@@ -39,7 +39,7 @@ def PaymentView(request,student,name,amount):
 @method_decorator(csrf_exempt, name='dispatch')
 class CheckoutSuccessView(View):
     model = Transaction
-    template_name = 'admit/admitcard.html'
+    template_name = 'payment/payment_receipt.html'
     
     def get(self, request, *args, **kwargs):
         return HttpResponse('nothing to see')
@@ -48,12 +48,12 @@ class CheckoutSuccessView(View):
         
         context={}
         data = self.request.POST
-        print(data)
+        #print(data)
 
         tran_purpose=PaymentPurpose.objects.filter(id=data['value_d']).first()
         student=Student.objects.filter(class_roll=data['value_a']).first()
         context['tran_purpose']=tran_purpose
-        print(tran_purpose.payment_type.id)
+        #print(tran_purpose.payment_type.id)
         transaction=None
         try:
             transaction=Transaction.objects.create(
@@ -89,15 +89,23 @@ class CheckoutSuccessView(View):
             #print("data['value_d']:",tran_purpose.payment_type)
             
             if tran_purpose.payment_type.id == 2:
-                print("data['value_d']:",tran_purpose.payment_type)
+                #print("data['value_d']:",tran_purpose.payment_type)
                 student=Student.objects.filter(class_roll=data['value_a']).first()
-                print(student)
+                #print(student)
+                context['transaction']=transaction
+                context['purpose']=tran_purpose
+                context['student']=student
+                return render(request,self.template_name,context)
+            if tran_purpose.payment_type.id == 3:
+                #print("data['value_d']:",tran_purpose.payment_type)
+                student=Student.objects.filter(class_roll=data['value_a']).first()
+                #print(student)
                 context['transaction']=transaction
                 context['purpose']=tran_purpose
                 context['student']=student
                 return render(request,self.template_name,context)
 
-            if tran_purpose.payment_type.id == '1':
+            if tran_purpose.payment_type.id == 1:
                 student=Student.objects.filter(phone=data['value_b']).last()
                 password="Student@"+data['value_c']
                 user = get_user_model.objects.create_user(username=data['value_c'],
@@ -109,7 +117,7 @@ class CheckoutSuccessView(View):
                 for std in students:
                     std.delete()
 
-                print(student)
+                #print(student)
                 context['purpose']=tran_purpose
                 context['student']=student
             messages.success(request,'Payment Successful!!')
@@ -167,7 +175,7 @@ def searchPayment(request):
         subject_choice=Choice.objects.filter(class_roll=request.POST.get('roll').strip()).first()
         purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose'),is_active=True).first()
         if student:
-            print(student,purpose)
+            #print(student,purpose)
 
             context['student']=student
             context['purpose']=purpose

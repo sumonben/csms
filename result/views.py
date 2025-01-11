@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Marks,Exam,Result
 from student.models import Student,Group,Choice
-from .forms import SeachResultForm
+from .forms import SeachResultForm,CreateResultForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
@@ -14,14 +14,13 @@ def searchResult(request):
     if request.method=='POST':
         totalgpa=0
         totalgpa1=0
-
-        result=Marks.objects.filter(class_roll=request.POST.get('roll').strip()).order_by('subject')
-        print(result)
-        position=Result.objects.filter(class_roll=request.POST.get('roll').strip()).first()
-        student=Student.objects.filter(class_roll=request.POST.get('roll').strip()).first()
-        print(student)
-        subject_choice=Choice.objects.filter(class_roll=request.POST.get('roll').strip()).first()
         exam=Exam.objects.filter(id=request.POST.get('exam')).first()
+        result=Marks.objects.filter(class_roll=request.POST.get('roll').strip(),exam=exam).order_by('subject')
+        #print(result)
+        position=Result.objects.filter(class_roll=request.POST.get('roll').strip(),exam=exam).first()
+        student=Student.objects.filter(class_roll=request.POST.get('roll').strip()).first()
+        #print(student)
+        subject_choice=Choice.objects.filter(class_roll=request.POST.get('roll').strip()).first()
         if subject_choice and student and result and exam:
             choice_list=[subject_choice.subject1,subject_choice.subject2,subject_choice.subject3,subject_choice.subject4,subject_choice.subject5,subject_choice.subject6,subject_choice.fourth_subject]
         else:
@@ -37,7 +36,7 @@ def searchResult(request):
 
         
         for reslt in result:
-            print(reslt.subject,reslt.cgpa,reslt.grade,reslt.total)
+            #print(reslt.subject,reslt.cgpa,reslt.grade,reslt.total)
             if reslt.subject  in choice_list:
                 if reslt.grade=="Absent":
                     grade="Absent"
@@ -66,7 +65,7 @@ def searchResult(request):
                         else:
                             totalgpa=totalgpa+float(reslt.cgpa)
                             totalgpa1=totalgpa1+float(reslt.cgpa)
-                            print(totalgpa1)
+                            #print(totalgpa1)
 
         if flag2==1 or flag1==1:
             return render(request, 'result/show_result.html', context=context)
@@ -105,9 +104,26 @@ def searchResult(request):
     return render(request, 'result/search_result.html', context=context)
 
 @login_required
+def OptionCreateResult(request):
+    context={}
+    create_result_form=CreateResultForm()
+    context['create_result_form']=create_result_form
+    return render(request, 'result/search_result.html', context=context)
+
+@login_required
+def OptionCreatePosition(request):
+    context={}
+    create_position_form=CreateResultForm()
+    #print(create_position_form)
+    context['create_position_form']=create_position_form
+    return render(request, 'result/search_result.html', context=context)
+
+
+@login_required
 def createResult(request):
-        rolls=list(Marks.objects.filter(exam=1).values('class_roll').order_by('class_roll').distinct())
-        exam=Exam.objects.filter(id=1).first()
+    if request.user.is_superuser:
+        exam=Exam.objects.filter(id=request.POST.get('exam')).first()
+        rolls=list(Marks.objects.filter(exam=exam).values('class_roll').order_by('class_roll').distinct())
         count=0
         choice_list=[]
         for roll in rolls:
@@ -116,7 +132,7 @@ def createResult(request):
             subject_choice=Choice.objects.filter(class_roll=roll['class_roll'].strip()).first()
             if subject_choice:
                 choice_list=[subject_choice.subject1,subject_choice.subject2,subject_choice.subject3,subject_choice.subject4,subject_choice.subject5,subject_choice.subject6,subject_choice.fourth_subject]
-                print(choice_list)
+                #print(choice_list)
             totalgpa=0
             totalgpa1=0
             total=0
@@ -204,16 +220,18 @@ def createResult(request):
                 else:
                     grade="Absent"
                 if student:
-                    print(student.name)
+                    #print(student.name)
                     remarks="Promoted"                   
                     result_individual=Result.objects.create(class_roll=roll['class_roll'],name=student.name,position=count,group=student.group,section=student.section,exam=exam,total=total,cgpa=cgpa,grade=grade,present_at=present_at,absent_at=absent_at,fail_at=fail_at,fail_at_without_4th=fail_at_without_4th,pass_at=pass_at,remarks=remarks)
             count=count+1
 
             
         
-        print(count,result)
-
+        #print(count,result)
         return HttpResponse('Result Created Successfully!')
+
+
+    return HttpResponse('Result Not Created!')
 
 @login_required
 def deleteResult(request):
@@ -224,67 +242,69 @@ def deleteResult(request):
 
 @login_required
 def CreatePosition(request):
-    group1=Group.objects.filter(id=3).first()
-    group2=Group.objects.filter(id=4).first()
-    group3=Group.objects.filter(id=5).first()
-    result1=Result.objects.filter(group=group1).order_by('-cgpa','-total')
-    result2=Result.objects.filter(group=group2).order_by('-cgpa','-total')
-    result3=Result.objects.filter(group=group3).order_by('-cgpa','-total')
-    count=0
-    cgpa_prev=0
-    total=0
-    for rslt in result1:
-        print('Cgpa: ',rslt.cgpa)
-        if cgpa_prev==rslt.cgpa and total==rslt.total:
-            rslt.position=count
-            cgpa_prev=rslt.cgpa
-            total=rslt.total
-            rslt.save(update_fields=['position'])
-            print('if clause',rslt.position)
-        else:
-            rslt.position=count+1
-            count=count+1
-            cgpa_prev=rslt.cgpa
-            total=rslt.total
-            rslt.save(update_fields=['position'])
-            print('else clause',rslt.position)
+    if request.user.is_superuser:
+        exam=Exam.objects.filter(id=request.POST.get('exam')).first()    
+        group1=Group.objects.filter(id=3).first()
+        group2=Group.objects.filter(id=4).first()
+        group3=Group.objects.filter(id=5).first()
+        result1=Result.objects.filter(group=group1,exam=exam).order_by('-cgpa','-total')
+        result2=Result.objects.filter(group=group2,exam=exam).order_by('-cgpa','-total')
+        result3=Result.objects.filter(group=group3,exam=exam).order_by('-cgpa','-total')
+        count=0
+        cgpa_prev=0
+        total=0
+        for rslt in result1:
+            #print('Cgpa: ',rslt.cgpa)
+            if cgpa_prev==rslt.cgpa and total==rslt.total:
+                rslt.position=count
+                cgpa_prev=rslt.cgpa
+                total=rslt.total
+                rslt.save(update_fields=['position'])
+                #print('if clause',rslt.position)
+            else:
+                rslt.position=count+1
+                count=count+1
+                cgpa_prev=rslt.cgpa
+                total=rslt.total
+                rslt.save(update_fields=['position'])
+                #print('else clause',rslt.position)
 
-    count=0
-    cgpa_prev=0
-    total=0
-    for rslt in result2:
-        print('Cgpa: ',rslt.cgpa)
-        if cgpa_prev==rslt.cgpa and total==rslt.total:
-            rslt.position=count
-            cgpa_prev=rslt.cgpa
-            total=rslt.total
-            rslt.save(update_fields=['position'])
-            print('if clause',rslt.position)
-        else:
-            rslt.position=count+1
-            count=count+1
-            cgpa_prev=rslt.cgpa
-            total=rslt.total
-            rslt.save(update_fields=['position'])
-            print('else clause',rslt.position)
-    count=0
-    cgpa_prev=0
-    total=0
-    for rslt in result3:
-        print('Cgpa: ',rslt.cgpa)
-        if cgpa_prev==rslt.cgpa and total==rslt.total:
-            rslt.position=count
-            cgpa_prev=rslt.cgpa
-            total=rslt.total
-            rslt.save(update_fields=['position'])
-            print('if clause',rslt.position)
-        else:
-            rslt.position=count+1
-            count=count+1
-            cgpa_prev=rslt.cgpa
-            total=rslt.total
-            rslt.save(update_fields=['position'])
-            print('else clause',rslt.position)
-         
+        count=0
+        cgpa_prev=0
+        total=0
+        for rslt in result2:
+            #print('Cgpa: ',rslt.cgpa)
+            if cgpa_prev==rslt.cgpa and total==rslt.total:
+                rslt.position=count
+                cgpa_prev=rslt.cgpa
+                total=rslt.total
+                rslt.save(update_fields=['position'])
+                #print('if clause',rslt.position)
+            else:
+                rslt.position=count+1
+                count=count+1
+                cgpa_prev=rslt.cgpa
+                total=rslt.total
+                rslt.save(update_fields=['position'])
+                #print('else clause',rslt.position)
+        count=0
+        cgpa_prev=0
+        total=0
+        for rslt in result3:
+            #print('Cgpa: ',rslt.cgpa)
+            if cgpa_prev==rslt.cgpa and total==rslt.total:
+                rslt.position=count
+                cgpa_prev=rslt.cgpa
+                total=rslt.total
+                rslt.save(update_fields=['position'])
+                #print('if clause',rslt.position)
+            else:
+                rslt.position=count+1
+                count=count+1
+                cgpa_prev=rslt.cgpa
+                total=rslt.total
+                rslt.save(update_fields=['position'])
+                #print('else clause',rslt.position)
+        return HttpResponse("Position Created successfully!!")
 
-    return HttpResponse("Position Created successfully!!")
+    return HttpResponse("Position Not Created")

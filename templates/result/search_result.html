@@ -11,14 +11,20 @@
                 {% endif %}
           <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;">Insert your roll and exam to find result </th></thead>
           <tbody>
-            <form method="post" action="{% url 'search_result' %}" id="form1" name="form1" target="_blank">
+            
+            <form method="post" action="{% if create_result_form %}{% url 'create_result' %}{% elif create_position_form %}{% url 'create_position' %}{% else %}{% url 'search_result' %}{% endif %}" id="form1" name="form1" target="_blank">
                 {% csrf_token %}
             <tr>
                 
                 <td class="r-align-right r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c1" data-pageid="1">
-               
 
-                {{form}}
+                    {% if create_result_form %}
+                    {{ create_result_form }}
+                    {% elif create_position_form%}
+                    {{create_position_form}}
+                    {% else %}
+                        {{form}}
+                    {% endif %}
                 </td>
                 
                 
@@ -55,7 +61,7 @@
                     <button type="submit" id="submit-btn"  >Submit</button>
                 </td></tr>
           </form>
-
+          
         </tbody>
     </table>
     </fieldset>

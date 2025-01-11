@@ -5,9 +5,9 @@ from import_export.admin import ExportActionMixin,ImportExportMixin
 # Register your models here.
 @admin.register(Exam)
 class ExamAdmin(admin.ModelAdmin):
-    list_display=[  'serial','title_en',]
+    list_display=[  'id','serial','title_en',]
     list_filter=[  'title_en',]
-    list_display_links = ['serial','title_en',]
+    list_display_links = ['id','serial','title_en',]
 
 @admin.register(Marks)
 class MarksAdmin(ImportExportMixin, admin.ModelAdmin):

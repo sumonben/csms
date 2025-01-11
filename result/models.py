@@ -6,6 +6,8 @@ class Exam(models.Model):
     title=models.CharField(max_length=150,blank=True,null=True)
     title_en=models.CharField(max_length=150,blank=True,null=True)
     is_practical_applicable=models.BooleanField(default=False)
+    is_active=models.BooleanField(default=False)
+
     
     class Meta:
         ordering = ['serial']
