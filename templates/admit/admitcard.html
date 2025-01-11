@@ -1,0 +1,183 @@
+{% extends 'basepage/basepage_result.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    button#print, button#next-btn, button#submit-btn {
+        font-size: 17px;
+        font-weight: bold;
+        position: relative;
+        width: 300px;
+        height: 50px;
+        background: #DC3545;
+        margin-left: 50%;
+        margin-top: 20px;
+        overflow: hidden;
+        z-index: 1;
+        cursor: pointer;
+        transition: color .3s;
+        text-align: center;
+        color: #fff;
+        border: 0;
+        -webkit-border-bottom-right-radius: 5px;
+        -webkit-border-bottom-left-radius: 5px;
+        -moz-border-radius-bottomright: 5px;
+        -moz-border-radius-bottomleft: 5px;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
+      button#print:after, button#next-btn:after, button#submit-btn:after {
+        position: absolute;
+        top: 90%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #05812a;
+        content: "";
+        z-index: -2;
+        transition: transform .3s;
+      }
+      button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover::after {
+        transform: translateY(-80%);
+        transition: transform .3s;
+      }
+.cyan11,.progress{
+    display:none;
+}
+table{
+        -webkit-print-color-adjust: exact; 
+
+}
+#first,#second{
+    width:90%;
+}
+@media(max-width:767px){
+#container_id{
+    width:100%;
+    margin=0; 
+}
+table{
+    width:100%;
+  
+}
+#first,#second{
+    width:100%;
+}
+}
+ #second td {
+    border:1px solid #b9b1b1;
+    
+    background-color:rgb(207, 241, 218);
+    padding:0.5em;
+    -webkit-print-color-adjust: exact; 
+
+    }
+</style>
+<div class="container home-page" id="column" >
+
+    <button id="submit-btn" class="btn-default" onclick="goToPrint()" >Download or Print</button>
+
+    <div id="container_id" >
+
+              <table id="first" border="2" align="center" >
+                <thead style=" background-color: #a6d1fb; color: #e03838;">
+                    <th width="100%" style=" text-align:center; background-color:  #a6d1fb; color:rgb(223, 49, 49); padding: 15px; margin-bottom: 15px;line-height: 1;"><p style="font-size: 25px;line-height: 1.2;"><b>{{purpose.title_en}}</p></th>
+                </thead>
+                  <thead>
+                    <th width="100%" style=" text-align:center; background-color:  #a6d1fb; color:rgb(223, 49, 49); padding: 15px; margin-bottom: 15px;line-height: 1;"><p style="font-size: 25px;line-height: 1.2;"><b>{{purpose.subtitle_en}}</p></th>
+                </thead>
+                <tbody>
+          
+                </tbody>
+            </table>
+                
+                 
+                                      
+             <table id="second" width="100%" border="2" align="center" style="border:5px">
+                    
+                    <tbody>
+                        <tr>
+                          <td width="250px" colspan="2" align="left" valign="middle"><b></b>&nbsp;Roll:</b></td>
+                          <td id="roll" width="550px" colspan="3" align="left" valign="middle" class="black12">{{student.class_roll}}</td>
+                          
+                      </tr>
+                      <tr>
+                          <td colspan="2" align="left" valign="middle">&nbsp;Name:</td>
+                          <td colspan="3" align="left" valign="middle" class="black12">{{student.name}}</td>
+                          
+                      </tr>
+                      <tr>
+                          <td colspan="2" align="left" valign="middle">&nbsp;Session:</td>
+                          <td colspan="3" align="left" valign="middle" class="black12">{{student.session}}</td>
+                          
+                      </tr>
+                      <tr>
+                          <td colspan="2" align="left" valign="middle">&nbsp;Group:</td>
+                          <td colspan="1" align="left" valign="middle" class="black12">{{student.group}}</td>
+                          
+                          <td colspan="1" align="left" valign="middle">&nbsp;Section: </td>
+                          <td colspan="1" align="left" valign="middle" class="black12">{{student.section}}</td>
+                          
+                      </tr>
+                      <tr>
+                        <td colspan="2" align="left" valign="middle">&nbsp;Amount Paid: </td>
+                        <td colspan="3" align="left" valign="middle" class="black12">{{purpose.amount}}</td>
+                        
+                    </tr>
+                    <tr>
+                      <td colspan="2" align="left" valign="middle">&nbsp;Phone: </td>
+                      <td colspan="3" align="left" valign="middle" class="black12">{{student.phone}}</td>
+                     
+                      
+                  </tr>
+                 
+          
+                  </tbody>
+                </table>
+                
+                
+                
+          
+                                      
+                
+                      
+                <table id="second" width="100%" border="2" align="center" style="border:5px;text-align:center;">
+                    
+                      <tbody>
+                        
+                        <tr>
+
+                             <td > <img id='barcode' src="https://api.qrserver.com/v1/create-qr-code/?data={{student.class_roll}}:{{student.name}}:{{student.session}}:{{transaction.tran_id}}:{{transaction.created_at}}&amp;size=200x200" width="120px" height="120px" alt="" title="{{student.class_roll}}:{{student.name}}" width="50" height="50" /></td>
+
+                            
+                        </tr>
+                        
+                        
+                    </tbody>
+                </table>  
+                      
+           <div style="float:right;margin:10px;"><img  src="{% static 'images/principal_signature.png' %}" width="120px" height="120px" alt="" title="{{student.class_roll}}:{{student.name}}" width="50" height="50" /><br>Principal<br></div>
+
+                        
+                    
+                
+          </div>
+          
+
+<script>
+    function goToPrint(){
+        document.getElementById("submit-btn").style.display="none";
+        window.print();
+        document.getElementById("submit-btn").style.display="block";
+
+    }
+
+    $( document ).ready(function() {
+        const d = new Date();
+        var nric = '{{student.class_roll}}:{{student.name}}:{{student.session}}:'+d;
+        alert(nric)
+        var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + nric + '&amp;size=200x200';
+        $('#barcode').attr('src', url);
+      });
+</script>
+{% endblock %}

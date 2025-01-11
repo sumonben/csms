@@ -1,0 +1,80 @@
+{% extends 'basepage/basepage_result.html' %}
+
+{% block content %}
+{% load static %}
+
+    <fieldset style="margin-bottom: 2%;">
+        <table width="50%" border="1" cellspacing="0" cellpadding="2" align="center">
+            {% if notfound %}
+                <thead><th colspan="5" style="height: 25px; background-color:rgb(148, 30, 9); color: #fff;padding: 15px;">Result Not found!<br>re-Enter right information or Contact exam control room </th></thead>
+                 
+                {% endif %}
+          <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;">Insert your roll and exam to find result </th></thead>
+          <tbody>
+            <form method="post" action="{% url 'search_payment' %}" id="form1" name="form1" target="_blank">
+                {% csrf_token %}
+            <tr>
+                
+                <td class="r-align-right r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c1" data-pageid="1">
+               
+
+                {{form}}
+                </td>
+                
+                
+                <td class="col-md-2"></td>
+                </tr>
+                
+                <tr>
+                
+                <td class="r-align-right r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c3" data-pageid="1">
+                
+                </td>
+                
+                <td class=" r-ori-vert							col-md-6						" data-single="" data-cellid="grid_c4" data-pageid="1">
+                
+                </td>
+                <td class="col-md-2"></td>
+                </tr>
+                
+                <tr>
+                
+                <td class=" r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c9" data-pageid="1">
+                <div edit-form-cell="" class="clearfix">
+                </div>
+                </td>
+                
+                <td class=" r-ori-vert							col-md-6						" data-single="" data-cellid="grid_c10" data-pageid="1">
+                <div edit-form-cell="" class="clearfix">
+                </div>
+                </td>
+                <td class="col-md-2"></td>
+                </tr>
+                <tr >
+                    <td colspan="5" align="right">                
+                    <button type="submit" id="submit-btn"  >Submit</button>
+                </td></tr>
+          </form>
+
+        </tbody>
+    </table>
+    </fieldset>
+   
+<script>
+    function myFunction( id ){
+            
+            var e=document.getElementById('id_student_category')
+            var val = e.options[e.selectedIndex].value;
+            if(val == 3){
+                document.getElementById('id_group').style.display='block';
+                document.getElementByFor('id_group').label.visibility='visible';
+
+            }else{
+                
+                document.getElementById('id_group').style.display='none';
+                document.getElementByFor('id_group').label.visibility='hidden';
+
+            }
+    }
+</script>
+{% endblock  %}

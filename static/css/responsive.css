@@ -1,0 +1,249 @@
+/* Responsive Menu for ministry*/
+
+
+@media only screen and (min-width:320px ) and (max-width:979px){
+
+    .show-menu{
+        margin-top: 0!important;
+    }
+
+    .meganizr > li > a{
+        text-shadow:none!important;
+    }
+    .col0 a:hover{
+        color:#fff!important;
+        background-color: rgb(102,102,102);
+    }
+
+    .meganizr > li > a:active, .meganizr > li > a {
+      transition: none!important;
+    }
+
+    .meganizr > li > a {
+      padding: 3px 15px;
+    }
+    .meganizr > li > div, .meganizr > li > ul, .meganizr > li > ul li > ul{
+        padding: 0;
+    }
+    .mzr-content{
+        padding-left: 10px !important;
+    }
+
+    .meganizr{
+        
+    }
+
+
+    .mzr-content{
+        display: none;
+    }
+
+    /*============== NAV design ============ */
+    .show-menu {
+        background: #fafafa;
+        color: #000;
+    }
+    .col0:hover{
+        color: #fff;
+    }
+
+    .col0 a{
+        display: block;
+    }
+    .mzr-drop a{
+        display: block;
+    }
+    .meganizr li, .meganizr ul{
+        margin-bottom: 1px;
+    }
+
+    .mzr-links li:hover{
+        background: rgba(0,0,0,.5);
+    }
+
+    .meganizr li{
+        line-height: 25px;
+    }
+    .one-col h6{
+        color: #fff;
+        margin-top: 10px;
+    }
+
+
+    .mzr-content{
+        border-right: none;
+    }
+    .show-menu i {
+      background-color: #666;
+      border-radius: 5px;
+      color: #fff;
+      padding: 7px 7px 7px 9px;
+    }
+
+    /*====== Bg color======*/
+
+    .meganizr > li.col1:hover{ background-color:#fff ; color: #FF6600; }
+
+    .meganizr > li.col2:hover{ background-color: #FFF; color: #C40A2A; }
+
+    .meganizr > li.col3:hover{ background-color: #FFF; color: #84154D; }
+
+    .meganizr > li.col4:hover {background-color: #FFF; color: #098346; }
+
+    .meganizr > li.col5:hover{ background-color: #FFF; color: #1399BE; }
+
+    .meganizr > li.col6:hover{ background-color: #FFF; color: #8768DE; }
+
+    .meganizr > li.col7:hover{ background-color: #FFF; color: #C40A2A; }
+
+    .meganizr > li.col8:hover{ background-color: #FFF; color: #098346; }
+
+    .meganizr > li{
+        height: auto;
+    }
+
+      /* Responsive Menu*/
+    .mzr-responsive > li{
+        width: 100%;
+    }
+     .show-menu{
+        display: block;
+    }
+    .mzr-responsive{
+        display: none;
+    }
+
+    .meganizr .drop-two-columns{
+        width: 100%;
+    }
+
+    .meganizr {
+      float: left;
+      height: auto;
+    }
+    .mzr-content {
+      border-top: none!important;
+    }
+
+    .mzr-responsive > li.mzr-drop {
+      background-position:right 5px top 10px !important;
+    }
+
+}
+@media only screen and (min-width:320px ) and (max-width:480px){
+
+
+    .show-menu{
+        display: block;
+    }
+    .mzr-responsive{
+        display:none;
+    }
+
+    .mzr-responsive{
+        margin-top: 0px;
+    }
+    .mzr-content{
+        width:99.49% !important;
+    }
+    .mzr-responsive li{
+        width:100%;
+    }
+
+    /*======= Nav======*/
+    .meganizr > li{height:auto;}
+    .meganizr > li > div, .meganizr > li > ul, .meganizr > li > ul li > ul{position:relative;}
+    .hidden{display:none;}
+
+
+     li.col1 .mzr-content, .mzr-drop .mzr-content{ border:none!important;}
+
+        /* Responsive Menu*/
+
+
+
+}
+@media only screen and (min-width:481px ) and (max-width:568px){
+    .show-menu{
+        display: block;
+    }
+    .mzr-responsive{
+        display:none;
+    }
+    .menu-head{
+        margin-bottom: 17px;
+    }
+    .mzr-responsive{
+        margin-top: -1px;
+    }
+    .mzr-content{
+        width:99.49% !important;
+    }
+    .mzr-responsive li{
+        width:100%;
+    }
+    .drop-one-columns .one-col{
+        width:95%!important;
+    }
+
+
+}
+
+@media only screen and (min-width:481px ) and (max-width:640px){
+    .show-menu{
+        display: block;
+    }
+    .mzr-responsive{
+        display:none;
+    }
+    .menu-head{
+        margin-bottom: 17px;
+    }
+    .mzr-responsive{
+        margin-top: -1px;
+    }
+    .mzr-content{
+        width:99.49% !important;
+    }
+    .mzr-responsive li{
+        width:100%;
+    }
+    .drop-one-columns .one-col{
+        width:95%!important;
+    }
+}
+
+@media only screen and (min-width:641px ) and (max-width:767px){
+
+    .mzr-responsive{
+        display:none;
+    }
+    .menu-head{
+        margin-bottom: 17px;
+    }
+    .mzr-responsive{
+        margin-top: -1px;
+    }
+    .mzr-content{
+        width:99.49% !important;
+    }
+    .mzr-responsive li{
+        width:100%;
+    }
+
+
+}
+
+@media only screen and (min-width:768px ) and (max-width:979px){
+
+    .meganizr .one-col{
+        width: 45%;
+    }
+
+
+}
+
+/*=======================tt custom css=============*/
+.mzr-responsive li.col0{ display: none;}
+
+

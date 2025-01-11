@@ -1,0 +1,116 @@
+{% extends 'basepage/basepage_result.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    #table td {
+        color: #fff;
+        border:1px solid #b9b1b1;
+        background-color:rgb(80, 7, 7);
+        padding:0.5em;
+        -webkit-print-color-adjust: exact; 
+
+        }
+
+</style>
+<fieldset style="margin-bottom: 2%;">
+    <table id="table" width="50%" border="1" cellspacing="0" cellpadding="2" align="center">
+        <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;">{{purpose}} </th></thead>
+
+      <tbody>
+        {% if purpose %}
+           <tr>
+            <td>Name:</td>
+            <td>{{student.name}}</td>
+           </tr>
+           <tr>
+            <td>Roll:</td>
+            <td>{{student.class_roll}}</td>
+           </tr>
+           <tr>
+            <td>Group:</td>
+            <td>{{student.group}}</td>
+           </tr>
+           <tr>
+            <td>Amout:</td>
+            <td>{{purpose.amount}}</td>
+           </tr>
+            {% endif %}
+      </tbody>
+    </table>
+</fieldset>
+    <fieldset style="margin-bottom: 2%;">
+        <table width="50%" border="1" cellspacing="0" cellpadding="2" align="center">
+            
+          <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;">Don't Change this value </th></thead>
+          <tbody>
+            <form method="post" action="{% url 'proceed_payment' %}" id="form1" name="form1" target="_blank">
+                {% csrf_token %}
+            <tr>
+                
+                <td class="r-align-right r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c1" data-pageid="1">
+               
+                    <input type="text" name="student" value="{{student.class_roll}}">
+
+                </td>
+                
+                
+                <td class="col-md-2">
+                    <input type="text" name="purpose" value="{{purpose.id}}">
+
+                </td>
+                </tr>
+                
+                <tr>
+                
+                <td class="r-align-right r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c3" data-pageid="1">
+                
+                </td>
+                
+                <td class=" r-ori-vert							col-md-6						" data-single="" data-cellid="grid_c4" data-pageid="1">
+                
+                </td>
+                <td class="col-md-2"></td>
+                </tr>
+                
+                <tr>
+                
+                <td class=" r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c9" data-pageid="1">
+                <div edit-form-cell="" class="clearfix">
+                </div>
+                </td>
+                
+                <td class=" r-ori-vert							col-md-6						" data-single="" data-cellid="grid_c10" data-pageid="1">
+                <div edit-form-cell="" class="clearfix">
+                </div>
+                </td>
+                <td class="col-md-2"></td>
+                </tr>
+                <tr >
+                    <td colspan="5" align="right">                
+                    <button type="submit" id="submit-btn"  >Payment Procced</button>
+                </td></tr>
+          </form>
+
+        </tbody>
+    </table>
+    </fieldset>
+   
+<script>
+    function myFunction( id ){
+            
+            var e=document.getElementById('id_student_category')
+            var val = e.options[e.selectedIndex].value;
+            if(val == 3){
+                document.getElementById('id_group').style.display='block';
+                document.getElementByFor('id_group').label.visibility='visible';
+
+            }else{
+                
+                document.getElementById('id_group').style.display='none';
+                document.getElementByFor('id_group').label.visibility='hidden';
+
+            }
+    }
+</script>
+{% endblock  %}
