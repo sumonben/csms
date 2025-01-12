@@ -15,11 +15,11 @@ def sslcommerz_payment_gateway(request, student,purpose):
     
     print(student,purpose)
     gateway = PaymentGateway.objects.all().first()
-    '''cradentials = {'store_id': 'israb672a4e32dfea5',
+    cradentials = {'store_id': 'israb672a4e32dfea5',
             'store_pass': 'israb672a4e32dfea5@ssl', 'issandbox': True} 
-    '''
-    cradentials = {'store_id': 'gmrwcedubdlive',
-            'store_pass': '677CD7B61AB5A81511', 'issandbox': False} 
+    
+    '''cradentials = {'store_id': 'gmrwcedubdlive',
+            'store_pass': '677CD7B61AB5A81511', 'issandbox': True} '''
     
     sslcommez = SSLCOMMERZ(cradentials)
     body = {}
@@ -32,11 +32,11 @@ def sslcommerz_payment_gateway(request, student,purpose):
     body['cancel_url'] = 'http://localhost:8000/payment/cancel'
     body['emi_option'] = 0
     body['cus_name'] = student.name
-    body['cus_email'] = 'sumonbendre@gmail.com'
+    body['cus_email'] = 'request.data["email"]'
     if student.phone:
         body['cus_phone'] = student.phone
     else:
-        body['cus_phone'] = '01712539569'
+        body['cus_phone'] = 'No Phone Number Provided'
     body['cus_add1'] = 'request.data["address"]'
     body['cus_city'] = 'request.data["address"]'
     body['cus_country'] = 'Bangladesh'
@@ -55,6 +55,7 @@ def sslcommerz_payment_gateway(request, student,purpose):
 
 
     response = sslcommez.createSession(body)
-    print(response)   
-    return 'https://securepay.sslcommerz.com/validator/api/validationserverAPI.php?wsdl?Q=pay&SESSIONKEY=' + response["sessionkey"]
+    #print(response)   
+    return 'https://sandbox.sslcommerz.com/gwprocess/v4/gw.php?Q=pay&SESSIONKEY=' + response["sessionkey"]
+    return 'https://securepay.sslcommerz.com/gwprocess/v4/api.php?Q=pay&SESSIONKEY=' + response["sessionkey"]
 
