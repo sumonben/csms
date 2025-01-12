@@ -1,12 +1,16 @@
 {% extends "admin/base.html" %}
+{%load static %}
+<style> 
 
-{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+</style>
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('GMRWC') }}{% endblock %}
 
 {% block branding %}
-<div id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></div>
+<h1 id="site-name" align="center"><a href="{% url 'admin:index' %}" ><img height="80px" width="auto"  src="{% static 'images/gmrwc_logo.png'%}" alt="ictparkbd_logo" >সরকারি মুজিবুর রহমান মহিলা কলেজ, বগুড়া</a></h1>
 {% if user.is_anonymous %}
   {% include "admin/color_theme_toggle.html" %}
 {% endif %}
+
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
