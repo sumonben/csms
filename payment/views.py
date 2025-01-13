@@ -143,26 +143,104 @@ class CheckoutFaildView(View):
         tran_purpose=PaymentPurpose.objects.filter(id=data['value_d']).first()
         context['tran_purpose']=tran_purpose
         
-        if data['value_d'] == '1':
-            certificate=Certificate.objects.filter(phone=data['value_b'],transaction=None)
-            if certificate:
-                certificate.delete()
-        if data['value_d'] == '2':
-            student=Student.objects.filter(phone=data['value_b']).first()
-            #user=UserModel.objects.filter(username=data['value_b']).first()
-            #user.delete()
+        if tran_purpose.payment_type.id == 2:
+                print("data['value_d']:",tran_purpose.payment_type)
+                student=Student.objects.filter(class_roll=data['value_a']).first()
+                #print(student)
+                context['purpose']=tran_purpose
+                context['student']=student
+                form=SearchPaymentForm()
+                context['form']=form
+                message='Payment Failed'
+                context['message']=message
+                
+                return render(request,self.template_name,context)
+        if tran_purpose.payment_type.id == 3:
+                #print("data['value_d']:",tran_purpose.payment_type)
+                student=Student.objects.filter(class_roll=data['value_a']).first()
+                #print(student)
+                context['purpose']=tran_purpose
+                context['student']=student
+                message='Payment Failed'
+                context['message']=message
+                form=SearchPaymentForm()
+                context['form']=form
+                return render(request,self.template_name,context)
 
-        '''certificate=Certificate.objects.filter(transaction=None)
-        print(request.POST)
+        if tran_purpose.payment_type.id == 1:
+                
+                students=Student.objects.filter(phone=data['value_b'],user=None)
+                for std in students:
+                    std.delete()
+
+                #print(student)
+                context['purpose']=tran_purpose
+                context['student']=student
+                message='Payment Failed'
+                context['message']=message
         
-        for cert in certificate:
-            response = sslcommez.transaction_query_session(cert.session_key)
-            print(response['status'])
-            print(response)
+        form=SearchPaymentForm()
+        context['form']=form  
+        message='Payment Failed'
+        context['message']=message
+        return render(request,self.template_name,context)
 
-            if response['status'] in 'FAILED' or response['status'] in 'PENDING':
-                cert.delete()'''
-        return render(request, self.template_name,context)
+@method_decorator(csrf_exempt, name='dispatch')
+class CheckoutCanceledView(View):
+    template_name = 'payment/search_payment.html'
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
+    def post(self, request, *args, **kwargs):
+        data=request.POST
+        context={}
+        tran_purpose=PaymentPurpose.objects.filter(id=data['value_d']).first()
+        context['tran_purpose']=tran_purpose
+        messages.success(request,'Payment Canceled')
+        context['messages']=messages
+        
+        if tran_purpose.payment_type.id == 2:
+                print("data['value_d']:",tran_purpose.payment_type)
+                student=Student.objects.filter(class_roll=data['value_a']).first()
+                #print(student)
+                context['purpose']=tran_purpose
+                context['student']=student
+                form=SearchPaymentForm()
+                context['form']=form
+                message='Payment Canceled'
+                context['message']=message
+                
+                return render(request,self.template_name,context)
+        if tran_purpose.payment_type.id == 3:
+                #print("data['value_d']:",tran_purpose.payment_type)
+                student=Student.objects.filter(class_roll=data['value_a']).first()
+                #print(student)
+                context['purpose']=tran_purpose
+                context['student']=student
+                message='Payment Canceled'
+                context['message']=message
+                form=SearchPaymentForm()
+                context['form']=form
+                return render(request,self.template_name,context)
+
+        if tran_purpose.payment_type.id == 1:
+                
+                students=Student.objects.filter(phone=data['value_b'],user=None)
+                for std in students:
+                    std.delete()
+
+                #print(student)
+                context['purpose']=tran_purpose
+                context['student']=student
+                message='Payment Canceled'
+                context['message']=message
+        
+        form=SearchPaymentForm()
+        context['form']=form  
+        message='Payment Canceled'
+        context['message']=message
+        return render(request,self.template_name,context)
 
 def searchPayment(request):
     context={}
