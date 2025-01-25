@@ -4,7 +4,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 # import GeeksModel from models.py
 from .models import Student,SubjectChoice,Upazilla,District,Division,Adress,SscEquvalent,GuardianInfo,Subject,Session,Group,Class
 from django.db.models import Q,Count
-
+from django_select2.forms import ModelSelect2Widget
 # create a ModelForm
 MARITAL_CHOICES = [('Unmarried', 'Unmarried'),('Married', 'Married'),('Divorced','Divorced')]
 BlOOD_CHOICE=[('AB+', 'AB+'),('A+', 'A+'),('B+', 'B+'),('O+', 'O+'),('AB-', 'AB-'),('A-', 'A-'),('B-', 'B-'),('O-', 'O-'),]
@@ -67,7 +67,7 @@ class StudentForm(forms.ModelForm):
         widget=forms.RadioSelect(choices=CHOICES,),
          
     )
-    session=forms.ModelChoiceField(queryset=Session.objects.all(),initial=Session.objects.last(),widget=forms.Select(attrs={'class': 'textfieldUSERinfo','onchange' : 'myFunction(this.id)',}))
+    session=forms.ModelChoiceField(queryset=Session.objects.all(),initial=Session.objects.first(),widget=forms.Select(attrs={'class': 'textfieldUSERinfo','onchange' : 'myFunction(this.id)',}))
 
 
     class Meta:
@@ -75,7 +75,7 @@ class StudentForm(forms.ModelForm):
         BlOOD_CHOICE=[('AB+', 'AB+'),('A+', 'A+'),('B+', 'B+'),('O+', 'O+'),('AB-', 'AB-'),('A-', 'A-'),('B-', 'B-'),('O-', 'O-'),]
         model = Student
         fields = "__all__"
-        exclude=['std_id','class_roll','exam_roll','registration','passing_year','student_category','department','section','class_year','cgpa','guardian_info','present_adress','permanent_adress','user','is_active','gender',]
+        exclude=['std_id','class_roll','exam_roll','registration','passing_year','student_category','department','section','class_year','cgpa','guardian_info','present_adress','permanent_adress','user','is_active','gender','fourth_subject']
         #department=forms.ModelChoiceField(label="",queryset=Department.objects.all(),empty_label="Placeholder",)
 
         
@@ -129,11 +129,12 @@ class SubjectChoiceForm(forms.ModelForm):
     class Meta:
         model = SubjectChoice
         fields = "__all__"
-        exclude=['serial','student',]
+        exclude=['serial','student']
         widgets={
                         'fourth_subject': forms.Select(attrs={'class': 'textfieldUSERinfo','onclick' : "fourthSubject(this.id);",'style':'margin-bottom:20px'}),
 
         }
+        
     class Media:
             css = {
                 'all': ('/static/admin/css/widgets.css',),
@@ -152,6 +153,7 @@ class SubjectChoiceForm(forms.ModelForm):
             if group.title_en=="Science":
                 self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3,4,5,]), widget=FilteredSelectMultiple('Comulsory Subject',True, attrs={'class':'textfieldUSERinfo',}))
                 self.fields['optional_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(group=group, type='Fourth'), widget=FilteredSelectMultiple('Optional Subject',False, attrs={'class':'textfieldUSERinfo',}))
+ 
             if group.title_en=="Humanities":
                 self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3,8]), widget=FilteredSelectMultiple('Comulsory Subject',True, attrs={'class':'textfieldUSERinfo',}))
                 self.fields['optional_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(group=group, type='Optional'), widget=FilteredSelectMultiple('Optional Subject',False, attrs={'class':'textfieldUSERinfo',}))
@@ -166,10 +168,10 @@ class SubjectChoiceForm(forms.ModelForm):
             
         
 class AdressForm(forms.ModelForm):
-    division= forms.ModelChoiceField(queryset=Division.objects.all(),widget=forms.Select(attrs={'class':'textfieldUSER'})),
-    district=forms.ModelChoiceField(queryset=District.objects.all(),widget=forms.Select(attrs={'class':'textfieldUSER'})),
+    division= forms.ModelChoiceField(queryset=None,widget=forms.Select(attrs={'class':'textfieldUSER'})),
+    district=forms.ModelChoiceField(queryset=None,widget=forms.Select(attrs={'class':'textfieldUSER'})),
     upazilla= forms.ModelChoiceField(queryset=Upazilla.objects.all(),widget=forms.Select(attrs={'class':'textfieldUSER'})),
-            
+             
     class Meta:
         model = Adress
         fields = "__all__"
@@ -180,15 +182,15 @@ class AdressForm(forms.ModelForm):
             'village_or_house': forms.TextInput(attrs={'class': 'textfieldUSER', 'placeholder':  'Village Name/house No.','onkeypress' : "myFunction(this.id);",'label':'Village/house'}),
             'house_or_street_no': forms.TextInput(attrs={'class': 'textfieldUSER', 'placeholder':  'Street Name/No.','onkeypress' : "myFunction(this.id);",'label':'Street No.'}),
             'post_office': forms.TextInput(attrs={'class': 'textfieldUSER', 'placeholder':  'Bogura-5800','onkeypress' : "myFunction(this.id);"}),
-            'division': forms.Select(attrs={'class': 'textfieldUSER',}),
-            'district': forms.Select(attrs={'class': 'textfieldUSER',}),            
+            'division': forms.Select(attrs={'class': 'textfieldUSER','onchange' : "myFunctionTeacher(this.id);"}),
+            'district': forms.Select(attrs={'class': 'textfieldUSER','onchange' : "myFunctionTeacher(this.id);"}),            
             'upazilla': forms.Select(attrs={'class': 'textfieldUSER',}),
 
 
         }
 class PresentAdressForm(forms.ModelForm):
     division= forms.ModelChoiceField(queryset=Division.objects.all(),widget=forms.Select(attrs={'class':'textfieldUSER'})),
-    district=forms.ModelChoiceField(queryset=District.objects.all(),widget=forms.Select(attrs={'class':'textfieldUSER'})),
+    district=forms.ModelChoiceField(queryset=None,widget=forms.Select(attrs={'class':'textfieldUSER'})),
     upazilla= forms.ModelChoiceField(queryset=Upazilla.objects.all(),widget=forms.Select(attrs={'class':'textfieldUSER'})),
             
     class Meta:

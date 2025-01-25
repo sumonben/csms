@@ -1,9 +1,11 @@
 from django.http import HttpResponse
-from django.shortcuts import render
-from .models import Marks,Exam,Result
-from student.models import Student,Group,Choice
-from .forms import SeachResultForm,CreateResultForm
+from django.shortcuts import render,redirect
+from .models import Marks,Exam,Result,HighestMarks
+from student.models import Student,Group,Choice,Subject
+from .forms import SeachResultForm,CreateResultForm,DeletResultForm,CreatePositionForm,HighestMarksForm
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db.models import Max,Window
 # Create your views here.
 
 def searchResult(request):
@@ -15,27 +17,30 @@ def searchResult(request):
         totalgpa=0
         totalgpa1=0
         exam=Exam.objects.filter(id=request.POST.get('exam')).first()
-        result=Marks.objects.filter(class_roll=request.POST.get('roll').strip(),exam=exam).order_by('subject')
+        marks=Marks.objects.filter(class_roll=request.POST.get('roll').strip(),exam=exam).order_by('subject')
+        highest_marks=HighestMarks.objects.filter(exam=exam)
+
         #print(result)
-        position=Result.objects.filter(class_roll=request.POST.get('roll').strip(),exam=exam).first()
+        result=Result.objects.filter(class_roll=request.POST.get('roll').strip(),exam=exam).first()
         student=Student.objects.filter(class_roll=request.POST.get('roll').strip()).first()
         #print(student)
         subject_choice=Choice.objects.filter(class_roll=request.POST.get('roll').strip()).first()
-        if subject_choice and student and result and exam:
+        if subject_choice and student and marks and exam:
             choice_list=[subject_choice.subject1,subject_choice.subject2,subject_choice.subject3,subject_choice.subject4,subject_choice.subject5,subject_choice.subject6,subject_choice.fourth_subject]
         else:
             context['notfound']="Result not found!!re=Enter Right Information or Contact exam control room"
             form=SeachResultForm()
             context['form']=form
             return render(request, 'result/search_result.html', context=context)
+        context['marks']=marks
+        context['highest_marks']=highest_marks
         context['result']=result
-        context['position']=position
         context['student']=student
         context['exam']=exam
         context['choice_list']=choice_list
 
         
-        for reslt in result:
+        for reslt in marks:
             #print(reslt.subject,reslt.cgpa,reslt.grade,reslt.total)
             if reslt.subject  in choice_list:
                 if reslt.grade=="Absent":
@@ -44,7 +49,7 @@ def searchResult(request):
                     context['grade']=grade
                     context['cgpa']=cgpa
                     flag1=1
-                    return render(request, 'result/show_result.html', context=context)
+                    return render(request, 'result/show_result_copy.html', context=context)
 
                 elif reslt.grade=="F" and reslt.subject !=subject_choice.fourth_subject:
                     grade="F"
@@ -68,7 +73,7 @@ def searchResult(request):
                             #print(totalgpa1)
 
         if flag2==1 or flag1==1:
-            return render(request, 'result/show_result.html', context=context)
+            return render(request, 'result/show_result_copy.html', context=context)
         
         else:
             #print(grade)
@@ -98,7 +103,7 @@ def searchResult(request):
         
         
    
-        return render(request, 'result/show_result.html', context=context)
+        return render(request, 'result/show_result_copy.html', context=context)
     form=SeachResultForm()
     context['form']=form
     return render(request, 'result/search_result.html', context=context)
@@ -109,6 +114,20 @@ def OptionCreateResult(request):
     create_result_form=CreateResultForm()
     context['create_result_form']=create_result_form
     return render(request, 'result/search_result.html', context=context)
+@login_required
+def OptionHighestMarks(request):
+    context={}
+    highest_marks_form=HighestMarksForm()
+    context['highest_marks_form']=highest_marks_form
+    return render(request, 'result/search_result.html', context=context)
+
+@login_required
+def OptionDeleteResult(request):
+    context={}
+    delete_result_form=DeletResultForm()
+    context['delete_result_form']=delete_result_form
+    return render(request, 'result/search_result.html', context=context)
+
 
 @login_required
 def OptionCreatePosition(request):
@@ -134,6 +153,7 @@ def createResult(request):
                 choice_list=[subject_choice.subject1,subject_choice.subject2,subject_choice.subject3,subject_choice.subject4,subject_choice.subject5,subject_choice.subject6,subject_choice.fourth_subject]
                 #print(choice_list)
             totalgpa=0
+            absent_or_fail_without_4th=0
             totalgpa1=0
             total=0
             flag1=0
@@ -149,6 +169,7 @@ def createResult(request):
                 if reslt.subject  in choice_list:
                     if reslt.grade=="Absent":
                         absent_at=absent_at+1
+                        absent_or_fail_without_4th=absent_or_fail_without_4th+1
                         grade="Absent"
                         cgpa=None
                         flag1=1
@@ -157,6 +178,7 @@ def createResult(request):
                         present_at=present_at+1
                         fail_at=fail_at+1
                         fail_at_without_4th=fail_at_without_4th+1
+                        absent_or_fail_without_4th=absent_or_fail_without_4th+1
                         grade="F"
                         cgpa=0
                         flag2=1
@@ -188,17 +210,17 @@ def createResult(request):
             if absent_at==7:
                 grade="AbsentAll"
                 remarks="Not Promoted"
-                result_individual=Result.objects.create(class_roll=roll['class_roll'],name=student.name,position=count,group=student.group,section=student.section,exam=exam,total=total,cgpa=cgpa,grade=grade,present_at=present_at,absent_at=absent_at,fail_at=fail_at,fail_at_without_4th=fail_at_without_4th,pass_at=pass_at,remarks=remarks)
+                result_individual=Result.objects.create(class_roll=roll['class_roll'],name=student.name,position=count,group=student.group,section=student.section,exam=exam,total=total,cgpa=cgpa,grade=grade,present_at=present_at,absent_at=absent_at,fail_at=fail_at,fail_at_without_4th=fail_at_without_4th,absent_or_fail_without_4th=absent_or_fail_without_4th, pass_at=pass_at,remarks=remarks)
 
             elif flag1==1 or flag2==1 :
                 count_fail=absent_at+fail_at
                 # Number of subject failed to be
-                if count_fail>3:
+                if absent_or_fail_without_4th>exam.minimum_threshold:
                     remarks="Not Promoted"
                 else:
                     remarks="Promoted"                   
                 if student:
-                    result_individual=Result.objects.create(class_roll=roll['class_roll'],name=student.name,position=count,group=student.group,section=student.section,exam=exam,total=total,cgpa=cgpa,grade=grade,present_at=present_at,absent_at=absent_at,fail_at=fail_at,fail_at_without_4th=fail_at_without_4th,pass_at=pass_at,remarks=remarks)
+                    result_individual=Result.objects.create(class_roll=roll['class_roll'],name=student.name,position=count,group=student.group,section=student.section,exam=exam,total=total,cgpa=cgpa,grade=grade,present_at=present_at,absent_at=absent_at,fail_at=fail_at,fail_at_without_4th=fail_at_without_4th,absent_or_fail_without_4th=absent_or_fail_without_4th,pass_at=pass_at,remarks=remarks)
             else:
                 #print(grade)
                 cgpa=round(totalgpa/6,2)
@@ -222,23 +244,29 @@ def createResult(request):
                 if student:
                     #print(student.name)
                     remarks="Promoted"                   
-                    result_individual=Result.objects.create(class_roll=roll['class_roll'],name=student.name,position=count,group=student.group,section=student.section,exam=exam,total=total,cgpa=cgpa,grade=grade,present_at=present_at,absent_at=absent_at,fail_at=fail_at,fail_at_without_4th=fail_at_without_4th,pass_at=pass_at,remarks=remarks)
+                    result_individual=Result.objects.create(class_roll=roll['class_roll'],name=student.name,position=count,group=student.group,section=student.section,exam=exam,total=total,cgpa=cgpa,grade=grade,present_at=present_at,absent_at=absent_at,fail_at=fail_at,fail_at_without_4th=fail_at_without_4th,absent_or_fail_without_4th=absent_or_fail_without_4th,pass_at=pass_at,remarks=remarks)
             count=count+1
 
             
         
         #print(count,result)
-        return HttpResponse('Result Created Successfully!')
+        messages.success(request,exam.title_en+" Result Created Successfully")
+        return redirect('option_create_result')
+    messages.success(request,exam.title_en+" Result Created Successfully")
+    return redirect('option_create_result')
 
-
-    return HttpResponse('Result Not Created!')
 
 @login_required
 def deleteResult(request):
-    for row in Result.objects.all().reverse():
-        if Result.objects.filter(class_roll=row.class_roll).count() > 1:
-            row.delete()
-    return HttpResponse("Data Deleted successfully!!")
+    if request.user.is_superuser:
+        exam=Exam.objects.filter(id=request.POST.get('exam')).first()
+        for row in Result.objects.filter(exam=exam).reverse():
+            if Result.objects.filter(class_roll=row.class_roll).count() > 1:
+                row.delete()
+        messages.success(request,exam.title_en+" Result deleted Successfully")
+        return redirect('option_delete_result')
+    messages.success(request,exam.title_en+" -You have no permission to delete result")
+    return redirect('option_delete_result')
 
 @login_required
 def CreatePosition(request):
@@ -254,20 +282,20 @@ def CreatePosition(request):
         cgpa_prev=0
         total=0
         for rslt in result1:
-            #print('Cgpa: ',rslt.cgpa)
+            print('Cgpa: ',rslt.cgpa)
             if cgpa_prev==rslt.cgpa and total==rslt.total:
                 rslt.position=count
                 cgpa_prev=rslt.cgpa
                 total=rslt.total
                 rslt.save(update_fields=['position'])
-                #print('if clause',rslt.position)
+                print('if clause',rslt.position)
             else:
                 rslt.position=count+1
                 count=count+1
                 cgpa_prev=rslt.cgpa
                 total=rslt.total
                 rslt.save(update_fields=['position'])
-                #print('else clause',rslt.position)
+                print('else clause',rslt.position)
 
         count=0
         cgpa_prev=0
@@ -305,6 +333,26 @@ def CreatePosition(request):
                 total=rslt.total
                 rslt.save(update_fields=['position'])
                 #print('else clause',rslt.position)
-        return HttpResponse("Position Created successfully!!")
+        messages.success(request,exam.title_en+" Position Created Successfully")
+        return redirect('option_create_position')
+    messages.success(request,exam.title_en+" -You have no permission to Create Position")
+    return redirect('option_create_position')
 
-    return HttpResponse("Position Not Created")
+def CreateHighestMarks(request):
+    if request.user.is_superuser:
+        exam=Exam.objects.filter(id=request.POST.get('exam')).first() 
+        print(exam)
+
+        subject=Subject.objects.all()
+        for subjt in subject:
+            marks=Marks.objects.filter(subject=subjt,exam=exam).order_by('-total')
+            highest_mark=marks.first()
+            highest_mark=HighestMarks.objects.create(class_roll=highest_mark.class_roll,exam=exam,subject=subjt,highest_mark=highest_mark.total)
+            for mark in marks:
+                mark.highest_mark=highest_mark
+                mark.save(update_fields=['highest_mark'])
+
+        messages.success(request,exam.title_en+" Highest Marks Created Successfully")
+        return redirect('option_delete_result')
+    messages.success(request,exam.title_en+" -You have no permission to Create Highest Marks")
+    return redirect('option_highest_marks')

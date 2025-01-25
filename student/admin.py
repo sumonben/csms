@@ -3,19 +3,37 @@ from django.contrib import admin
 from import_export.admin import ExportActionMixin,ImportExportMixin
 from .models import Student,Subject,StudentCategory,Class,Session,Group,Division,District,Upazilla,Union,GuardianInfo,Adress,SubjectChoice,SscEquvalent,Choice
 from import_export.admin import ExportActionMixin,ImportExportMixin
-from import_export.widgets import ManyToManyWidget
-from import_export.resources import ModelResource
+from import_export.widgets import ManyToManyWidget,ForeignKeyWidget
+from import_export import resources,fields
 from django.forms import Field
 # Register your models here.
-class StudentResource(ModelResource):
+class SubjectResource(resources.ModelResource):
+    class Meta:
+        model = Subject
+        fields = ('name_en', 'name')
+
+class SubjectChoiceResource(resources.ModelResource):
     
-    student_category = Field(
-        widget=ManyToManyWidget(StudentCategory, field='title',
-                                        separator='|')
+    compulsory_subject = fields.Field(
+        column_name="Compulsory Subject",
+        attribute='compulsory_subject',
+        widget=ManyToManyWidget(Subject, field='name_en',separator='|')
+    )
+    class Meta:
+        model = SubjectChoice
+        fields = ('serial', 'compulsory_subject')
+
+
+class StudentResource(resources.ModelResource):
+    
+    group = fields.Field(
+        column_name="Group",
+        attribute='group',
+        widget=ForeignKeyWidget(Group, field='title_en')
     )
     class Meta:
         model = Student
-        fields = ('email', 'student_category')
+        fields = ('email', 'group')
 
 
 @admin.register(Student)
@@ -24,6 +42,7 @@ class StudentAdmin(ImportExportMixin,admin.ModelAdmin):
     list_display=[ 'class_roll','name','email','phone','student_category','department','session','user_link']
     list_display_links = ['name','email']
     list_filter=['department','student_category','session','group','class_year','is_active']
+    resource_class = StudentResource
 
 @admin.register(Session)
 class StudentSessionAdmin(ImportExportMixin,admin.ModelAdmin):
@@ -41,9 +60,11 @@ class SscEquvalentAdmin(ExportActionMixin,admin.ModelAdmin):
     list_display_links = ['id', 'ssc_or_equvalent','ssc_board']
     list_filter=['id', 'ssc_or_equvalent','ssc_board']
 @admin.register(SubjectChoice)
-class SubjectChoiceAdmin(ExportActionMixin,admin.ModelAdmin):
-        list_display=['id',]
+class SubjectChoiceAdmin(ImportExportMixin,admin.ModelAdmin):
+        list_display=['id','serial',]
         filter_horizontal = ['compulsory_subject','optional_subject']
+        resource_class = SubjectChoiceResource
+
 
 @admin.register(Adress)
 class AdressAdmin(ExportActionMixin,admin.ModelAdmin):
@@ -91,6 +112,7 @@ class SubjectAdmin(ImportExportMixin,admin.ModelAdmin):
     list_display=[  'id','serial','name','code',]
     list_filter=[  'name','code',]
     list_display_links = ['id','serial','name','code']
+    resource_class = SubjectResource
 
 
 @admin.register(Choice)

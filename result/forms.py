@@ -17,3 +17,22 @@ class CreateResultForm(forms.ModelForm):
     class Meta:
         model = Exam
         fields = []
+class CreatePositionForm(forms.ModelForm):
+    exam= forms.ModelChoiceField(required=True,queryset=Exam.objects.filter(is_active=True),widget=forms.Select(attrs={'class': 'textfieldUSERinfo',}))
+
+    class Meta:
+        model = Exam
+        fields = []
+
+class DeletResultForm(forms.ModelForm):
+    exam= forms.ModelChoiceField(required=True,queryset=Exam.objects.filter(is_active=True),widget=forms.Select(attrs={'class': 'textfieldUSERinfo',}))
+
+    class Meta:
+        model = Exam
+        fields = []
+class HighestMarksForm(forms.ModelForm):
+    exam= forms.ModelChoiceField(required=True,queryset=Exam.objects.filter(is_active=True),widget=forms.Select(attrs={'class': 'textfieldUSERinfo',}))
+
+    class Meta:
+        model = Exam
+        fields = []

@@ -321,8 +321,8 @@ fieldset {
 }
 .GrayBlue12 {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color: #323A89;
+	font-size: 18px;
+	color: #fefeff;
 	text-decoration: none;
 	font-weight: bold;
 }
@@ -342,7 +342,7 @@ fieldset {
 .gray11 {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
-	color: #5A6572;
+	color: #05848d;
 	text-decoration: none;
 }
 

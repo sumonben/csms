@@ -8,9 +8,11 @@ urlpatterns = [
     path('create_result', views.createResult, name='create_result'),
     path('delete_result', views.deleteResult, name='delete_result'),
     path('create_position', views.CreatePosition, name='create_position'),
+    path('highest_marks', views.CreateHighestMarks, name='highest_marks'),
     path('option_create_result', views.OptionCreateResult, name='option_create_result'),
     path('option_create_position', views.OptionCreatePosition, name='option_create_position'),
-    path('option_delete_result', views.OptionCreateResult, name='option_delete_result'),
+    path('option_delete_result', views.OptionDeleteResult, name='option_delete_result'),
+    path('option_highest_marks', views.OptionHighestMarks, name='option_highest_marks'),
 
 
 

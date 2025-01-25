@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.template.defaultfilters import escape
 from import_export.resources import ModelResource
-
+from smart_selects.db_fields import ChainedForeignKey
 UserModel=get_user_model()
 
 # Create your models here.
@@ -121,7 +121,7 @@ class District(models.Model):
     name_en=models.CharField(max_length=25,unique=True)
     lattitude=models.CharField(max_length=15,blank=True,null=True)
     longitude=models.CharField(max_length=15, blank=True,null=True)
-    division=models.ForeignKey(Division, on_delete=models.CASCADE,blank=True,null=True)
+    division=ChainedForeignKey(Division, on_delete=models.CASCADE,blank=True,null=True)
     link=models.CharField(max_length=15,null=True,blank=True)
     class Meta:
         ordering = ['name_en']

@@ -106,7 +106,7 @@ class CheckoutSuccessView(View):
                 return render(request,self.template_name,context)
 
             if tran_purpose.payment_type.id == 1:
-                student=Student.objects.filter(phone=data['value_b']).last()
+                student=Student.objects.filter(phone=data['value_c']).last()
                 password="Student@"+data['value_c']
                 user = get_user_model.objects.create_user(username=data['value_c'],
                                  email=data['value_c'],last_name="Student",

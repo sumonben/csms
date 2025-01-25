@@ -1,12 +1,13 @@
 from django.http import JsonResponse
 from django.shortcuts import render,redirect
 from student.forms import StudentForm,AdressForm,PresentAdressForm,SscEquvalentForm,SubjectChoiceForm,GuardianForm
-from student.models import Group,Student,Session,SubjectChoice,SscEquvalent,StudentCategory
+from student.models import Group,Student,Session,SubjectChoice,SscEquvalent,StudentCategory,Division,District,Upazilla,Union
 from django.contrib.auth import get_user_model
 from sslcommerz_lib import SSLCOMMERZ
 from payment import sslcommerz 
 from .models import StudentAdmission
-
+from django.views.generic.edit import FormView
+from django.template.loader import render_to_string
 UserModel=get_user_model()
 board={
     'DHA':'Dhaka',
@@ -22,13 +23,15 @@ def admissionLogin(request ):
 # Create your views here.
 # Create your views here.
 
-def admissionForm(request ):
+def admissionForm(request):
+    print('bdchsdbhs')
     if request.POST.get('username') and request.POST.get('password') :
-            str=request.POST.get('username')
-            print(str)
+        str=request.POST.get('username')
+        print(str)
+        try:
             #student=StudentAdmission.objects.filter(ssc_roll=request.POST.get('password'),board=board[str[-3:]],status='Not Admitted').first()
-            group=Group.objects.filter(title_en='Science').first()
 
+            group=Group.objects.filter(title_en='Science').first()
             if group:
                 form = StudentForm()
                 subject_form = SubjectChoiceForm(group=group)
@@ -36,14 +39,17 @@ def admissionForm(request ):
                 present_adress_form = PresentAdressForm()
                 ssc_equivalent_form=SscEquvalentForm()
                 guardian_form=GuardianForm()
-                print('group',group.title_en)
+                print(group.title_en)
                 return render(request, 'admission/admission.html',{'group':group,'form':form,'subject_form':subject_form,'adress_form':adress_form,'ssc_equivalent_form':ssc_equivalent_form,'guardian_form':guardian_form,'present_adress_form':present_adress_form})
-
+                
 
             else:
                 subject_form = None
                 return redirect('admission_login')
-        
+        except():
+            print("Exception")
+            return redirect('admission_login')
+
             
     return redirect('admission_login')
 
@@ -99,7 +105,7 @@ def admissionFormSubmit(request):
             
             group=Group.objects.filter(title_en=request.POST.get('admission_group')).first()
             student_form.group=group
-            session=Session.objects.last()
+            session=Session.objects.first()
             std_count=Student.objects.filter(group=group,session=session).count()
             print(session)
             session_string=session.title_en
@@ -192,8 +198,8 @@ def admissionFormSubmit(request):
         body['currency'] = "BDT"
         body['tran_id'] = sslcommerz.generator_trangection_id()
         body['success_url'] = 'http://localhost:8000/payment/success/'
-        body['fail_url'] = 'http://localhost:8000/payment/failed/'
-        body['cancel_url'] = 'http://localhost:8000/payment'
+        body['fail_url'] = 'https://localhost:8000/payment/failed/'
+        body['cancel_url'] = 'https://localhost:8000/payment/canceled'
         body['emi_option'] = 0
         body['cus_name'] = request.POST.get('name')
         body['cus_email'] = 'request.data["email"]'
@@ -207,10 +213,10 @@ def admissionFormSubmit(request):
         body['product_name'] = "Test"
         body['product_category'] = "Test Category"
         body['product_profile'] = "general"
-        body['value_a'] = request.POST.get('name')
-        body['value_b'] = request.POST.get('phone')
-        body['value_c'] = request.POST.get('email')
-        body['value_d'] = 2           
+        body['value_a'] = student_form.class_roll
+        body['value_b'] = student_form.name
+        body['value_c'] = student_form.phone
+        body['value_d'] = 1          
         response = sslcommez.createSession(body)
         print(response["sessionkey"])   
 
@@ -230,3 +236,18 @@ def formDownload(request):
 
 
         return render(request, 'admission/admission_form.html',{'student':student,'ssc_equivalent':ssc_equivalent,'subject_choice':subject_choice})
+
+def SubprocessesView(request):
+        print(request.GET.get('id'),request.GET.get('value'))
+        if request.GET.get('id')=='id_division':
+            division=Division.objects.filter(id=request.GET.get('value')).first()
+            district=District.objects.filter(division=division)
+            district=list(district.values())
+            print(district)
+        if request.GET.get('id')=='id_district':
+            division=District.objects.filter(id=request.GET.get('value')).first()
+            print(division)
+            district=Upazilla.objects.filter(district=division)
+            district=list(district.values())
+            print(district)
+        return JsonResponse({'status': 'success','meaasge':'Account created Successfully','district':district},safe=False)

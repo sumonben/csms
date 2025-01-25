@@ -1,0 +1,255 @@
+{% extends 'basepage/basepage.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    .main_body{
+        width:100%;
+        height:100%;
+        color:red;
+    }
+    @media(max-width:767px){
+        .main_body{
+            width:100%;
+            height:700px;
+            color:red;
+            background-color:green;
+        }   
+    }
+</style>
+
+<!-- CONTAINER -->
+<div class="box_container" style="width: 100%; margin: 0px;">
+    <div class="" style="margin: auto;width: 100%;">
+        <!-- TITLE 
+        <div class="col-lg-4 offset-lg-1 mx-0 px-0">
+            <div id="title-container">
+                <img class="covid-image" src="./img/covid-check.png">
+                <h2>COVID-19</h2>
+                <h3>Self Checker Form</h3>
+                <p>A clinical assessment multi-step form that will assist individuals on deciding when to seek testing or medical care if they suspect they or someone they know has contracted COVID-19 or has come into close contact with someone who has COVID-19</p>
+            </div>
+        </div>-->
+        <!-- FORMS -->
+        <div >
+  <form class="needs-validation" action="" id="form-wrapper" method="post" name="form-wrapper" novalidate="" enctype="multipart/form-data">
+        {% csrf_token %}
+            <div id="qbox-container">
+                    <div id="steps-container">
+                        <div class="step d-block">
+                          <div><h1 style="text-align: center;"><u></u></h1></div>
+
+                          <table width="900" border="0" align="center" valign="middle" cellspacing="0" cellpadding="0">
+
+                            <tbody>
+                            <tr>
+                              <td align="left">
+                                <fieldset>
+                                <table width="100%" border="1" cellspacing="0" cellpadding="2">
+                                  <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;"> <a href="{% url 'search_payment' %}" class="OffWhite12b">অনলাইন ফি প্রদান</a> </th></thead>
+                                  <tbody>
+
+                                    <tr>
+                                        <td width="10%" align="left" valign="middle">&nbsp;</td>
+                                        <td width="15%" align="left" valign="middle" class="black12"></td>
+                                        <td width="75%" align="left" valign="middle"><span id="sprytextfield1">
+                                          <label>
+                                            ছাত্রীরা এই লিংকের মাধ্যমে তাদের বিভিন্ন ফি প্রদান করতে পারবে
+                                            <br>
+                                            ১। পরীক্ষার ফি<br>
+                                            ২। সেশন ফি 
+                                            <br>৩। অন্যান্য ফি
+                                          </label>
+                                          <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
+
+                                      </tr>
+                                    
+                                      
+                                  
+    
+                                </tbody></table>
+                              </fieldset>
+                            </td>
+                            
+                          </tr>
+                              
+                          </tbody>
+                        </table>
+                        <fieldset>
+                                  <table width="100%" border="1" cellspacing="0" cellpadding="5">
+                                    <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;"><th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;"> <a href="{% url 'search_result' %}" class="OffWhite12b">ফলাফলসমুহ</a> </th></thead>
+                                    <tbody>
+                                      <tr>
+                                          <td width="10%" align="left" valign="middle">&nbsp;</td>
+                                          <td width="15%" align="left" valign="middle" class="black12"></td>
+                                          <td width="75%" align="left" valign="middle"><span id="sprytextfield1">
+                                            <label>
+                                                এই  লিংকের মাধ্যমে ছাত্র-ছাত্রীরা কলেজের অভ্যন্তরীণ পরীক্ষাসমূহের ফলাফল দেখতে পারবে
+                                                <br>
+                                                ১।প্রথম বর্ষ (১ম সাময়িক ও ইয়ার ফাইনাল)
+                                                <br>
+                                                ২। প্রিটেস্ট বা প্রাক নির্বাচনী পরীক্ষা
+                                                <br>
+                                                ৩। টেস্ট বা নির্বাচনী পরীক্ষ
+                                            </label>
+                                            <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
+                                          <td width="5%" align="left" valign="middle">&nbsp;</td>
+                                      </tr>
+                                      
+                                  </tbody>
+                                </table>
+                              </fieldset>
+
+                              <fieldset>
+                                <table width="100%" border="1" cellspacing="0" cellpadding="3">
+                                  <thead style="height: 25px; background-color: #245b80; color: #fff;">
+                                    <th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;"><a href="{% url 'admission_login' %}" class="OffWhite12b">অনলাইন ভর্তি </a></th>
+                                  </thead>
+                                  <tbody>
+                                    <tr><td colspan="5" align="center">
+
+                                        <div id="form-container">
+
+                                         
+                                          <div class="bird-form">
+                                            <table >
+                                            <tr>
+                                              <td>
+                                               <label> 
+                                                এই লিংকের মাধ্যমে এইচএসসি ভর্তি সম্পন্ন করা যাবে 
+                                               </label>
+                                            </td></table>
+                                          <br>
+                                        </div>
+                                        
+   
+
+                                        </div>
+                                    </td></tr>
+                                    
+                                      
+                                </tbody></table>
+                              </fieldset>
+                          
+                              <fieldset>
+                                <table width="100%" border="1" cellspacing="" cellpadding="5">
+                                  <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;"><th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;"><a href="" class="OffWhite12b">সনদসমূহ</a></th></thead>
+                                  <tbody>
+                                    <tr>
+                                        <td width="10%" align="left" valign="middle">&nbsp;</td>
+                                        <td width="25%" align="left" valign="middle" class="black12">{{form.file.label_tag}}</td>
+                                        <td width="65%" align="left" valign="middle"><span id="sprytextfield1">
+                                          <label>
+                                            এই লিংকে কলেজ কতৃক প্রদত্ত সনদসমূহ পাওয়া যাবে
+                                            <br>
+                                            ১। প্রসংশাপত্র 
+                                            <br>
+                                            ২। চারিত্রিক সনদসমূহ
+                                            <br>
+                                            ৩। প্রত্যয়নপত্র
+                                            <br>
+                                            ৪। অধ্যয়নরত প্রত্যয়নপত্র
+
+
+                                          </label>
+                                          <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
+                                        <td width="5%" align="left" valign="middle">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                      <td width="10%" align="left" valign="middle">&nbsp;</td>
+                                      <td width="25%" align="left" valign="middle" class="black12">{{form.nid_file.label_tag}}</td>
+                                      <td width="65%" align="left" valign="middle"><span id="sprytextfield1">
+                                        <label>
+                                          {{form.nid_file}}                                        
+                                        </label>
+                                        <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
+                                      <td width="5%" align="left" valign="middle">&nbsp;</td>
+                                  </tr>
+                                  
+                                </tbody>
+                              </table>
+                          
+                              </fieldset>
+                          
+
+                        </div>
+                       
+                        
+                       
+                    
+                    
+                </div>
+                    <div id="q-box__buttons" >
+                      
+                  </div>   
+            </div>
+            
+          </form>
+
+          <div id="download_form_id">
+            <div class="mt-5">
+
+              <form id="form_download_id" method="post" action="" target="_blank" >
+                {% csrf_token %}
+              <input type="hidden" value="{{student}}" id="student_id" name="student_id">
+              <div id="q-box__buttons" >
+
+                <button type="submit" id="btn_admission_form" style="width:300px;">Download Admission form</button>
+                </div>
+              </form>
+                <a style="margin-top: 20px; margin-bottom: 20px; margin-left: 10%;" class="back-link" href="">Go back from the beginning ➜</a>
+            </div>
+        </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    let birdForm = document.querySelectorAll(".bird-form")
+    let container = document.querySelector("#form-container")
+    let addButton = document.querySelector("#add-form")
+    let removeButton = document.querySelector("#remove-form")
+    let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+
+    let formNum = birdForm.length-1
+    addButton.addEventListener('click', addForm)
+    removeButton.addEventListener('click', removeForm)
+
+    function addForm(e){
+        e.preventDefault()
+
+        let newForm = birdForm[0].cloneNode(true)
+        let formRegex = RegExp(`form-(\\d){1}-`,'g')
+
+        formNum++
+        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+        container.insertBefore(newForm, addButton)
+        
+        
+        totalForms.setAttribute('value', `${formNum+1}`)
+    } 
+    function removeForm(id){
+      let formDel=document.getElementById(id)
+      del=formDel.parentNode
+      del=del.parentNode
+      del=del.parentNode
+      del=del.parentNode
+      del=del.parentNode.remove()
+
+
+      
+      
+    }
+    {% comment %} function removeForm(e){
+      e.preventDefault()
+
+      let birdForm2 = document.querySelectorAll(".bird-form")
+      let formNum2 = birdForm2.length-1
+      birdForm2[formNum2].parentNode.removeChild(birdForm2[formNum2]);
+      
+  }          {% endcomment %}
+</script>
+{% endblock  %}

@@ -6,6 +6,7 @@ class Exam(models.Model):
     title=models.CharField(max_length=150,blank=True,null=True)
     title_en=models.CharField(max_length=150,blank=True,null=True)
     is_practical_applicable=models.BooleanField(default=False)
+    minimum_threshold=models.IntegerField(blank=True,null=True)
     is_active=models.BooleanField(default=False)
 
     
@@ -14,6 +15,18 @@ class Exam(models.Model):
     def __str__(self):
         return self.title_en
 
+class HighestMarks(models.Model):
+    class_roll=models.CharField(max_length=25,blank=True,null=True)
+    exam=models.ForeignKey(Exam,on_delete=models.SET_NULL,blank=True,null=True)
+    subject=models.ForeignKey(Subject,on_delete=models.SET_NULL,blank=True, null=True)
+    highest_mark=models.IntegerField(blank=True,null=True)
+    class Meta:
+        ordering = ['-subject','-highest_mark']
+    def __str__(self):
+        if self.class_roll is not None:
+            return self.class_roll+': '+self.subject.name_en
+        return self.class_roll
+    
 class Marks(models.Model):
     serial=models.IntegerField(default=0)
     class_roll=models.CharField(max_length=10,)
@@ -25,6 +38,7 @@ class Marks(models.Model):
     CQ=models.IntegerField(blank=True,null=True)
     practical=models.IntegerField(blank=True,null=True)
     total=models.IntegerField(blank=True,null=True)
+    highest_mark=models.ForeignKey(HighestMarks,blank=True,null=True,on_delete=models.SET_NULL)
     grade=models.CharField(max_length=150,blank=True,null=True)
     cgpa=models.CharField(max_length=150,blank=True,null=True)
      
@@ -158,6 +172,7 @@ class Result(models.Model):
     fail_at_without_4th=models.IntegerField(blank=True,null=True)
     pass_at=models.IntegerField(blank=True,null=True)
     absent_or_fail_at=models.IntegerField(blank=True,null=True)
+    absent_or_fail_without_4th=models.IntegerField(blank=True,null=True)
     minimum_pass=models.IntegerField(blank=True,null=True)
     remarks=models.CharField(max_length=255,blank=True,null=True)
     class Meta:
@@ -172,3 +187,4 @@ class Result(models.Model):
         else:
             self.absent_or_fail_at=self.absent_at
         super(Result, self).save(*args, **kwargs)
+

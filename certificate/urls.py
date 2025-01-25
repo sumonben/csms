@@ -4,9 +4,4 @@ from . import views
 
 urlpatterns = [
     
-    
-
-
-
-
 ]

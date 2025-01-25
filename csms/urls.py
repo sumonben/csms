@@ -24,6 +24,7 @@ urlpatterns = [
     path('admission/', include('admission.urls')),
     path('certificate/', include('certificate.urls')),
     path('payment/', include('payment.urls')),
+    path('chaining/', include('smart_selects.urls')),
 
 
 ]
