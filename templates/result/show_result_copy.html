@@ -75,13 +75,7 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
   transform: translateY(-80%);
   transition: transform .3s;
 }
-#bg_image{
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width:1000px;
-  height:1100;
-}
+
 
 
 @media print and (min-width: 480px) {
@@ -91,28 +85,42 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
     #column{
       width:100%;
     }
+    #main_table{
+      padding:5em;
+      -webkit-print-color-adjust: exact; 
   
-    #graph-image{
-      opacity: 0.1; 
-      left: 0; 
-      right: 0; 
-      position: absolute; 
-      margin-left: 25%; 
-      margin-right: 18%; 
-      margin-top: -40%;
-    } 
+    }
+    #img1,#img3,#img7,#img9{
+      display:none;
+    }
+    .main-left{
+      display:none;
+     }
+     .main-right{
+      display:none;
+     }
+    
+  .main-button {
+    display:none;
+
+  }
+  .main-top{
+    display:none;
+
+  } 
+
     
     table.result{
-      width:100%;
+      width:90%;
     }
-      table.result th, table.result td {
+      {% comment %} table.result th, table.result td {
         
             border:1px solid #b9b1b1;
             background-color: #999999;
-            padding:0.5em;
+            padding:0.2em;
             -webkit-print-color-adjust: exact; 
     
-            }
+            } {% endcomment %}
       table th, table td {
         
               padding:0.5em;
@@ -127,36 +135,13 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
     
     
 
-#bg_image{
-  display: block;
-  margin-left:auto;
-  margin-right:auto;
-  width:900;
-  height:1000;
-}
 
 #heading {
     color: #000080 !important;;
   }
 
 
-#graph-image{
-  opacity: 0.1; 
-  left: 0; 
-  right: 0; 
-  position: absolute; 
-  margin-left: 27%; 
-  margin-right: 25%; 
-  margin-top: -40%;
-}
-#graph-image1{
-  opacity: 1; 
-  left: 0; 
-  right: 0; 
-  position: relative; 
-  margin-left: 80%; 
-  margin-top: -20%;
-}
+
 #column{
   width:95%;
   margin-left:2%;
@@ -166,26 +151,11 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
     width:100%;
     margin-left:0%;
   }
-  #graph-image{
-    opacity: 0.1; 
-    left: 0; 
-    right: 0; 
-    position: absolute; 
-    margin-left: 25%; 
-    margin-right: 20%; 
-    margin-top: -55%;
-  }
+  
   #google_translate_element{
     display:none;
   }
-  #graph-image1{
-    opacity: 1; 
-    left: 0; 
-    right: 0; 
-    position: absolute; 
-    margin-left: 70%; 
-    margin-top: -11%;
-  }
+  
 }
 
 
@@ -194,56 +164,56 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
 #main_body{
   background-color:rgb(231, 152, 152);
   width:90%;
+    background-image:url('/static/images/logo_opacity.png');
+    background-repeat: no-repeat;
+    background-position: center;
+   
+  
 
 }
+
+
 table.result th, table.result td {
-            border:1px solid #b9b1b1;
-            
-            background-color:rgb(231, 152, 152);
-            padding:.6em;
+            border:1px solid rgb(253, 251, 251);
+            padding:0.2em;
             -webkit-print-color-adjust: exact; 
     
             }
-            {%else%}
+    {%else%}
+    
+    
             #main_body{
               background-color:rgb(207, 241, 218);
               width:90%;
+              background-image:url('/static/images/logo_opacity.png');
+              background-repeat: no-repeat;
+              background-position: center;
+   
             }
-            table.result th, table.result td {
-              border:1px solid #b9b1b1;
+             table.result th, table.result td {
+              border:1px solid rgb(253, 253, 253);
               
-              background-color:rgb(207, 241, 218);
-              padding:0.6em;
+              padding:0.2em;
               -webkit-print-color-adjust: exact; 
       
-              }
+              } 
   
 
 {% endif %}
+table.result{
+  width:95%;
+}
 goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07Ob *, .VIpgJd-ZVi9od-vH1Gmf *, .VIpgJd-ZVi9od-l9xktf *{
   display:none;
 }
 </style>
 
 <div class="box_container" style="width: 100%; margin: 0px;">
-  <div class="" style="margin: auto;width: 100%;">
-    {% comment %} <table class="result"  width="100%" border="2" align="center" >
-      <thead style=" background-color: #a6d1fb; color: #e03838;">
-        <th width="10%" style=" background-color:  #a6d1fb; color: #0f0f0f; padding: 15px; margin-bottom: 15px;"><img  height="80px" src="{% static 'images/gmrwc_logo.png' %}" alt="" style=" left: 0; right: 0; result: relative;">
-        </th>
-        <th width="65%" align="left" style=" background-color:  #a6d1fb; color: #1c0b0b; padding: 15px; margin-bottom: 15px;line-height: 1;">Government of thead Peoples Republic of Bangladesh<p style="font-size: 25px;line-height: 1.2;"><b>Govt. Mujibur Rahman Women's college, Bogura.</p></th>
-
-        <th width="25%" align="right" style=" background-color:  #a6d1fb; color: #582a2a; padding: 15px; margin-bottom: 15px;"><p style="font-size: 20px;line-height: 1.2;"><b>{{exam}} </b></p> Result Card</th>
-
-    </thead>
-    <tbody>
-
-    </tbody>
-    </table> {% endcomment %}
+  <div style="margin: auto;width: 100%;">
     
      
                           
-      <table class="result" width="100%" border="2" align="center" style="border:5px">
+      <table class="result" width="80%" border="2" align="center" style="border:5px">
         
         <tbody>
             <tr>
@@ -263,32 +233,32 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
           </tr>
           <tr>
               <td colspan="2" align="left" valign="middle">&nbsp;Group:</td>
-              <td colspan="1" align="left" valign="middle" class="black12">{{student.group}}</td>
+              <td colspan="1" align="center" valign="middle"  class="black12">{{student.group}}</td>
               
               <td colspan="1" align="left" valign="middle">&nbsp;Section: </td>
-              <td colspan="1" align="left" valign="middle" class="black12">{{student.section}}</td>
+              <td colspan="1" width="20%" align="center" valign="middle" class="black12">{{student.section}}</td>
               
           </tr>
           <tr>
             <td colspan="2" align="left" valign="middle">&nbsp;CGPA(With 4th subject): </td>
-            <td colspan="1" align="left" valign="middle" class="black12">{{cgpa}}</td>
+            <td colspan="1" align="center" valign="middle" class="black12">{{cgpa}}</td>
             {% if cgpa_witout_4th %}
             <td colspan="1" align="left" valign="middle" class="black12"> CGPA (Without 4th subject):</td>
-            <td colspan="1" align="left" valign="middle" class="black12"> {{cgpa_witout_4th}}</td>
+            <td colspan="1" align="center" valign="middle" class="black12"> {{cgpa_witout_4th}}</td>
             {% else %}
             <td colspan="1" align="left" valign="middle" class="black12"> CGPA (Without 4th subject):</td>
-            <td colspan="1" align="left" valign="middle" class="black12"> Not Applicable</td>
+            <td colspan="1" align="center" valign="middle" class="black12"> Not Applicable</td>
             {% endif %}
         </tr>
         <tr>
           <td colspan="2" align="left" valign="middle">&nbsp;Grade: </td>
-          <td colspan="1" align="left" valign="middle" class="black12">{{grade}}</td>
+          <td colspan="1" align="center" valign="middle" class="black12">{{grade}}</td>
           {% if grade in 'A+' or grade in 'A' or grade in 'A-' or grade in 'B' or grade in 'C' or grade in 'D' or grade in 'F'   %}
           <td colspan="1" align="left" valign="middle">&nbsp;Position: </td>
-          <td colspan="1" align="left" valign="middle" class="black12">{{result.position}}</td>
+          <td colspan="1" align="center" valign="middle" class="black12">{{result.position}}</td>
           {% else %}
           <td colspan="1" align="left" valign="middle">&nbsp;Position: </td>
-          <td colspan="1" align="left" valign="middle" class="black12">Not Applicable</td>
+          <td colspan="1" align="center" valign="middle" class="black12">Not Applicable</td>
           {% endif %}
           
       </tr>
@@ -311,9 +281,8 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
           <th rowspan="2">Subject Name</th>
           <th colspan="3" style="text-align:center;" >Obtained Marks</th>
           <th rowspan="2">Highest Marks</th>
-
-          <th rowspan="2">Grade</th>
           <th rowspan="2">GP</th>
+          <th rowspan="2">Grade</th>
         </tr>
         <tr>
           <th>MCQ</th>
@@ -329,18 +298,17 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
 
 
               <td width="30%"  align="left" valign="middle"> {{rslt.subject.name_en}} </td>
-              <td width="10%"  align="left" valign="middle"> {{rslt.MCQ}} </td>
-              <td width="10%" align="left" valign="middle"> {{rslt.CQ}} </td>
+              <td width="10%"  align="center" valign="middle"> {{rslt.MCQ}} </td>
+              <td width="10%" align="center" valign="middle"> {{rslt.CQ}} </td>
 
               {% if rslt.subject.id == 3 or rslt.subject.id == 4 or rslt.subject.id == 5 or rslt.subject.id == 6 or rslt.subject.id == 7 %}
-              <td width="10%" align="left" valign="middle"> {{rslt.total}}(Calculated) </td>
+              <td width="10%" align="center" valign="middle"> {{rslt.total}}(Calculated) </td>
               {% else %}
-              <td width="10%" align="left" valign="middle"> {{rslt.total}} </td>
+              <td width="10%" align="center" valign="middle"> {{rslt.total}} </td>
               {% endif %}
-              <td width="15%" align="left" valign="middle"> {{rslt.highest_mark.highest_mark}} </td>
-
-              <td width="10%" align="left" valign="middle"> {{rslt.grade}} </td>
-              <td width="10%" align="left" valign="middle"> {{rslt.cgpa}} </td>
+              <td width="15%" align="center" valign="middle"> {{rslt.highest_mark.highest_mark}} </td>
+              <td width="10%" align="center" valign="middle"> {{rslt.cgpa}} </td>
+              <td width="10%" align="center" valign="middle"> {{rslt.grade}} </td>
 
 
 
@@ -360,13 +328,12 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
 
 
                 <td width="15%"  align="left" valign="middle"> {{rslt.subject.name_en}}(4th Subject) </td>
-                <td width="15%"  align="left" valign="middle"> {{rslt.MCQ}} </td>
-                <td width="15%" align="left" valign="middle"> {{rslt.CQ}} </td>
-                <td width="15%" align="left" valign="middle"> {{rslt.total}} </td>
-                <td width="15%" align="left" valign="middle"> {{rslt.highest_mark.highest_mark}} </td>
-
-                <td width="10%" align="left" valign="middle"> {{rslt.grade}} </td>
-                <td width="10%" align="left" valign="middle"> {{rslt.cgpa}} </td>
+                <td width="15%"  align="center" valign="middle"> {{rslt.MCQ}} </td>
+                <td width="15%" align="center" valign="middle"> {{rslt.CQ}} </td>
+                <td width="15%" align="center" valign="middle"> {{rslt.total}} </td>
+                <td width="15%" align="center" valign="middle"> {{rslt.highest_mark.highest_mark}} </td>
+                <td width="10%" align="center" valign="middle"> {{rslt.cgpa}} </td>
+                <td width="10%" align="center" valign="middle"> {{rslt.grade}} </td>
 
 
 
@@ -383,7 +350,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
           
       </tbody>
   </table>
-      <table style="margin-top:2%" class="result" width="100%" border="0">
+      <table align="center" style="margin-top:2%" class="result" width="100%" border="0">
         
           <tbody>
             <thead>
@@ -406,8 +373,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
           
 
  
-    <img id="graph-image" height="500px" src="{% static 'images/gmrwc_logo.png' %}" alt="" >
-    <div style="float:right;margin:2%"><img  height="80px" src="{% static 'images/principal_signature.png' %}" alt="" ><br>Principal</div>
+    <div style="float:right;margin:2%"><img  height="80px" src="{% static 'images/principal_signature.png' %}" alt="" ><br><h4>Principal</h4></div>
 
   </div>
 

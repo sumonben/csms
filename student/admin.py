@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib import admin
 from import_export.admin import ExportActionMixin,ImportExportMixin
-from .models import Student,Subject,StudentCategory,Class,Session,Group,Division,District,Upazilla,Union,GuardianInfo,Adress,SubjectChoice,SscEquvalent,Choice
+from .models import Student,Subject,StudentCategory,Class,Session,Group,Division,District,Upazilla,Union,GuardianInfo,Adress,SubjectChoice,SscEquvalent,Choice,TestSubject
 from import_export.admin import ExportActionMixin,ImportExportMixin
 from import_export.widgets import ManyToManyWidget,ForeignKeyWidget
 from import_export import resources,fields
@@ -33,7 +33,7 @@ class StudentResource(resources.ModelResource):
     )
     class Meta:
         model = Student
-        fields = ('email', 'group')
+        
 
 
 @admin.register(Student)
@@ -42,7 +42,7 @@ class StudentAdmin(ImportExportMixin,admin.ModelAdmin):
     list_display=[ 'class_roll','name','email','phone','student_category','department','session','user_link']
     list_display_links = ['name','email']
     list_filter=['department','student_category','session','group','class_year','is_active']
-    resource_class = StudentResource
+    # resource_class = StudentResource
 
 @admin.register(Session)
 class StudentSessionAdmin(ImportExportMixin,admin.ModelAdmin):
@@ -107,12 +107,17 @@ class GroupAdmin(admin.ModelAdmin):
     list_filter=[  'title_en',]
     list_display_links = ['serial','title_en',]
 
+@admin.register(TestSubject)
+class TestSubjectAdmin(ImportExportMixin,admin.ModelAdmin):
+    list_display=[  'id','serial','name','code',]
+    list_filter=[  'name','code',]
+    list_display_links = ['id','serial','name','code']
+
 @admin.register(Subject)
 class SubjectAdmin(ImportExportMixin,admin.ModelAdmin):
     list_display=[  'id','serial','name','code',]
     list_filter=[  'name','code',]
     list_display_links = ['id','serial','name','code']
-    resource_class = SubjectResource
 
 
 @admin.register(Choice)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Exam,Marks,Result,HighestMarks
+from .models import Exam,Marks,Result,HighestMarks,TestMarks
 from import_export.admin import ExportActionMixin,ImportExportMixin
 
 # Register your models here.
@@ -14,6 +14,14 @@ class HighestMarksAdmin(admin.ModelAdmin):
     list_filter=[  'class_roll',]
     list_display_links = ['id','class_roll',]
 
+@admin.register(TestMarks)
+class TestMarksAdmin(ImportExportMixin, admin.ModelAdmin):
+    list_display=[  'id','class_roll','name','subject_name','MCQ1','CQ1','MCQ2','CQ2','total','grade','cgpa','exam','group']
+    search_fields=['class_roll']
+    list_display_links = ['id','class_roll']
+    list_filter=[  'grade','cgpa','exam','subject','group']
+    def get_import_data_kwargs(self, **kwargs):
+        return super().get_import_data_kwargs(**kwargs)
 @admin.register(Marks)
 class MarksAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display=[  'id','class_roll','name','subject_name','MCQ','CQ','total','grade','cgpa','exam','group']

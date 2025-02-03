@@ -36,7 +36,7 @@ def admissionForm(request):
                 form = StudentForm()
                 subject_form = SubjectChoiceForm(group=group)
                 adress_form = AdressForm()
-                present_adress_form = PresentAdressForm()
+                present_adress_form = AdressForm()
                 ssc_equivalent_form=SscEquvalentForm()
                 guardian_form=GuardianForm()
                 print(group.title_en)

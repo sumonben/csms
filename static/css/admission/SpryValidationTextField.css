@@ -134,3 +134,10 @@ input.textfieldMaxCharsState, .textfieldMaxCharsState input {
 	border: 1px solid #000;
 	/*color: red !important;*/
 }
+
+@media(max-width:767px){
+	.textfieldUSERinfo, .textfieldUSER{
+		width: 100%;
+	}
+	
+}

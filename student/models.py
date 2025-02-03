@@ -106,7 +106,26 @@ class Subject(models.Model):
         else:
             return '1'
 
-    
+class TestSubject(models.Model):
+    serial=models.IntegerField(default=10)
+    name=models.CharField(max_length=100,null=True,blank=True)
+    name_en=models.CharField(max_length=100,null=True,blank=True)
+    code=models.CharField(max_length=20, null=True,blank=True)
+    group=models.ManyToManyField(Group, blank=True,)
+    department=models.ManyToManyField(Department, blank=True,)
+    type=models.CharField(max_length=25,blank=True,null=True)
+    is_available=models.BooleanField(default=True)
+
+
+
+    class Meta:
+        ordering = ['serial']
+    def __str__(self):
+        if self.name_en:
+            return self.name_en
+        else:
+            return '1'
+ 
 class Division(models.Model):
     name=models.CharField(max_length=25,unique=True)
     name_en=models.CharField(max_length=15,unique=True)

@@ -1,5 +1,5 @@
 from django.db import models
-from student.models import Subject,Group
+from student.models import Subject,Group,TestSubject
 # Create your models here.
 class Exam(models.Model):
     serial=models.IntegerField(default=0)
@@ -154,6 +154,157 @@ class Marks(models.Model):
 
 
         super(Marks, self).save(*args, **kwargs)
+
+class TestMarks(models.Model):
+    class_roll=models.CharField(max_length=10,)
+    name=models.CharField(max_length=100,blank=True, null=True)
+    subject=models.ForeignKey(Subject,blank=True,null=True,on_delete=models.SET_NULL)
+    group=models.ForeignKey(Group,blank=True,null=True,on_delete=models.SET_NULL)    
+    exam=models.ForeignKey(Exam,blank=True,null=True,on_delete=models.SET_NULL)
+    MCQ1=models.IntegerField(blank=True,null=True)
+    CQ1=models.IntegerField(blank=True,null=True)
+    practical1=models.IntegerField(blank=True,null=True)
+    MCQ2=models.IntegerField(blank=True,null=True)
+    CQ2=models.IntegerField(blank=True,null=True)
+    practical2=models.IntegerField(blank=True,null=True)
+    total=models.IntegerField(blank=True,null=True)
+    highest_mark=models.ForeignKey(HighestMarks,blank=True,null=True,on_delete=models.SET_NULL)
+    grade=models.CharField(max_length=150,blank=True,null=True)
+    cgpa=models.CharField(max_length=150,blank=True,null=True)
+     
+    class Meta:
+        ordering = ['group','total']
+        unique_together=('class_roll','subject','exam')
+    def __str__(self):
+        if self.subject is not None:
+            return self.class_roll+': '+self.subject.name_en
+        return self.class_roll
+    def subject_name(self):
+        if self.subject is not None:
+            return self.subject.name_en
+    
+    def save(self, *args, **kwargs):
+        total=0
+        if self.subject:
+            group=Group.objects.filter(id=3).first()
+            subj=Subject.objects.filter(name_en=self.subject.name_en).first()
+
+            if group in subj.group.all():
+                if self.CQ:
+                    total=total+self.CQ
+                    if self.CQ<33:
+                        self.grade="F"
+                        self.cgpa=0
+                else:
+                    self.grade="Absent"
+                    self.cgpa=None
+                    
+                if self.MCQ:
+                    total=total+self.MCQ
+                    if self.MCQ<8:
+                        self.cgpa=0
+                        self.grade="F"
+                else:
+                    self.grade="Absent"
+                    self.cgpa=None
+                
+                if self.practical:
+                    print("practical")
+                    total=total+self.practical
+                    if self.practical<8:
+                        self.cgpa=0
+                        self.grade="F"
+                else:
+                    total=round(total*(100/75), 2)
+            else:
+                if self.subject.id==1:
+                    if self.CQ1:
+                        total=total+self.CQ1
+                        if self.CQ<23:
+                            self.grade="F"
+                            self.cgpa=0
+                    else:
+                        self.grade="Absent"
+                        self.cgpa=None
+                    if self.MCQ1:
+                        total=total+self.MCQ1
+                        if self.MCQ1<10:
+                            self.grade="F"
+                            self.cgpa=0
+                    else:
+                        self.grade="Absent"
+                        self.cgpa=None
+                    if self.CQ2:
+                        total=total+self.CQ2
+                        if self.CQ<33:
+                            self.grade="F"
+                            self.cgpa=0
+                    else:
+                        self.grade="Absent"
+                        self.cgpa=None
+                else:
+                    if self.CQ1 and self.CQ2:
+                        sum=self.CQ1+self.CQ2
+                        total=total+sum
+                        if sum<46:
+                            self.grade="F"
+                            self.cgpa=0
+                    else:
+                        self.grade="Absent"
+                        self.cgpa=None
+                    
+
+                    if self.MCQ1 and self.MCQ2:
+                        sum=self.MCQ1+self.MCQ2
+                        total=total+sum
+                        if sum<20:
+                            self.cgpa=0
+                            self.grade="F"
+                    else:
+                        self.grade="Absent"
+                        self.cgpa=None
+                    
+                        
+
+
+            self.total=total
+
+            if self.grade == 'F':
+                self.cgpa=0
+            elif self.grade == 'Absent':
+                self.cgpa=None
+            else: 
+                if total<66:
+                    self.cgpa=0
+                    self.grade="F"
+
+                elif total>=66 and total<80:
+                    self.cgpa=1
+                    self.grade="D"
+
+                elif total>=80 and total<100:
+                    self.cgpa=2
+                    self.grade="C"
+                elif total>=100 and total<120:
+                    self.cgpa=3
+                    self.grade="B"
+                elif total>=120 and total<140:
+                    self.cgpa=3.5
+                    self.grade="A-"
+                elif total>=140 and total<160:
+                    self.cgpa=4
+                    self.grade="A"
+                elif total>=160 and total<=200:
+                    self.cgpa=5
+                    self.grade="A+"
+                else:
+                    self.cgpa=None
+                    self.grade="Undefined"
+
+
+
+
+        super(TestMarks, self).save(*args, **kwargs)
 
 class Result(models.Model):
     class_roll=models.CharField(max_length=255,)
