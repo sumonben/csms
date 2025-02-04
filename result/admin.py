@@ -16,7 +16,7 @@ class HighestMarksAdmin(admin.ModelAdmin):
 
 @admin.register(TestMarks)
 class TestMarksAdmin(ImportExportMixin, admin.ModelAdmin):
-    list_display=[  'id','class_roll','name','subject_name','MCQ1','CQ1','MCQ2','CQ2','total','grade','cgpa','exam','group']
+    list_display=[  'id','class_roll','name','subject_name','MCQ1','CQ1','MCQ2','CQ2','total','grade','cgpa','exam','group','grade_1st','grade_2nd']
     search_fields=['class_roll']
     list_display_links = ['id','class_roll']
     list_filter=[  'grade','cgpa','exam','subject','group']
