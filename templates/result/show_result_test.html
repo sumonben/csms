@@ -279,7 +279,9 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
         </thead>
         <tr>
           <th rowspan="2">Subject Name</th>
-          <th colspan="3" style="text-align:center;" >Obtained Marks</th>
+          <th colspan="3" style="text-align:center;" >1st Paper</th>
+          <th colspan="3" style="text-align:center;" >2nd Paper</th>
+          <th rowspan="2">Total</th>
           <th rowspan="2">Highest Marks</th>
           <th rowspan="2">GP</th>
           <th rowspan="2">Grade</th>
@@ -287,32 +289,36 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
         <tr>
           <th>MCQ</th>
           <th >CQ</th>
-          <th >total</th>
+          <th >Practical</th>
+          <th>MCQ</th>
+          <th >CQ</th>
+          <th >Practical</th>
         </tr>
        
         <tbody>
           {% for rslt in marks %}
-          
-
           {%if rslt.subject  in choice_list %}
-          
-          {% if subject_choice.fourth_subject.code not in rslt.subject.code %}
-          
+          {% if student.fourth_subject.code not in rslt.subject.code %}
             <tr>
 
 
               <td width="30%"  align="left" valign="middle"> {{rslt.subject.name_en}} </td>
-              <td width="10%"  align="center" valign="middle"> {% if rslt.MCQ %}{{rslt.MCQ}} {% endif %}</td>
-              <td width="10%" align="center" valign="middle">{% if rslt.CQ %} {{rslt.CQ}}{% endif %} </td>
+              <td width="10%"  align="center" valign="middle">{% if rslt.MCQ1 %} {{rslt.MCQ1}} {% else %}-{% endif %} </td>
+              <td width="10%" align="center" valign="middle"> {{rslt.CQ1}} </td>              
+              <td width="10%" align="center" valign="middle"> {% if rslt.practical1 %} {{rslt.practical1}} {% else %}-{% endif %} </td>
+              <td width="10%"  align="center" valign="middle"> {% if rslt.MCQ2 %} {{rslt.MCQ2}} {% else %}-{% endif %}</td>
+              <td width="10%" align="center" valign="middle"> {{rslt.CQ2}} </td>              
+              <td width="10%" align="center" valign="middle"> {% if rslt.practical2 %} {{rslt.practical2}} {% else %}-{% endif %} </td>
+
 
               {% if rslt.subject.id == 3 or rslt.subject.id == 4 or rslt.subject.id == 5 or rslt.subject.id == 6 or rslt.subject.id == 7 %}
-              <td width="10%" align="center" valign="middle">{% if rslt.total %} {{rslt.total}}(Calculated){% endif %} </td>
+              <td width="10%" align="center" valign="middle"> {{rslt.total}} </td>
               {% else %}
-              <td width="10%" align="center" valign="middle">{% if rslt.total %} {{rslt.total}} {% endif %}</td>
+              <td width="10%" align="center" valign="middle"> {{rslt.total}} </td>
               {% endif %}
-              <td width="15%" align="center" valign="middle">{% if rslt.highest_mark.highest_mark %} {{rslt.highest_mark.highest_mark}} {% endif %}</td>
-              <td width="10%" align="center" valign="middle">{% if rslt.cgpa %} {{rslt.cgpa}} {% endif %}</td>
-              <td width="10%" align="center" valign="middle">{% if rslt.grade %} {{rslt.grade}} {% endif %} </td>
+              <td width="15%" align="center" valign="middle"> {{rslt.highest_mark.highest_mark}} </td>
+              <td width="10%" align="center" valign="middle"> {{rslt.cgpa}} </td>
+              <td width="10%" align="center" valign="middle"> {{rslt.grade}} </td>
 
 
 
@@ -327,17 +333,18 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
 
 
             {% for rslt in marks %}
-            {% if subject_choice.fourth_subject.code in rslt.subject.code %}
+            {% if student.fourth_subject.code in rslt.subject.code %}
               <tr>
 
 
-                <td width="15%"  align="left" valign="middle"> {{rslt.subject.name_en}}(4th Subject) </td>
-                <td width="15%"  align="center" valign="middle">{% if rslt.MCQ %} {{rslt.MCQ}} {% endif %}</td>
-                <td width="15%" align="center" valign="middle">{% if rslt.CQ %} {{rslt.CQ}} {% endif %}</td>
-                <td width="15%" align="center" valign="middle">{% if rslt.total %} {{rslt.total}} {% endif %} </td>
-                <td width="15%" align="center" valign="middle">{% if rslt.highest_mark.highest_mark %} {{rslt.highest_mark.highest_mark}} {% endif %}</td>
-                <td width="10%" align="center" valign="middle">{% if rslt.cgpa %} {{rslt.cgpa}} {% endif %}</td>
-                <td width="10%" align="center" valign="middle"> {% if rslt.grade %}{{rslt.grade}} {% endif %} </td>
+                <td width="30%"  align="left" valign="middle"> {{rslt.subject.name_en}} </td>
+                <td width="10%"  align="center" valign="middle"> {% if rslt.MCQ1 %} {{rslt.MCQ1}} {% else %}-{% endif %} </td>
+                <td width="10%" align="center" valign="middle"> {{rslt.CQ1}} </td>              
+                <td width="10%" align="center" valign="middle"> {% if rslt.practical1 %} {{rslt.practical1}} {% else %}-{% endif %}</td>
+                <td width="10%"  align="center" valign="middle"> {% if rslt.MCQ2 %} {{rslt.MCQ2}} {% else %}-{% endif %} </td>
+                <td width="10%" align="center" valign="middle"> {{rslt.CQ2}} </td>              
+                <td width="10%" align="center" valign="middle"> {% if rslt.practical2 %} {{rslt.practical2}} {% else %}-{% endif %} </td>
+  
 
 
 

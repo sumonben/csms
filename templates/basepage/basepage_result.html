@@ -194,8 +194,8 @@
                         </tr> {% endcomment %}
                        <tr>
                       <td width="10%" height="95" align="center" valign="middle"><img src="{% static 'images/gmrwc_logo.png'%}" width="75" height="75"></td>
-                      <td width="75%" height="95" align="left" valign="top">
-                                              
+                      <td width="75%" height="95" align="left" valign="middle">
+                                                
                         <span class="GrayBlue14b" style="color:#fff;line-height:1.5;">Government of the People's Republic of Bangladesh</span><br>
                       <span class="GrayBlue20bold" style="color:#fff;line-height:1;font-size:30px;">Govt. Mujibur Rahman Women's College Bogura</span>
                       </td>
@@ -220,13 +220,13 @@
               <td height="30" align="left" valign="middle"><a href="{% url 'search_result' %}" class="link02">Refresh</a></td>
               {% if  request.user.is_superuser %}
               <td width="30" height="25" align="center" valign="middle">•</td>
-              <td width="150" height="25" valign="middle"><a href="{% url 'option_create_result' %}" class="link-home">Create Result</a></td>
-              <td width="150" height="25" align="center" valign="middle">•</td>
-              <td width="150" height="25" valign="middle"><a href="{% url 'option_create_position' %}" class="link-home">Create Position</a></td>
+              <td width="200" height="25" valign="middle"><a href="{% url 'option_create_result' %}" class="link-home">Create Result</a></td>
               <td width="30" height="25" align="center" valign="middle">•</td>
-              <td width="150" height="25" valign="middle"><a href="{% url 'option_delete_result' %}" class="link-home">Delete Result</a></td>
+              <td width="200" height="25" valign="middle"><a href="{% url 'option_create_position' %}" class="link-home">Create Position</a></td>
               <td width="30" height="25" align="center" valign="middle">•</td>
-              <td width="150" height="25" valign="middle"><a href="{% url 'option_highest_marks' %}" class="link-home">Create Highest Marks</a></td>
+              <td width="200" height="25" valign="middle"><a href="{% url 'option_delete_result' %}" class="link-home">Delete Result</a></td>
+              <td width="30" height="25" align="center" valign="middle">•</td>
+              <td width="250" height="25" valign="middle"><a href="{% url 'option_highest_marks' %}" class="link-home">Create Highest Marks</a></td>
               {% endif %}
               <!--<td height="30" align="left" valign="middle"><a href="/" class="link02">Download Certificate Copy</a></td>
               <td width="30" height="25" align="center" valign="middle">•</td>

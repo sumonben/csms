@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
-from .models import Marks,Exam,Result,HighestMarks
+from .models import Marks,Exam,Result,HighestMarks,TestMarks
 from student.models import Student,Group,Choice,Subject
 from .forms import SeachResultForm,CreateResultForm,DeletResultForm,CreatePositionForm,HighestMarksForm
 from django.contrib.auth.decorators import login_required
@@ -17,16 +17,22 @@ def searchResult(request):
         totalgpa=0
         totalgpa1=0
         exam=Exam.objects.filter(id=request.POST.get('exam')).first()
-        marks=Marks.objects.filter(class_roll=request.POST.get('roll').strip(),exam=exam).order_by('subject')
+        if exam.type == '2':
+            marks=TestMarks.objects.filter(class_roll=request.POST.get('roll').strip(),exam=exam).order_by('subject')
+        else:
+            marks=Marks.objects.filter(class_roll=request.POST.get('roll').strip(),exam=exam).order_by('subject')
         highest_marks=HighestMarks.objects.filter(exam=exam)
 
-        #print(result)
+        print(marks)
         result=Result.objects.filter(class_roll=request.POST.get('roll').strip(),exam=exam).first()
         student=Student.objects.filter(class_roll=request.POST.get('roll').strip()).first()
-        #print(student)
+        print(student)
         subject_choice=Choice.objects.filter(class_roll=request.POST.get('roll').strip()).first()
+
         if subject_choice and student and marks and exam:
             choice_list=[subject_choice.subject1,subject_choice.subject2,subject_choice.subject3,subject_choice.subject4,subject_choice.subject5,subject_choice.subject6,subject_choice.fourth_subject]
+            print(choice_list)
+
         else:
             context['notfound']="Result not found!!re=Enter Right Information or Contact exam control room"
             form=SeachResultForm()
@@ -38,6 +44,7 @@ def searchResult(request):
         context['student']=student
         context['exam']=exam
         context['choice_list']=choice_list
+        context['subject_choice']=subject_choice
 
         
         for reslt in marks:
@@ -49,7 +56,11 @@ def searchResult(request):
                     context['grade']=grade
                     context['cgpa']=cgpa
                     flag1=1
-                    return render(request, 'result/show_result_copy.html', context=context)
+                    
+                    if exam.type == '2':
+                        return render(request, 'result/show_result_test.html', context=context)
+                    else:
+                        return render(request, 'result/show_result_copy.html', context=context)
 
                 elif reslt.grade=="F" and reslt.subject !=subject_choice.fourth_subject:
                     grade="F"
@@ -73,8 +84,11 @@ def searchResult(request):
                             #print(totalgpa1)
 
         if flag2==1 or flag1==1:
-            return render(request, 'result/show_result_copy.html', context=context)
-        
+                    if exam.type == '2':
+                        return render(request, 'result/show_result_test.html', context=context)
+                    else:
+                        return render(request, 'result/show_result_copy.html', context=context)
+
         else:
             #print(grade)
             cgpa=totalgpa/6
@@ -103,7 +117,10 @@ def searchResult(request):
         
         
    
-        return render(request, 'result/show_result_copy.html', context=context)
+        if exam.type == '2':
+            return render(request, 'result/show_result_test.html', context=context)
+        else:
+            return render(request, 'result/show_result_copy.html', context=context)
     form=SeachResultForm()
     context['form']=form
     return render(request, 'result/search_result.html', context=context)
@@ -142,11 +159,22 @@ def OptionCreatePosition(request):
 def createResult(request):
     if request.user.is_superuser:
         exam=Exam.objects.filter(id=request.POST.get('exam')).first()
-        rolls=list(Marks.objects.filter(exam=exam).values('class_roll').order_by('class_roll').distinct())
+        del_result=Result.objects.filter(exam=exam).delete()
+        if exam.id == 3:
+            rolls=list(TestMarks.objects.filter(exam=exam).values('class_roll').order_by('class_roll').distinct())
+        else:
+            rolls=list(Marks.objects.filter(exam=exam).values('class_roll').order_by('class_roll').distinct())
+
         count=0
         choice_list=[]
         for roll in rolls:
-            result=Marks.objects.filter(class_roll=roll['class_roll'])
+            if exam.id == 3:
+                result=TestMarks.objects.filter(class_roll=roll['class_roll'])
+            else:
+                result=Marks.objects.filter(class_roll=roll['class_roll'])
+            if result.count()<7:
+                messages.success(request,exam.title_en+" Result Not Created Successfully! -->All subject marks not entered")
+                return redirect('option_create_result')            
             student=Student.objects.filter(class_roll=roll['class_roll']).first()
             subject_choice=Choice.objects.filter(class_roll=roll['class_roll'].strip()).first()
             if subject_choice:
@@ -164,7 +192,7 @@ def createResult(request):
             present_at=0
             pass_at=0
             remarks=None
-
+            
             for reslt in result:
                 if reslt.subject  in choice_list:
                     if reslt.grade=="Absent":
@@ -207,6 +235,7 @@ def createResult(request):
                                 pass_at=pass_at+1
                                 total=total+reslt.total
                                 totalgpa=totalgpa+float(reslt.cgpa)
+            
             if absent_at==7:
                 grade="AbsentAll"
                 remarks="Not Promoted"
@@ -241,6 +270,7 @@ def createResult(request):
                     grade="A+"
                 else:
                     grade="Absent"
+                    remarks="Not Promoted"                   
                 if student:
                     #print(student.name)
                     remarks="Promoted"                   
@@ -278,6 +308,9 @@ def CreatePosition(request):
         result1=Result.objects.filter(group=group1,exam=exam).order_by('-cgpa','-total')
         result2=Result.objects.filter(group=group2,exam=exam).order_by('-cgpa','-total')
         result3=Result.objects.filter(group=group3,exam=exam).order_by('-cgpa','-total')
+        if result1==None or result2==None or result3==None:
+            messages.success(request,exam.title_en+" Result Not found")
+            return redirect('option_create_position')
         count=0
         cgpa_prev=0
         total=0

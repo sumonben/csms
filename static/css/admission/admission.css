@@ -456,7 +456,7 @@ fieldset {
 .link-home {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 18px;
-	color: rgb(218, 31, 6);
+	color: rgb(253, 253, 253);
 	text-decoration: none;
 	font-weight: bold;
 
@@ -464,7 +464,7 @@ fieldset {
 .link-home:hover {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 18px;
-	color: rgb(252, 252, 252);
+	color: rgb(206, 2, 2);
 	text-decoration: none;
 	font-weight: bold;
 }
