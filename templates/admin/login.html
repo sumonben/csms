@@ -1,68 +1,100 @@
-{% extends "admin/base_site.html" %}
+{% extends 'basepage/ictparkbd_layout.html' %}
+{% block content %} 
+{% include 'components/navbarfront.html'%}           
 {% load i18n static %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static "admin/css/login.css" %}">
-{{ form.media }}
-{% endblock %}
+ {% load static %}
+ 
+ <div class="wrapper">
+        <div class="logo1">
+            <img src="{% static 'images/gmrwc_logo.png'%}" alt="">
+        </div>
+       
+                
+                <div class="text-center mt-4 name">
+              লগিন করুন
+        </div>
+        {% if form.errors and not form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+                  {% blocktranslate count counter=form.errors.items|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktranslate %}
+        </div>
+        {% endif %}
+        
+        {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+                      {{ error }}
+        </div>
+        {% endfor %}
+        {% endif %}
+                 {%if email %}
+                
+                <div class="alert alert-danger" role="alert">
+                  <strong>{{email}}</strong> 
+                </div>
+                {% endif %}
+                
+                {%if password %}
+                
+                <div class="alert alert-danger" role="alert">
+                  <strong>{{password}}</strong> 
+                </div>
+                
+                {% endif %}
+                
+                <form action="{{ app_path }}" class="p-3 mt-3" method="POST">
+                  {% csrf_token %}
+               <div class="form-field d-flex align-items-center">
+                <span class="far fa-user"></span>
+                <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="100" required="" id="id_username" placeholder="ই-মেইল">
+            </div>
+            <div class="form-field d-flex align-items-center">
+                <span class="fas fa-key"></span>
+                <input type="password" name="password" autocomplete="current-password" required id="id_password" placeholder="পাসওয়ার্ড">
+            </div>
+            <button class="btn mt-3">লগ-ইন</button>
+        </form>
+        <div class="text-center fs-6">
+            <a href="">Forget password?</a> or <a href="">রেজিস্ট্রেশন</a>
+        </div>
+    </div>
+<script>
+             
+              // When the user scrolls down 50px from the top of the document, resize the header's font size
+              window.onscroll = function() {
+                  scrollFunction()
 
-{% block bodyclass %}{{ block.super }} login{% endblock %}
+              };
+          
+              function scrollFunction() {
+                var x = window.matchMedia("(max-width: 989px)")
+                  if (document.body.scrollTop >50 || document.documentElement.scrollTop > 50) {
+                    document.getElementById("header").className = "header sticky";
 
-{% block usertools %}{% endblock %}
+                    
+                    {% comment %} if (x.matches) { 
+                      // If media query matches
+                    } else {
+                      document.getElementById("heading").style= "padding-top:-20px;font-size:35px;";
+                      document.getElementById("sub-heading").style.display = "none";
 
-{% block nav-global %}{% endblock %}
+                     
+                    } {% endcomment %}
+                      
+                  } else {
+                    document.getElementById("header").className = "header";
+                    document.getElementById("sub-heading").style.display = "block";
 
-{% block nav-sidebar %}{% endblock %}
+                    {% comment %} if (x.matches) { 
+                      // If media query matches
+                    } else {
+                    document.getElementById("heading").style= "padding-top:-20px;font-size:40px;";
+                    } {% endcomment %}
 
-{% block content_title %}{% endblock %}
 
-{% block nav-breadcrumbs %}{% endblock %}
+                  }
+                 
+              }
+          </script>
+{% endblock %} 
 
-{% block content %}
-{% if form.errors and not form.non_field_errors %}
-<p class="errornote">
-{% blocktranslate count counter=form.errors.items|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktranslate %}
-</p>
-{% endif %}
-
-{% if form.non_field_errors %}
-{% for error in form.non_field_errors %}
-<p class="errornote">
-    {{ error }}
-</p>
-{% endfor %}
-{% endif %}
-
-<div id="content-main">
-
-{% if user.is_authenticated %}
-<p class="errornote">
-{% blocktranslate trimmed %}
-    You are authenticated as {{ username }}, but are not authorized to
-    access this page. Would you like to login to a different account?
-{% endblocktranslate %}
-</p>
-{% endif %}
-
-<form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
-  <div class="form-row">
-    {{ form.username.errors }}
-    {{ form.username.label_tag }} {{ form.username }}
-  </div>
-  <div class="form-row">
-    {{ form.password.errors }}
-    {{ form.password.label_tag }} {{ form.password }}
-    <input type="hidden" name="next" value="{{ next }}">
-  </div>
-  {% url 'admin_password_reset' as password_reset_url %}
-  {% if password_reset_url %}
-  <div class="password-reset-link">
-    <a href="{{ password_reset_url }}">{% translate 'Forgotten your password or username?' %}</a>
-  </div>
-  {% endif %}
-  <div class="submit-row">
-    <input type="submit" value="{% translate 'Login' %}">
-  </div>
-</form>
-
-</div>
-{% endblock %}

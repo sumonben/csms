@@ -1,111 +1,134 @@
-{% extends 'basepage/basepage_result.html' %}
+{% extends 'basepage/ictparkbd_layout.html' %}
 
 {% block content %}
 {% load static %}
-
-    
-    <fieldset style="margin-bottom: 2%;">
-        <table id="search_table" border="1" cellspacing="0" cellpadding="2" align="center">
-            {% if notfound %}
-            
-                <thead><th colspan="5" style="height: 25px; background-color:rgb(148, 30, 9); color: #fff;padding: 15px;">Result Not found!<br>re-Enter right information or Contact exam control room </th></thead>
-                 
-                {% endif %}
-                {% if messages %}
-                {% for message in messages %}
-            
-                    <thead><th colspan="5" style="height: 25px; background-color:rgb(148, 30, 9); color: #fff;padding: 15px;">{{message}} </th></thead>
-                {% endfor %}
-                {% endif %}
-          <thead style="height: 25px; background-color: #035a4c; color: #fff;padding: 15px"><th colspan="5" style="height: 25px; background-color: #035a4c; color: #fff;padding: 15px;">
-            {% if create_result_form %}
-            Create Result
-            {% elif create_position_form%}
-            Create Position
-            {% elif delete_result_form %}
-            Delete Result
-            {% elif highest_marks_form %}
-            Create Highest Marks
-            {% else %}
-            Insert roll and exam to find result
-
-            {% endif %} </th></thead>
-          <tbody>
-            
-            <form method="post" action="{% if create_result_form %}{% url 'create_result' %}{% elif create_position_form %}{% url 'create_position' %}{% elif delete_result_form %}{% url 'delete_result' %}{% elif highest_marks_form %}{% url 'highest_marks'%}{% else %}{% url 'search_result' %}{% endif %}" id="form1" name="form1" target="_blank">
-                {% csrf_token %}
-            <tr>
-                
-                <td class="r-align-right r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c1" data-pageid="1">
-
-                    {% if create_result_form %}
-                    {{ create_result_form }}
-                    {% elif create_position_form%}
-                    {{create_position_form}}
-                    {% elif delete_result_form %}
-                        {{delete_result_form}}
-                    {% elif highest_marks_form %}
-                    {{highest_marks_form}}
-
-                    {% else %}
-                        {{form}}
-                    {% endif %}
-                </td>
-                
-                
-                <td class="col-md-2"></td>
-                </tr>
-                
-                <tr>
-                
-                <td class="r-align-right r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c3" data-pageid="1">
-                
-                </td>
-                
-                <td class=" r-ori-vert							col-md-6						" data-single="" data-cellid="grid_c4" data-pageid="1">
-                
-                </td>
-                <td class="col-md-2"></td>
-                </tr>
-                
-                <tr>
-                
-                <td class=" r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c9" data-pageid="1">
-                <div edit-form-cell="" class="clearfix">
-                </div>
-                </td>
-                
-                <td class=" r-ori-vert							col-md-6						" data-single="" data-cellid="grid_c10" data-pageid="1">
-                <div edit-form-cell="" class="clearfix">
-                </div>
-                </td>
-                <td class="col-md-2"></td>
-                </tr>
-                <tr >
-                    <td colspan="5" align="right">                
-                    <button type="submit" id="submit-btn"  >Submit</button>
-                </td></tr>
-          </form>
-          
-        </tbody>
-    </table>
-    </fieldset>
-   
-<script>
-    function myFunction( id ){
-            
-            var e=document.getElementById('id_student_category')
-            var val = e.options[e.selectedIndex].value;
-            if(val == 3){
-                document.getElementById('id_group').style.display='block';
-                document.getElementByFor('id_group').label.visibility='visible';
-
-            }else{
-                
-                document.getElementById('id_group').style.display='none';
-                document.getElementByFor('id_group').label.visibility='hidden';
-
-            }
+<style>
+    .main_body{
+        width:100%;
+        height:100%;
+        color:red;
     }
-</script>
+    option{
+      color:#035a4c;
+      font-weight:bold;
+      font-size:17px;
+    }
+    option:hover:after{
+      background-color:#035a4c;
+      font-weight:bold;
+    }
+    @media(max-width:767px){
+        .main_body{
+            width:100%;
+            height:700px;
+            color:red;
+            background-color:green;
+        }   
+    }
+</style>
+<div class="services">
+    <div  class="container-wrapper" >
+
+  <div><h2 style="text-align: center;color: #035a4c ;text-shadow: 2px 2px 2px rgb(65, 7, 7);"><u>আপনার সনদটি ডাউনলোড করুন</u></h2></div>
+  
+  <div data-v-6f04a53f="" class="memberRegistration py-5">
+    <div class="container-wrapper">
+      <div class="row justify-content-md-center">
+        <div class="col col-lg-10">
+          <div class="card login-body shadow-lg rounded-10 py-5">
+            <table width="100%" border="1" cellspacing="0" cellpadding="10">
+              <thead><th colspan="5" style="height: 40px; background-color: #035a4c; color: #fff;padding: 15px;font-size:20px;text-align:center;"> সনদ ডাউনলোড ফর্ম </th></thead>
+
+              {% if message %}
+              <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 40px; background-color:rgb(168, 8, 8); color: #fff;padding: 15px;"> {{message}} </th></thead>
+              {% endif %}
+              <tbody>
+              </tbody>
+            </table>
+                <div class="card-body">
+
+                <span class="bubbleNew"><img src="{%static 'images/ictpark_monogram.png'%}" class="rounded-circle" style="width: 200px;height: 200px;" /></span>
+
+                <span class="shape"><img align="center" src="{% static 'images\ictparkbd_logo.jpg' %}"><img align="center" style="height:60%;margin-top:10%;rotate: -50deg;" src="{% static 'images\tilokpur_logo.png' %}"></span> 
+                {%if email %}
+            
+            <div class="alert alert-danger" role="alert">
+              <strong>{{email}}</strong> 
+            </div>
+            
+            {% endif %}
+            {%if phone %}
+            
+            <div class="alert alert-danger" role="alert">
+              <strong>{{phone}}</strong> 
+            </div>
+            
+            {% endif %} 
+            
+            {%if password %}
+            
+            <div class="alert alert-danger" role="alert">
+              <strong>{{password}}</strong> 
+            </div>
+            
+            {% endif %}
+            
+            {%if success %}
+            
+            <div class="alert alert-success" role="alert">
+              <strong>{{success}}</strong> 
+            </div>
+            
+            {% endif %}
+            
+            <form autocomplete="off" id="form" class="form-row px-3" method="post" action="">
+               {% csrf_token %}
+                            <div class="col-sm-8 form-group" style="margin:auto;">
+                              <div class="row">
+                                <div class="col-sm-10" >
+                                  <label for="" class="col-form-label-sm m-0" style="font-size:20px;">{{form.roll.label}}</label> 
+                                  <div class="loginBox">
+                                            {{form.roll}}     
+                                            <span class="fa fa-universal-access"></span>
+                                   
+                                  </div> <!--  --> <div class="invalid-feedback"></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-8 form-group" style="margin:auto;">
+                              <div class="row">
+                                <div class="col-sm-10" >
+                                  <label for="" class="col-form-label-sm m-0" style="font-size:20px;">{{form.exam.label}}</label> 
+                                  <div class="loginBox">
+                                            {{form.exam}}     
+                                            <span class="fa fa-certificate"></span>
+                                   
+                                  </div> <!--  --> <div class="invalid-feedback"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                
+              
+              
+             
+              <div class="col-sm-9 form-group">
+                <p class="text-right">
+                  <button type="submit" class="btn btn-danger text-white"><span>সাবমিট</span></button>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CONTAINER -->
+
+
+ 
 {% endblock  %}

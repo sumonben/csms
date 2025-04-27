@@ -1,0 +1,169 @@
+
+
+
+.minister-profile {
+    background-color: rgb(9, 71, 77);
+}
+
+.container1 {
+
+    animation-name: example2;
+    animation-duration: 4s;
+    float: left;
+    width: 25%;
+    height: 100%;
+    padding-left: 10px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    box-shadow: inset -8px -8px 8px #cbced1, inset 8px 8px 8px #fff;
+}
+
+
+.container2 {
+
+
+    float: left;
+    width: 72%;
+    height: 100%;
+
+    margin-bottom: 20px;
+    border-radius: 20px;
+    box-shadow: inset -8px -8px 8px #cbced1, inset -8px -8px 8px #fff, inset -8px -8px 8px #fff, inset -8px -8px 8px #fff;
+}
+
+.container3 {
+
+
+    float: left;
+    width: 47%;
+    height: 100%;
+
+    margin: 2px;
+    border-radius: 20px;
+    box-shadow: inset 8px 8px 8px #cbced1, inset 8px 8px 8px #fff;
+}
+
+.container4 {
+
+
+    float: left;
+    width: 47%;
+    height: 100%;
+
+    margin: 2px;
+    border-radius: 20px;
+    box-shadow: inset 8px 8px 8px #cbced1, inset 8px 8px 8px #fff;
+}
+
+.container5 {
+    margin: auto;
+    width: 90%;
+    height: 100%;
+    font-family: SolaimanLipi;
+    width: 100%;
+    min-height: 80px;
+    display: block;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 1.2rem;
+    color: #666;
+    padding: 10px 15px 10px 10px;
+    border-radius: 15px;
+    box-shadow: inset 13px 13px 13px #cbced1, inset 13px 13px 13px #cbced1;
+}
+
+.container1,
+.container2,
+.container3,
+.container4,
+.container5 {
+        background: #fff;
+
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+@media(max-width:768px){
+    .container1,
+.container2,
+.container3,
+.container4,
+.container5 {
+    position: relative;
+    width: 100%;
+}
+.modal-body {
+  margin: 0px;
+  padding:0px;
+}
+}
+@keyframes example2 {
+    0% {
+        left: -23%;
+    }
+
+    100% {
+        left: 2px;
+    }
+}
+
+.member .card {
+    background-size: cover;
+    height: 190px;
+    position: absolute;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    -webkit-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+    cursor: pointer
+}
+
+.member .card h3 {
+    font-size: 16px;
+    color: #000;
+    font-weight: 600
+}
+
+.member .card .iconbox {
+
+    border: 3px solid rgba(0, 127, 61, .3);
+    width: 70px;
+    display: block;
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+    border-radius: 50%;
+    margin: -40px auto 15px;
+    background: #fff;
+    -webkit-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out
+}
+
+.member .card .iconbox i {
+    color: #007f3d;
+    font-size: 40px
+}
+
+.member .card:hover {
+    border-color: #ed1c24
+}
+
+.member .card:hover .iconbox {
+    border: 3px solid #ed1c24
+}
+
+.member .card:hover .iconbox i {
+    color: #ed1c24;
+    font-size: 40px
+} .container {
+    width: 100%;
+    margin: 0 auto;
+}
+

@@ -1,0 +1,335 @@
+{% load static %}
+<style>
+    .heading{
+        color:#fff;
+        text-shadow: 8px 8px 8px rgb(65, 7, 7);
+        font-size: 30px;
+        text-align:center;
+        font-family:kalpurush;
+        font-weight:bold;
+        
+
+    }
+    .sub-heading{
+        color:#fff;
+        text-shadow: 2px 2px 2px rgb(65, 7, 7);
+        font-size:17px;
+        font-family:kalpurush;
+
+
+    }
+    #main-heading{
+        width:100px;
+        margin-top:-40px;
+    }
+    
+    .header.sticky #main-heading{
+        margin-top: -5px;
+    }
+    .header.sticky .heading{
+        font-size:35px;
+        line-height:1;
+    } 
+    .header.sticky .sub-heading{
+        display:none;
+    } 
+    @media(max-width:767px){
+        
+        .heading{
+            color:#fff;
+            text-shadow: 4px 4px 4px rgb(65, 7, 7);
+            font-size: 22px;
+            padding:0px;
+            text-align:center;
+            font-weight:bold;
+        } 
+        .sub-heading{
+            color:#fff;
+            margin-left:10px;
+            text-shadow: 2px 2px 2px rgb(65, 7, 7);
+            font-size:18px;
+
+    
+        }
+        #main-heading{
+            width:100px;
+            margin-top:-15px;
+            margin-left:-130px;
+        }
+        .header.sticky #main-heading{
+            margin-top: -15px;
+        }
+        .header.sticky .heading{
+            font-size:22px;
+        } 
+        .header.sticky .sub-heading{
+            display:block;
+        } 
+    }
+    @media(min-width:768px) and (max-width:989px){
+        #navbarSupportedContent{
+            background-color:#035a4c;
+        }
+        .navbar-toggler{
+            margin-top:-20px;
+
+        }
+        .heading{
+            color:#fff;
+            text-shadow: 1px 1px 1px rgb(65, 7, 7);
+            font-size: 40px;
+            margin-left:-150px;
+            margin-top:-110px;
+            padding:0px;
+            text-align:center;
+        } 
+        .header .sub-heading{
+            color:#fff;
+            font-size:15px;
+            margin-left:-150px;
+    
+        }
+        #main-heading{
+            width:100px;
+            margin-left:-130px;
+        }
+        .header.sticky #main-heading{
+            margin-top:-30px;
+        } 
+        .header.sticky .heading{
+            font-size:30px;
+        } 
+        .header.sub-heading{
+            display:block;
+        }.header .sticky .sub-heading{
+            display:block;
+        } 
+    }
+
+</style>
+<header data-v-6f04a53f="" class="header" id="header" style="border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;" >
+    <div class="search-box">
+        <div class="box">
+            <form id="searchform2"> 
+           
+            <input list="browsers" type="search" placeholder="What are you looking for?"> <span class="mdi mdi-magnify"></span>
+                <!---->
+            </form> <button type="button" class="close text-light search-box-close"><i class="mdi mdi-close"></i></button>
+        </div>
+    </div>
+    <div class="container-wrapper" >
+        <div class="top-header">
+            <ul class="nav align-items-center justify-content-end" style="position: relative;">
+                {% if user.is_authenticated %}
+                <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"> ড্যাশবোর্ড </a></li>
+                {% else %}
+                    <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"> লগিন </a></li>
+                {% endif %}
+                <li class="nav-item"><a href="" class="nav-link">রেজিস্ট্রার</a></li>
+                <li class="nav-item"><a href="" class="nav-link">
+                        মন্তব্য
+                    </a></li>
+                <li class="nav-item"><a href="/digitalshop" class="nav-link"><b>যোগাযোগ</b></a>
+                </li>
+            </ul>
+        </div>
+  <div class="main-header">
+                  
+        <span class="shape2New"> </span><span class="shape3New"> </span><span class="shape1New"> </span>
+    <nav class="navbar navbar-expand-lg p-lg-0" >
+        <a  href="/" class="navbar-brand logo" aria-current="page"  > 
+            <span><img src="{% static 'images/gmrwc_logo.png'%}"></span>
+
+        </a>
+        <a id="main-heading" href="/" class="navbar-brand logo active router-link-active" aria-current="page" > 
+           
+                                          
+                  <span class="heading" id="heading">GOVT. MUJIBUR RAHMAN WOMEN'S COLLEGE</span><br>
+                  <span id="sub-heading" class="sub-heading"   >BAGURA SADAR, BOGURA</span>
+
+               
+             
+        </a>
+        
+        <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler mMenu collapsed"><span class="fas fa-bars"></span></button>
+        <div id="navbarSupportedContent" class="navbar-collapse collapse" style="">
+            
+            <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler mMenu collapsed" style="margin-top:20px;"><span class="fa fa-close"></span></button>
+            <ul class="navbar-nav ml-auto" style="float:left; margin-left:20%;">
+                <li class="nav-item" ><a href="/" class="{% if request.resolver_match.url_name in 'home' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}" aria-current="page">Home</a></li>
+                <li class="nav-item dropdown" ><a href="{% url 'search_payment' %}" id="navbarDropdown"  aria-haspopup="true" aria-expanded="false" class="{% if request.resolver_match.url_name == 'search_payment' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Online Payment</a>
+                    {% comment %} <div aria-labelledby="navbarDropdown" class="dropDown dropdown-menu megamenu megamenu-lg">
+                        <div class="row m-0">
+                            <div class="col-lg-4 pr-0">
+                                <h4 class="menu-head"><a href="/ea/local/awards" class="">প্রথম ভাগ</a></h4>
+                                     
+                                <ul>
+                                    {% for certificate in certificate_types_first %}
+                                        
+                                        
+                                    <li class="subMenu" ><span class="fa fa-hand-o-up"></span>
+                                        <a href="{% url 'apply_for_certificate' certificate.id %}" target="_blank" style="padding-left:2px;padding-right:0px;">
+                                       {{certificate.name}}
+                                        </a>
+                                    </li>
+                                    {% endfor %} 
+
+                                    {% for certificate in certificate_types|slice:'0:10'  %}
+                                        
+                                        
+                                    <li class="subMenu" ><span class="fa fa-hand-o-up"></span>
+                                        <a href="" target="_blank" style="padding-left:2px;padding-right:0px;">
+                                       {{certificate.name}}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+
+                                    
+                                </ul>
+                            </div>
+                            <div class="col-lg-4 pr-0">
+                                <h4 class="menu-head"><a href="/ea/local/events" class="">দ্বিতীয় ভাগ</a></h4>
+                                <ul>
+                                    {% for certificate in certificate_types|slice:'10:20'  %}
+                                        
+                                        
+                                    <li class="subMenu"><span class="fa fa-hand-o-up"></span>
+                                        <a href="" target="_blank" class="">
+                                       {{certificate.name}}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                    
+                                </ul>
+                            </div>
+                            <div class="col-lg-4 pr-0">
+                                <h4 class="menu-head" ><span style="color:rgb(180, 9, 9)">
+                                        তৃতীয় ভাগ
+                                    </span></h4>
+                                    <ul>
+                                        {% for certificate in certificate_types|slice:'20:30'  %}
+                                            
+                                            
+                                        <li class="subMenu" ><span class="fa fa-hand-o-up"></span>
+                                            <a href="" target="_blank" class="">
+                                           {{certificate.name}}
+                                            </a>
+                                        </li>
+                                        {% endfor %}
+                                        
+                                    </ul>
+                                    <h4 class="menu-head" ><span style="color:rgb(180, 9, 9)">
+                                        <br>
+                                        লাইসেন্সসমূহ 
+                                    </span></h4>
+                                <ul>
+                                    {% for license in license_types  %}
+                                        
+                                        
+                                    <li class="subMenu"><span class="fa fa-hand-o-up"></span>
+                                        <a href="" target="_blank" class="">
+                                       {{license.name}}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                        </ul>
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                </li>
+                
+                <li class="nav-item nav-item dropdown"><a href="{% url 'search_result' %}" aria-haspopup="true" aria-expanded="false" class="{% if request.resolver_match.url_name == 'search_result' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Results</a>
+                    {% comment %} <div aria-labelledby="navbarDropdown" class="dropDown dropdown-menu megamenu megamenu-lg">
+                        <div class="row m-0">
+                            <div class="col-lg-4 pr-0">
+                                <h4 class="menu-head"><a href="{% url 'select_certificate' %}" class="">আবেদন করুন</a></h4>
+                                          <ul>
+                                             
+                                            </ul>
+                            </div>
+                            <div class="col-lg-4 pr-0">
+                                <h4 class="menu-head"><a href="/secretariat" class="">Our Team</a></h4>
+                                        <ul>
+                                            <li class="subMenu"><span class="fa fa-angle-double-right"></span>
+                                            <a href="https://israbentech.com/frontend/about/excutive-council" class="nav-link" onclick="myFunctionNavbar(this.id)">Excutive Council</a></li>
+                                                <li class="fas fa-eye"><a href="https://israbentech.com/frontend/about/previous-excutive-council" class="nav-link">Previous Excutive Council</a></li>
+                                                        <li class="subMenu"><span class="fab fa-think-peaks"> </span><a href="https://israbentech.com/frontend/about/members" class="nav-link">Members</a></li> 
+                                            </ul>
+                            </div>
+                          
+                        </div>
+                    </div> {% endcomment %}
+                </li>
+                <li class="nav-item nav-item dropdown"><a href="{% url 'admission_login' %}" class="{% if request.resolver_match.url_name in 'admission_login' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}" aria-expanded="false" aria-current="page">ADMISSSION</a>
+                    {% comment %} <div aria-labelledby="navbarDropdown" class="dropdown-menu">
+                        <div class="row m-0">
+                            <div class="col-lg-6">
+                                <h4 class="menu-head"><a href="{% url 'download_certificate_form' %}" class="">সনদ ডাউনলোড</a></h4>
+                                          <ul>
+                                             
+                                            </ul>
+                            </div>
+                            <div class="col-lg-6">
+                                <h4 class="menu-head"><a href="{% url 'download_license_form' %}" class="">লাইসেন্স ডাউনলোড</a></h4>
+                                        <ul>
+                                             <li class="subMenu"><span class="fa fa-angle-double-right"></span>
+                                            <a href="https://israbentech.com/frontend/about/excutive-council" class="nav-link" onclick="myFunctionNavbar(this.id)">Excutive Council</a></li>
+                                                <li class="fas fa-eye"><a href="https://israbentech.com/frontend/about/previous-excutive-council" class="nav-link">Previous Excutive Council</a></li>
+                                                        <li class="subMenu"><span class="fab fa-think-peaks"> </span><a href="https://israbentech.com/frontend/about/members" class="nav-link">Members</a></li> 
+                                            </ul>
+                            </div>
+                          
+                    </div> {% endcomment %}
+                </li>
+
+                <li class="nav-item nav-item dropdown"><a href=""   aria-expanded="false" class="{% if request.resolver_match.url_name in 'download_license_form' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Certificates</a>
+                   
+                </li> 
+                
+                
+                {% comment %} <li class="nav-item"><a href="" class="nav-link" target="__blank" ><img width="30px" height="30px" src="{% static 'images/blog.jpg'%}" alt="blog_icon"><span class="fas fa-arrow-right">Blog</span></a></li> {% endcomment %}
+            </ul>
+           
+
+            <div class="mobile-search-box">
+                <div class="box">
+                    
+                    <form id="searchform">
+                        <div class="input-group mb-2"><input list="browsers" type="search" placeholder="What are you looking for?" class="form-control shadow-sm">
+                            <div class="input-group-prepend">
+                                
+                                <div class="input-group-text"><span class="fa fa-search"></span></div>
+                            </div>
+                        </div>
+                    </form> <button type="button" class="close text-light search-box-close"><i class="mdi mdi-close"></i></button>
+                </div>
+                <strong><a  style="float:right;width:80px;height:80px" href="https://bangladesh.gov.bd/" target="_blank"><img style="float:right;width:80px;height:80px"  alt="Tarique Sumon" data-src="/images/sumon.jpg" src="{% static 'images/logo.png'%}" lazy="loaded"> 
+                </a></strong>
+                <strong><a  style="float:left;width:80px" href="https://bangladesh.gov.bd/" target="_blank"><img  alt="Tarique Sumon" data-src="/images/sumon.jpg" src="{% static 'images/tilokpur_logo.png'%}" lazy="loaded"> 
+                </a></strong> 
+            </div>
+
+            {% comment %} <ul class="social-menu navbar-nav">
+                <li class="nav-item"><a href="javascript:void(0)" class="nav-link top-search search-box-open text-danger"> <i class="fa fa-search" aria-hidden="true"></i></a></li>
+                <li class="nav-item"><a target="_blank" href="https://www.facebook.com/profile.php?id=100084759775076" class="nav-link">
+                        <p><i class="bi bi-facebook"></i></p>
+                    </a></li>
+                <li class="nav-item"><a target="_blank" href="https://twitter.com/I_am_sumon" class="nav-link">
+                        <p><i class="bi bi-twitter"></i></p>
+                    </a></li>
+                <li class="nav-item"><a target="_blank" href="https://www.youtube.com" class="nav-link">
+                        <p><i class="bi bi-youtube"></i></p>
+                    </a></li>
+                <li class="nav-item"><a target="_blank" href="https://www.instagram.com/tarique_sumon/" class="nav-link">
+                        <p><i class="bi bi-linkedin"></i></p>
+                    </a></li>
+            </ul> {% endcomment %}
+           
+        </div>
+
+    </nav>
+  </div>
+  </div>
+  </header>  
+
+  

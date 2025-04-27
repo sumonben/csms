@@ -176,6 +176,8 @@ class TestMarks(models.Model):
     highest_mark=models.ForeignKey(HighestMarks,blank=True,null=True,on_delete=models.SET_NULL)
     grade=models.CharField(max_length=150,blank=True,null=True)
     cgpa=models.CharField(max_length=150,blank=True,null=True)
+    cgpa_1st=models.CharField(max_length=15,blank=True,null=True)
+    cgpa_2nd=models.CharField(max_length=15,blank=True,null=True)
     grade_1st=models.CharField(max_length=15,blank=True,null=True)
     grade_2nd=models.CharField(max_length=15,blank=True,null=True)
      
@@ -192,79 +194,160 @@ class TestMarks(models.Model):
     
     def save(self, *args, **kwargs):
         total=0
+        total1=0
+        total2=0
         if self.subject:
             group=Group.objects.filter(id=3).first()
             subj=Subject.objects.filter(name_en=self.subject.name_en).first()
-
+            flag1=0
+            flag2=0
             if group in subj.group.all():
                 if self.subject.id == 3:
-                    if self.CQ1:
+                    if self.CQ1 is not None:
                         total=total+self.CQ1
+                        total1=total1+self.CQ1
                         if self.CQ1<17:
                             self.grade="F"
                             self.grade_1st="F"
                             self.cgpa=0
+                            self.cgpa_1st=0
                     else:
+                        flag1=1
                         self.grade="Absent"
+                        self.grade_1st="Absent"
                         self.cgpa=None
+                        self.cgpa_1st=None
                         
                     if self.MCQ1:
                         total=total+self.MCQ1
+                        total1=total1+self.MCQ1
                         if self.MCQ1<8:
                             self.cgpa=0
                             self.grade="F"
                             self.grade_1st="F"
+                            self.cgpa_1st=0
+
 
                     else:
+                        flag1=1
                         self.grade="Absent"
+                        self.grade_1st="Absent"
                         self.cgpa=None
+                        self.cgpa_1st=None
+
                     
                     if self.practical1:
                         total=total+self.practical1
+                        total1=total1+self.practical1
                         if self.practical1<8:
                             self.cgpa=0
+                            self.cgpa_1st=0
                             self.grade="F"
                             self.grade_1st="F"
                     else:
+                        flag2=1
+                        self.grade="Postponed"
+                        self.grade_1st="Absent"
+                        self.cgpa=None
+                        self.cgpa_1st=None
+
+                    if flag2 == 1:
+                        self.grade="Postponed"
+                        self.cgpa=None
+                    if flag1 == 1:
                         self.grade="Absent"
                         self.cgpa=None
                         
                 else:
-                    if self.CQ1 and self.CQ2:
+                    if self.CQ1 is not None and self.CQ2 is not None:
                         sum=self.CQ1+self.CQ2
                         total=total+sum
-                        if self.CQ1<16:
-                             self.grade_1st="F"
+                        if self.CQ1:
+                            total1=total1+self.CQ1
+                            if self.CQ1<16:
+                                self.grade_1st="F"
+                                self.cgpa_1st=0
+                        else:
+                            self.grade_1st="Absent"
+                            self.cgpa_1st=None
+
+                        if self.CQ2:
+                            total2=total2+self.CQ2
+                            if self.CQ2<16:
+                                self.grade_2nd="F"
+                                self.cgpa_2nd=0
+                        else:
+                            self.grade_2nd="Absent"
+                            self.cgpa_2nd=None
+                        
                         if sum<33:
                             self.grade="F"
                             self.cgpa=0
+
                     else:
+                        flag1=1
                         self.grade="Absent"
                         self.cgpa=None
                     
-                    if self.MCQ1 and self.MCQ2:
+                    if self.MCQ1 is not None and self.MCQ2 is not None:
                         sum=self.MCQ1+self.MCQ2
                         total=total+sum
-                        if self.MCQ1<8:
-                             self.grade_1st="F"
+                        if self.MCQ1:
+                            total1=total1+self.MCQ1
+                            if self.MCQ1<8:
+                                self.grade_1st="F"
+                                self.cgpa_1st=0
+                        else:
+                            self.grade_1st="Absent"
+                            self.cgpa_1st=None
+
+                        if self.MCQ2:
+                            total2=total2+self.MCQ2
+                            if self.MCQ2<8:
+                                self.grade_2nd="F"
+                                self.cgpa_2nd=0
+                        else:
+                            self.grade_2nd="Absent"
+                            self.cgpa_2nd=None
                         if sum<16:
                             self.grade="F"
                             self.cgpa=0
                     else:
+                        flag1=1
                         self.grade="Absent"
                         self.cgpa=None
                     
-                    if self.practical1 and self.practical2:
+                    if self.practical1 is not None and self.practical2 is not None:
                         sum=self.practical1+self.practical2
                         total=total+sum
-                        if self.practical1<8:
-                             self.grade_1st="F" 
-                        if self.practical2<8:
-                             self.grade_2nd="F"
+                        if self.practical1:
+                            total1=total1+self.practical1
+                            if self.practical1<8:
+                                self.grade_1st="F"
+                                self.cgpa_1st=0
+                        else:
+                            self.grade_1st="Absent"
+                            self.cgpa_1st=None
+
+                        if self.practical2:
+                            total2=total2+self.practical2
+                            if self.practical2<16:
+                                self.grade_2nd="F"
+                                self.cgpa_2nd=0
+                        else:
+                            self.grade_2nd="Absent"
+                            self.cgpa_2nd=None
                         if sum<16:
-                            self.cgpa=0
                             self.grade="F"
+                            self.cgpa=0
                     else:
+                        flag2=1
+                        self.grade="Absent"
+                        self.cgpa=None
+                    if flag2 == 1:
+                        self.grade="Postponed"
+                        self.cgpa=None
+                    if flag1 == 1:
                         self.grade="Absent"
                         self.cgpa=None
                     
@@ -272,36 +355,68 @@ class TestMarks(models.Model):
                 if self.subject.id==1:
                     if self.CQ1:
                         total=total+self.CQ1
+                        total1=total1+self.CQ1
                         if self.CQ1<23:
                             self.grade="F"
                             self.grade_1st="F"
                             self.cgpa=0
+                            self.cgpa_1st=0
                     else:
                         self.grade="Absent"
+                        self.grade_1st="Absent"
                         self.cgpa=None
+                        self.cgpa_1st=None
+
                     if self.MCQ1:
                         total=total+self.MCQ1
+                        total1=total1+self.MCQ1
                         if self.MCQ1<10:
                             self.grade="F"
                             self.grade_1st="F"
                             self.cgpa=0
+                            self.cgpa_1st=0
                     else:
                         self.grade="Absent"
+                        self.grade_1st="Absent"
                         self.cgpa=None
+                        self.cgpa_2nd=None
+
                     if self.CQ2:
                         total=total+self.CQ2
+                        total2=total2+self.CQ2
                         if self.CQ2<33:
                             self.grade="F"
                             self.grade_2nd="F"
                             self.cgpa=0
+                            self.cgpa_2nd=0
                     else:
                         self.grade="Absent"
+                        self.grade_2nd="Absent"
                         self.cgpa=None
+                        self.cgpa_2nd=None
                         
                 elif self.subject.id==2:
                     if self.CQ1 and self.CQ2:
                         sum=self.CQ1+self.CQ2
                         total=total+sum
+                        if self.CQ1:
+                            total1=total1+self.CQ1
+                            if self.CQ1<33:
+                                self.grade_1st="F"
+                                self.cgpa_1st=0
+                        else:
+                            self.grade_1st="Absent"
+                            self.cgpa_1st=None
+
+                        if self.CQ2:
+                            total2=total2+self.CQ2
+                            if self.CQ2<33:
+                                self.grade_2nd="F"
+                                self.cgpa_2nd=0
+                        else:
+                            self.grade_2nd="Absent"
+                            self.cgpa_2ndt=None
+
                         if sum<66:
                             self.grade="F"
                             self.cgpa=0
@@ -313,28 +428,54 @@ class TestMarks(models.Model):
                     if self.CQ1 and self.CQ2:
                         sum=self.CQ1+self.CQ2
                         total=total+sum
-                        if self.CQ1<23:
-                            self.grade_1st="F" 
-                        if self.CQ2<23:
-                            self.grade_2nd="F" 
+                        if self.CQ1:
+                            total1=total1+self.CQ1
+                            if self.CQ1<23:
+                                self.grade_1st="F"
+                                self.cgpa_1st=0
+                        else:
+                            self.grade_1st="Absent"
+                            self.cgpa_1st=None
+
+                        if self.CQ2:
+                            total2=total2+self.CQ2
+                            if self.CQ2<23:
+                                self.grade_2nd="F"
+                                self.cgpa_2nd=0
+                        else:
+                            self.grade_2nd="Absent"
+                            self.cgpa_2nd=None
                         if sum<46:
                             self.grade="F"
                             self.cgpa=0
+
                     else:
                         self.grade="Absent"
                         self.cgpa=None
                     
-
                     if self.MCQ1 and self.MCQ2:
                         sum=self.MCQ1+self.MCQ2
                         total=total+sum
-                        if self.MCQ1<10:
-                            self.grade_1st="F" 
-                        if self.MCQ2<10:
-                            self.grade_2nd="F" 
+                        if self.MCQ1:
+                            total1=total1+self.MCQ1
+                            if self.MCQ1<10:
+                                self.grade_1st="F"
+                                self.cgpa_1st=0
+                        else:
+                            self.grade_1st="Absent"
+                            self.cgpa_1st=None
+
+                        if self.MCQ2:
+                            total2=total2+self.MCQ2
+                            if self.MCQ2<10:
+                                self.grade_2nd="F"
+                                self.cgpa_2nd=0
+                        else:
+                            self.grade_2nd="Absent"
+                            self.cgpa_2nd=None
                         if sum<20:
-                            self.cgpa=0
                             self.grade="F"
+                            self.cgpa=0
                     else:
                         self.grade="Absent"
                         self.cgpa=None
@@ -343,9 +484,13 @@ class TestMarks(models.Model):
 
 
             self.total=total
+            self.total1=total1
+            self.total2=total2
 
             if self.grade == 'F':
                 self.cgpa=0
+            elif self.grade == 'Postponed':
+                self.cgpa=None
             elif self.grade == 'Absent':
                 self.cgpa=None
             elif self.subject.id == 3:
@@ -404,8 +549,69 @@ class TestMarks(models.Model):
                     self.grade="Undefined"
 
 
+            if self.grade_1st == 'F':
+                self.cgpa_1st=0
+            elif self.grade_1st== 'Absent':
+                self.cgpa_1st=None      
+            elif total1<33:
+                    self.cgpa_1st=0
+                    self.grade_1st="F"
+            elif total1>=33 and total1<40:
+                    self.cgpa_1st=1
+                    self.grade_1st="D"
 
+            elif total1>=40 and total1<50:
+                    self.cgpa_1st=2
+                    self.grade_1st="C"
+            elif total1>=50 and total1<60:
+                    self.cgpa_1st=3
+                    self.grade_1st="B"
+            elif total1>=60 and total1<70:
+                    self.cgpa_1st=3.5
+                    self.grade_1st="A-"
+            elif total1>=70 and total1<80:
+                    self.cgpa_1st=4
+                    self.grade_1st="A"
+            elif total1>=80 and total1<=100:
+                    self.cgpa_1st=5
+                    self.grade_1st="A+"
+            else:
+                    self.cgpa_1st=None
+                    self.grade_1st="Undefined"
 
+            
+            if self.grade_2nd == 'F':
+                self.cgpa_2nd=0
+            elif self.grade_2nd== 'Absent':
+                self.cgpa_2nd=None      
+            elif total2<33:
+                    self.cgpa_2nd=0
+                    self.grade_2nd="F"
+            elif total2>=33 and total2<40:
+                    self.cgpa_2nd=1
+                    self.grade_2nd="D"
+
+            elif total2>=40 and total2<50:
+                    self.cgpa_2nd=2
+                    self.grade_2nd="C"
+            elif total2>=50 and total2<60:
+                    self.cgpa_2nd=3
+                    self.grade_2nd="B"
+            elif total2>=60 and total2<70:
+                    self.cgpa_2nd=3.5
+                    self.grade_2nd="A-"
+            elif total2>=70 and total2<80:
+                    self.cgpa_2nd=4
+                    self.grade_2nd="A"
+            elif total2>=80 and total2<=100:
+                    self.cgpa_2nd=5
+                    self.grade_2nd="A+"
+            else:
+                    self.cgpa_2nd=None
+                    self.grade_2nd="Undefined"
+            
+
+            
         super(TestMarks, self).save(*args, **kwargs)
 
 
@@ -420,12 +626,14 @@ class Result(models.Model):
     total=models.IntegerField(blank=True,null=True)
     grade=models.CharField(max_length=255,blank=True,null=True)
     cgpa=models.CharField(max_length=255,blank=True,null=True)
+    cgpa_without_4th=models.CharField(max_length=25,blank=True,null=True)
     number_of_subject=models.IntegerField(blank=True,null=True)
     present_at=models.IntegerField(blank=True,null=True)
     absent_at=models.IntegerField(blank=True,null=True)
     fail_at=models.IntegerField(blank=True,null=True)
     fail_at_without_4th=models.IntegerField(blank=True,null=True)
     pass_at=models.IntegerField(blank=True,null=True)
+    pass_at_without_4th=models.IntegerField(blank=True,null=True)
     absent_or_fail_at=models.IntegerField(blank=True,null=True)
     absent_or_fail_without_4th=models.IntegerField(blank=True,null=True)
     minimum_pass=models.IntegerField(blank=True,null=True)

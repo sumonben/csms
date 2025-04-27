@@ -23,7 +23,6 @@ def searchResult(request):
             marks=Marks.objects.filter(class_roll=request.POST.get('roll').strip(),exam=exam).order_by('subject')
         highest_marks=HighestMarks.objects.filter(exam=exam)
 
-        print(marks)
         result=Result.objects.filter(class_roll=request.POST.get('roll').strip(),exam=exam).first()
         student=Student.objects.filter(class_roll=request.POST.get('roll').strip()).first()
         print(student)
@@ -47,81 +46,12 @@ def searchResult(request):
         context['subject_choice']=subject_choice
 
         
-        for reslt in marks:
-            #print(reslt.subject,reslt.cgpa,reslt.grade,reslt.total)
-            if reslt.subject  in choice_list:
-                if reslt.grade=="Absent":
-                    grade="Absent"
-                    cgpa=None
-                    context['grade']=grade
-                    context['cgpa']=cgpa
-                    flag1=1
-                    
-                    if exam.type == '2':
-                        return render(request, 'result/show_result_test.html', context=context)
-                    else:
-                        return render(request, 'result/show_result_copy.html', context=context)
-
-                elif reslt.grade=="F" and reslt.subject !=subject_choice.fourth_subject:
-                    grade="F"
-                    cgpa=0
-                    context['grade']=grade
-                    context['cgpa']=cgpa
-                    flag2=1
-                    
-                else:
-                    #print(student.fourth_subject,reslt.subject)
-                    if student:
-                        if reslt.subject == student.fourth_subject:
-                            cg=float(reslt.cgpa)
-                            if cg>2:
-                                gpa=cg-2
-                                totalgpa=totalgpa+gpa
-
-                        else:
-                            totalgpa=totalgpa+float(reslt.cgpa)
-                            totalgpa1=totalgpa1+float(reslt.cgpa)
-                            #print(totalgpa1)
-
-        if flag2==1 or flag1==1:
-                    if exam.type == '2':
-                        return render(request, 'result/show_result_test.html', context=context)
-                    else:
-                        return render(request, 'result/show_result_copy.html', context=context)
-
-        else:
-            #print(grade)
-            cgpa=totalgpa/6
-            context['cgpa']=round(cgpa,2)
-            cgpa_witout_4th=totalgpa1/6
-            context['cgpa_witout_4th']=round(cgpa_witout_4th,2)
-
-            if cgpa<1:
-                grade="F"
-            elif cgpa>=1 and cgpa<2:
-                grade="D"
-            elif cgpa>=2 and cgpa<3:
-                grade="C"
-            elif cgpa>=3 and cgpa<3.5:
-                grade="B"
-            elif cgpa>=3.5 and cgpa<4:
-                grade="A-"
-            elif cgpa>=4 and cgpa<5:
-                grade="A"
-            elif cgpa>=5:
-                grade="A+"
-            else:
-                grade="Absent"
-            context['grade']=grade
-
         
-        
-   
         if exam.type == '2':
             return render(request, 'result/show_result_test.html', context=context)
         else:
             return render(request, 'result/show_result_copy.html', context=context)
-    form=SeachResultForm()
+    form=SeachResultForm(current_user=request.user)
     context['form']=form
     return render(request, 'result/search_result.html', context=context)
 
@@ -165,20 +95,26 @@ def createResult(request):
         else:
             rolls=list(Marks.objects.filter(exam=exam).values('class_roll').order_by('class_roll').distinct())
 
+        print('Number of Student:',rolls.count)
         count=0
         choice_list=[]
-        for roll in rolls:
+        
+        for roll in rolls[0:500]:
             if exam.id == 3:
                 result=TestMarks.objects.filter(class_roll=roll['class_roll'])
             else:
                 result=Marks.objects.filter(class_roll=roll['class_roll'])
-            if result.count()<7:
-                messages.success(request,exam.title_en+" Result Not Created Successfully! -->All subject marks not entered")
-                return redirect('option_create_result')            
+            # if result.count()<7:
+            #     print(result)
+            #     continue
+                # messages.success(request,exam.title_en+" Result Not Created Successfully! -->All subject marks not entered")
+                # return redirect('option_create_result')            
             student=Student.objects.filter(class_roll=roll['class_roll']).first()
             subject_choice=Choice.objects.filter(class_roll=roll['class_roll'].strip()).first()
+            
             if subject_choice:
                 choice_list=[subject_choice.subject1,subject_choice.subject2,subject_choice.subject3,subject_choice.subject4,subject_choice.subject5,subject_choice.subject6,subject_choice.fourth_subject]
+                
                 #print(choice_list)
             totalgpa=0
             absent_or_fail_without_4th=0
@@ -189,6 +125,7 @@ def createResult(request):
             absent_at=0
             fail_at=0
             fail_at_without_4th=0
+            pass_at_without_4th=0
             present_at=0
             pass_at=0
             remarks=None
@@ -200,59 +137,70 @@ def createResult(request):
                         absent_or_fail_without_4th=absent_or_fail_without_4th+1
                         grade="Absent"
                         cgpa=None
+                        cgpa_without_4th=None
                         flag1=1
 
-                    elif reslt.grade=="F" and reslt.subject !=subject_choice.fourth_subject :
-                        present_at=present_at+1
-                        fail_at=fail_at+1
-                        fail_at_without_4th=fail_at_without_4th+1
-                        absent_or_fail_without_4th=absent_or_fail_without_4th+1
-                        grade="F"
-                        cgpa=0
-                        flag2=1
-                        total=total+reslt.total
+                    elif reslt.grade=="F" :
+                        if subject_choice:
+                            if reslt.subject != subject_choice.fourth_subject:
+                                # print("Fourth_Subject: Eliif_top",subject_choice.fourth_subject,reslt.subject,reslt.class_roll)
+                                present_at=present_at+1
+                                fail_at=fail_at+1
+                                fail_at_without_4th=fail_at_without_4th+1
+                                absent_or_fail_without_4th=absent_or_fail_without_4th+1
+                                grade="F"
+                                cgpa=0
+                                cgpa_without_4th=0
+                                flag2=1
+                                total=total+reslt.total
+                            else:
+                                total=total+reslt.total
+                                fail_at=fail_at+1
+
+
 
                         
                     else:
                         #print(student.fourth_subject,reslt.subject)
-                        if student:
-                            if reslt.subject == student.fourth_subject:
+                        if student and subject_choice:
+                            print("Fourth_Subject: top",subject_choice.fourth_subject,reslt.subject,reslt.class_roll)
+                            
+                            if reslt.subject == subject_choice.fourth_subject:
+                                print("Fourth_Subject: equal",subject_choice.fourth_subject)
                                 present_at=present_at+1
-
-                                if reslt.grade=="F":
-                                    fail_at=fail_at+1
-                                else:
-                                    pass_at=pass_at+1
+                                pass_at = pass_at+1
                                 cg=float(reslt.cgpa)
                                 total=total+reslt.total
-
                                 if cg>2:
                                     gpa=cg-2
                                     totalgpa=totalgpa+gpa
 
                             else:
                                 present_at=present_at+1
+                                pass_at_without_4th=pass_at_without_4th+1
                                 pass_at=pass_at+1
                                 total=total+reslt.total
                                 totalgpa=totalgpa+float(reslt.cgpa)
+                                totalgpa1=totalgpa1+float(reslt.cgpa)
             
             if absent_at==7:
                 grade="AbsentAll"
                 remarks="Not Promoted"
-                result_individual=Result.objects.create(class_roll=roll['class_roll'],name=student.name,position=count,group=student.group,section=student.section,exam=exam,total=total,cgpa=cgpa,grade=grade,present_at=present_at,absent_at=absent_at,fail_at=fail_at,fail_at_without_4th=fail_at_without_4th,absent_or_fail_without_4th=absent_or_fail_without_4th, pass_at=pass_at,remarks=remarks)
+                result_individual=Result.objects.create(class_roll=roll['class_roll'],name=student.name,position=count,group=student.group,section=student.section,exam=exam,total=total,cgpa=cgpa,cgpa_without_4th=cgpa_without_4th,grade=grade,present_at=present_at,absent_at=absent_at,fail_at=fail_at,fail_at_without_4th=fail_at_without_4th,absent_or_fail_without_4th=absent_or_fail_without_4th, pass_at=pass_at,pass_at_without_4th=pass_at_without_4th,remarks=remarks)
 
             elif flag1==1 or flag2==1 :
                 count_fail=absent_at+fail_at
                 # Number of subject failed to be
-                if absent_or_fail_without_4th>exam.minimum_threshold:
-                    remarks="Not Promoted"
+                if pass_at_without_4th>exam.minimum_threshold:
+                    remarks="Promoted"
                 else:
-                    remarks="Promoted"                   
+                    remarks="Not Promoted"                   
                 if student:
-                    result_individual=Result.objects.create(class_roll=roll['class_roll'],name=student.name,position=count,group=student.group,section=student.section,exam=exam,total=total,cgpa=cgpa,grade=grade,present_at=present_at,absent_at=absent_at,fail_at=fail_at,fail_at_without_4th=fail_at_without_4th,absent_or_fail_without_4th=absent_or_fail_without_4th,pass_at=pass_at,remarks=remarks)
+                    result_individual=Result.objects.create(class_roll=roll['class_roll'],name=student.name,position=count,group=student.group,section=student.section,exam=exam,total=total,cgpa=cgpa,cgpa_without_4th=cgpa_without_4th,grade=grade,present_at=present_at,absent_at=absent_at,fail_at=fail_at,fail_at_without_4th=fail_at_without_4th,absent_or_fail_without_4th=absent_or_fail_without_4th,pass_at=pass_at,pass_at_without_4th=pass_at_without_4th,remarks=remarks)
             else:
                 #print(grade)
                 cgpa=round(totalgpa/6,2)
+                cgpa_without_4th=round(totalgpa1/6,2)
 
                 if cgpa<1:
                     grade="F"
@@ -274,7 +222,7 @@ def createResult(request):
                 if student:
                     #print(student.name)
                     remarks="Promoted"                   
-                    result_individual=Result.objects.create(class_roll=roll['class_roll'],name=student.name,position=count,group=student.group,section=student.section,exam=exam,total=total,cgpa=cgpa,grade=grade,present_at=present_at,absent_at=absent_at,fail_at=fail_at,fail_at_without_4th=fail_at_without_4th,absent_or_fail_without_4th=absent_or_fail_without_4th,pass_at=pass_at,remarks=remarks)
+                    result_individual=Result.objects.create(class_roll=roll['class_roll'],name=student.name,position=count,group=student.group,section=student.section,exam=exam,total=total,cgpa=cgpa,cgpa_without_4th=cgpa_without_4th,grade=grade,present_at=present_at,absent_at=absent_at,fail_at=fail_at,fail_at_without_4th=fail_at_without_4th,absent_or_fail_without_4th=absent_or_fail_without_4th,pass_at=pass_at,pass_at_without_4th=pass_at_without_4th,remarks=remarks)
             count=count+1
 
             

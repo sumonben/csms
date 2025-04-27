@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'import_export',
     'admission',
     'certificate',
+    'rangefilter',
     'payment',
     'result'
 ]
@@ -97,7 +98,7 @@ DATABASES = {
         'PORT': '3306',
         'default-character-set' : 'utf8'
     },
-    'sqlite3': {
+    'default1': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }

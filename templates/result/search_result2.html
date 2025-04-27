@@ -1,0 +1,118 @@
+{% extends 'basepage/basepage_result.html' %}
+
+{% block content %}
+{% load static %}
+
+    
+    <fieldset style="margin-bottom: 2%;">
+        <table id="search_table" border="1" cellspacing="0" cellpadding="2" align="center">
+            {% if notfound %}
+            
+                <thead><th colspan="5" style="height: 25px; background-color:rgb(148, 30, 9); color: #fff;padding: 15px;">Result Not found!<br>re-Enter right information or Contact exam control room </th></thead>
+                 
+                {% endif %}
+                {% if messages %}
+                {% for message in messages %}
+            
+                    <thead><th colspan="5" style="height: 25px; background-color:rgb(148, 30, 9); color: #fff;padding: 15px;">{{message}} </th></thead>
+                {% endfor %}
+                {% endif %}
+          <thead style="height: 25px; background-color: #035a4c; color: #fff;padding: 15px"><th colspan="5" style="height: 25px; background-color: #035a4c; color: #fff;padding: 15px;">
+            {% if create_result_form %}
+            Create Result
+            {% elif create_position_form%}
+            Create Position
+            {% elif delete_result_form %}
+            Delete Result
+            {% elif highest_marks_form %}
+            Create Highest Marks
+            {% else %}
+            Insert roll and exam to find result
+
+            {% endif %} </th></thead>
+          <tbody>
+            
+            <form method="post" action="{% if create_result_form %}{% url 'create_result' %}{% elif create_position_form %}{% url 'create_position' %}{% elif delete_result_form %}{% url 'delete_result' %}{% elif highest_marks_form %}{% url 'highest_marks'%}{% else %}{% url 'search_result' %}{% endif %}" id="form1" name="form1" target="_blank">
+                {% csrf_token %}
+            <tr>
+                
+                <td class="r-align-right r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c1" data-pageid="1">
+
+                    {% if create_result_form %}
+                    {{ create_result_form }}
+                    {% elif create_position_form%}
+                    {{create_position_form}}
+                    {% elif delete_result_form %}
+                        {{delete_result_form}}
+                    {% elif highest_marks_form %}
+                    {{highest_marks_form}}
+
+                    {% else %}
+                        {{form}}
+                    {% endif %}
+                </td>
+                
+                
+                <td class="col-md-2"></td>
+                </tr>
+                
+                <tr>
+                
+                <td class="r-align-right r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c3" data-pageid="1">
+                
+                </td>
+                
+                <td class=" r-ori-vert							col-md-6						" data-single="" data-cellid="grid_c4" data-pageid="1">
+                
+                </td>
+                <td class="col-md-2"></td>
+                </tr>
+                
+                <tr>
+                
+                <td class=" r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c9" data-pageid="1">
+                <div edit-form-cell="" class="clearfix">
+                </div>
+                </td>
+                
+                <td class=" r-ori-vert							col-md-6						" data-single="" data-cellid="grid_c10" data-pageid="1">
+                <div edit-form-cell="" class="clearfix">
+                </div>
+                </td>
+                <td class="col-md-2"></td>
+                </tr>
+                <tr >
+                    <td colspan="5" align="right">                
+                    <button type="submit" id="submit-btn"  >Submit</button>
+                </td></tr>
+          </form>
+          
+        </tbody>
+    </table>
+    </fieldset>
+   
+<script>
+    function myFunction( id ){
+            
+            var e=document.getElementById('id_student_category')
+            var val = e.options[e.selectedIndex].value;
+            if(val == 3){
+                document.getElementById('id_group').style.display='block';
+                document.getElementByFor('id_group').label.visibility='visible';
+
+            }else{
+                
+                document.getElementById('id_group').style.display='none';
+                document.getElementByFor('id_group').label.visibility='hidden';
+
+            }
+    }
+</script>
+{% endblock  %}
+
+
+
+
+
+
+

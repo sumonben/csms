@@ -79,6 +79,13 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
 
 
 @media print and (min-width: 480px) {
+  body{
+    margin-top:-10px;
+    font-weight: normal;
+    font-style:normal;
+        
+      
+}
     #first_table{
         width:100%;
     }
@@ -160,7 +167,7 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
 
 
 
-{% if grade == 'F' or grade == 'Absent' %}
+{% if result.grade == 'F' or result.grade == 'Absent' %}
 #main_body{
   background-color:rgb(231, 152, 152);
   width:90%;
@@ -174,7 +181,8 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
 
 
 table.result th, table.result td {
-            border:1px solid rgb(253, 251, 251);
+            font-weight:bold;
+            border:2px solid rgb(255, 255, 255);
             padding:0.2em;
             -webkit-print-color-adjust: exact; 
     
@@ -191,8 +199,8 @@ table.result th, table.result td {
    
             }
              table.result th, table.result td {
-              border:1px solid rgb(253, 253, 253);
-              
+              border:2px solid rgb(255, 255, 255);
+              font-weight:bold;
               padding:0.2em;
               -webkit-print-color-adjust: exact; 
       
@@ -217,7 +225,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
         
         <tbody>
             <tr>
-              <td width="250px" colspan="2" align="left" valign="middle"><b></b>&nbsp;Roll:</b></td>
+              <td width="300px" colspan="2" align="left" valign="middle"><b></b>&nbsp;Roll:</b></td>
               <td width="550px" colspan="3" align="left" valign="middle" class="black12">{{student.class_roll}}</td>
               
           </tr>
@@ -240,20 +248,20 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
               
           </tr>
           <tr>
-            <td colspan="2" align="left" valign="middle">&nbsp;CGPA(With 4th subject): </td>
-            <td colspan="1" align="center" valign="middle" class="black12">{{cgpa}}</td>
-            {% if cgpa_witout_4th %}
-            <td colspan="1" align="left" valign="middle" class="black12"> CGPA (Without 4th subject):</td>
-            <td colspan="1" align="center" valign="middle" class="black12"> {{cgpa_witout_4th}}</td>
+            <td colspan="2" align="left" valign="middle">&nbsp;CGPA(<small>With additional subject</small>): </td>
+            <td colspan="1" align="center" valign="middle" class="black12">{{result.cgpa}}</td>
+            {% if result.cgpa_witout_4th %}
+            <td colspan="1" align="left" valign="middle" class="black12"> CGPA (Without additional subject):</td>
+            <td colspan="1" align="center" valign="middle" class="black12"> {{result.cgpa_without_4th}}</td>
             {% else %}
-            <td colspan="1" align="left" valign="middle" class="black12"> CGPA (Without 4th subject):</td>
+            <td colspan="1" align="left" valign="middle" class="black12"> CGPA (Without additional subject):</td>
             <td colspan="1" align="center" valign="middle" class="black12"> Not Applicable</td>
             {% endif %}
         </tr>
         <tr>
           <td colspan="2" align="left" valign="middle">&nbsp;Grade: </td>
           <td colspan="1" align="center" valign="middle" class="black12">{{grade}}</td>
-          {% if grade in 'A+' or grade in 'A' or grade in 'A-' or grade in 'B' or grade in 'C' or grade in 'D' or grade in 'F'   %}
+          {% if result.grade in 'A+' or result.grade in 'A' or result.grade in 'A-' or result.grade in 'B' or result.grade in 'C' or result.grade in 'D'   %}
           <td colspan="1" align="left" valign="middle">&nbsp;Position: </td>
           <td colspan="1" align="center" valign="middle" class="black12">{{result.position}}</td>
           {% else %}
@@ -274,7 +282,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
                           
       <table class="result" width="100%" border="2" align="center" >
         <thead>
-              <th colspan="8" align="left"><b>Subject Wise Obtained Marks<b></th>
+          <th colspan="10" align="left"><b>Subject Wise Obtained Marks<b></th>
 
         </thead>
         <tr>
@@ -283,14 +291,19 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
           <th rowspan="2">Highest Marks</th>
           <th rowspan="2">GP</th>
           <th rowspan="2">Grade</th>
+          <th rowspan="2">CGPA</th>
+
         </tr>
         <tr>
           <th>MCQ</th>
           <th >CQ</th>
           <th >total</th>
+          
         </tr>
+        
        
         <tbody>
+
           {% for rslt in marks %}
           
 
@@ -301,7 +314,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
             <tr>
 
 
-              <td width="30%"  align="left" valign="middle"> {{rslt.subject.name_en}} </td>
+              <td width="20%"  align="left" valign="middle"> {{rslt.subject.name_en}} </td>
               <td width="10%"  align="center" valign="middle"> {% if rslt.MCQ %}{{rslt.MCQ}} {% endif %}</td>
               <td width="10%" align="center" valign="middle">{% if rslt.CQ %} {{rslt.CQ}}{% endif %} </td>
 
@@ -313,8 +326,10 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
               <td width="15%" align="center" valign="middle">{% if rslt.highest_mark.highest_mark %} {{rslt.highest_mark.highest_mark}} {% endif %}</td>
               <td width="10%" align="center" valign="middle">{% if rslt.cgpa %} {{rslt.cgpa}} {% endif %}</td>
               <td width="10%" align="center" valign="middle">{% if rslt.grade %} {{rslt.grade}} {% endif %} </td>
+              {% if rslt.subject.id == 1 %}
+              <td width="10%" align="center" rowspan="8" valign="middle">{{result.cgpa}} </td>
 
-
+              {% endif %}
 
           </tr>
           {% endif %}
@@ -324,14 +339,15 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
 
           
           <tr>
-
+            <td width="100%" colspan="7" align="left" valign="middle">Additional Subject: </td>
+          </tr>
+          <tr>
 
             {% for rslt in marks %}
             {% if subject_choice.fourth_subject.code in rslt.subject.code %}
-              <tr>
 
 
-                <td width="15%"  align="left" valign="middle"> {{rslt.subject.name_en}}(4th Subject) </td>
+                <td width="15%"  align="left" valign="middle"> {{rslt.subject.name_en}}</td>
                 <td width="15%"  align="center" valign="middle">{% if rslt.MCQ %} {{rslt.MCQ}} {% endif %}</td>
                 <td width="15%" align="center" valign="middle">{% if rslt.CQ %} {{rslt.CQ}} {% endif %}</td>
                 <td width="15%" align="center" valign="middle">{% if rslt.total %} {{rslt.total}} {% endif %} </td>
@@ -341,14 +357,16 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
 
 
 
-            </tr>
            
             {% endif %}
             {% endfor %}
             
 
           </tr>
-          
+          <tr>
+            <td colspan="7" cellpadding="3" align="right"> CGPA (without additional subject): </td>
+            <td align="center" > {{result.cgpa_without_4th}}</td>
+          </tr>
           
           
           
@@ -359,12 +377,16 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
           <tbody>
             <thead>
               <th >Total Marks</th>
+              <th  >Pass at</th>
+              <th  >Fail at</th>
               <th  >Absent at</th>
               <th >Minimum Threshold</th>
               <th >Remarks</th>
             </thead>
             <tr>
                 <td  align="left" valign="middle"> {{result.total}}</td>
+                <td  align="left" valign="middle" class="black12">{{result.pass_at}}</td>
+                <td  align="left" valign="middle" class="black12">{{result.fail_at}}</td>
                 <td  align="left" valign="middle" class="black12">{{result.absent_at}}</td>
                 <td  align="left" valign="middle">{{exam.minimum_threshold}}</td>
                 <td  align="left" valign="middle" class="black12"> {{result.remarks}}</td>
@@ -376,7 +398,8 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
     </table>  
           
 
- 
+    <button id="submit-btn" class="btn-default" onclick="window.print()" >Download or Print</button>
+
     <div style="float:right;margin:2%"><img  height="80px" src="{% static 'images/principal_signature.png' %}" alt="" ><br><h4>Principal</h4></div>
 
   </div>
