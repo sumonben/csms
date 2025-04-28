@@ -974,7 +974,7 @@ addChoiceBtn.addEventListener('change', () => {
   function myFunctionTeacher(id){
     var division=document.getElementById(id).value;
     url="{% url 'get_district'%}";
-
+    alert(url);
     
       $.ajax({
       type: 'GET',

@@ -262,8 +262,9 @@ def searchPayment(request):
 
             return render(request, 'payment/check_payment_info.html', context=context)
 
-        
-        
+        else:
+            context['notfound']="Student not found!! Re=Enter Right Information or Contact  control room"    
+    
     form=SearchPaymentForm()
     context['form']=form
     return render(request, 'payment/search_payment.html', context=context)

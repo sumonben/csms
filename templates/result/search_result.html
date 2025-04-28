@@ -29,7 +29,7 @@
 <div class="services">
     <div  class="container-wrapper" >
 
-  <div><h2 style="text-align: center;color: #035a4c ;text-shadow: 2px 2px 2px rgb(65, 7, 7);"><u>আপনার সনদটি ডাউনলোড করুন</u></h2></div>
+  <div><h2 style="text-align: center;color: #035a4c ;text-shadow: 2px 2px 2px rgb(65, 7, 7);"><u> INSERT ROLL AND SELECT RESULT </u></h2></div>
   
   <div data-v-6f04a53f="" class="memberRegistration py-5">
     <div class="container-wrapper">
@@ -37,10 +37,14 @@
         <div class="col col-lg-10">
           <div class="card login-body shadow-lg rounded-10 py-5">
             <table width="100%" border="1" cellspacing="0" cellpadding="10">
-              <thead><th colspan="5" style="height: 40px; background-color: #035a4c; color: #fff;padding: 15px;font-size:20px;text-align:center;"> সনদ ডাউনলোড ফর্ম </th></thead>
-
+              <thead><th colspan="5" style="height: 40px; background-color: #035a4c; color: #fff;padding: 15px;font-size:20px;text-align:center;"> RESULT SHOW DOWNLOAD FORM </th></thead>
+              {% if notfound %}
+              <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 40px; background-color:rgb(168, 8, 8); color: #fff;padding: 20px;"> Result Not found!<br>re-Enter right information or Contact exam control room</th></thead>
+              {% endif %}
               {% if message %}
+              {% for message in messages %}
               <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 40px; background-color:rgb(168, 8, 8); color: #fff;padding: 15px;"> {{message}} </th></thead>
+              {% endfor %}
               {% endif %}
               <tbody>
               </tbody>

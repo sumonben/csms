@@ -13,11 +13,14 @@ class SeachResultForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
         self.current_user = kwargs.pop('current_user', None)
         super(SeachResultForm,self).__init__(*args,**kwargs)
-        if self.current_user.is_superuser or self.current_user.is_staff :
-            self.fields['exam']=forms.ModelChoiceField(required=True,queryset=Exam.objects.all(),widget=forms.Select(attrs={'class': 'form-control form-control-sm',}))
+        if self.current_user:
+            if self.current_user.is_superuser or self.current_user.is_staff :
+                self.fields['exam']=forms.ModelChoiceField(required=True,queryset=Exam.objects.all(),widget=forms.Select(attrs={'class': 'form-control form-control-sm',}))
+            else:
+                self.fields['exam']=forms.ModelChoiceField(required=True,queryset=Exam.objects.filter(is_active=True),widget=forms.Select(attrs={'class': 'form-control form-control-sm',}))
         else:
             self.fields['exam']=forms.ModelChoiceField(required=True,queryset=Exam.objects.filter(is_active=True),widget=forms.Select(attrs={'class': 'form-control form-control-sm',}))
-            
+                       
 
 class CreateResultForm(forms.ModelForm):
     exam= forms.ModelChoiceField(required=True,queryset=Exam.objects.all(),widget=forms.Select(attrs={'class': 'form-control form-control-sm',}))

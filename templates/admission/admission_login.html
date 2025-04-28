@@ -2,88 +2,85 @@
 
 {% load static %}
 {% block content %}
+
 <tr>
     <td>
-    <fieldset>
-        <table width="50%" border="1" cellspacing="0" cellpadding="2" align="center">
-          <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;">Instruction to login</th></thead>
-          <tbody>
-            <tr><td colspan="5">             <img src="{% static 'images/admission_header.jpg' %}" alt="">
-            </td></tr>
-         
-          
-
-        </tbody></table>
-      </fieldset>
-    </td>
-</tr>
-<tr>
-    <td>
-    <fieldset style="margin-bottom: 2%;">
-        <table width="50%" border="1" cellspacing="0" cellpadding="2" align="center">
-          <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;">Login  </th></thead>
-          <tbody>
-            <form method="post" action="{% url 'admission_form' %}" id="form1" name="form1">
-                {% csrf_token %}
-            <tr>
-
-                <td class="r-align-right r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c1" data-pageid="1">
-                <div edit-form-cell="" class="clearfix">
-                    <label data-itemtype="username_label" data-itemid="username_label" data-pageid="1" data-small="" class="r-edit-label control-label" for="username">
-                Username:
-                </label>					</div>
-                </td>
+        <div data-v-6f04a53f="" class="memberRegistration py-5">
+            <div class="container-wrapper">
+              <div class="row justify-content-md-center">
+                <div class="col col-lg-10">
+                  <div class="card login-body shadow-lg rounded-10 py-5">
+                    <table width="100%" border="1" cellspacing="0" cellpadding="10">
+                      <thead><th colspan="5" style="height: 40px; background-color: #035a4c; color: #fff;padding: 15px;font-size:20px;text-align:center;"> RESULT SHOW DOWNLOAD FORM </th></thead>
+                      {% if notfound %}
+                      <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 40px; background-color:rgb(168, 8, 8); color: #fff;padding: 20px;"> Result Not found!<br>re-Enter right information or Contact exam control room</th></thead>
+                      {% endif %}
+                      <tbody>
+                    </tbody>
+                  </table>
+                  <div class="col-sm-12 form-group">
                 
-                <td class=" r-ori-vert							col-md-6						" data-single="" data-cellid="grid_c2" data-pageid="1">
-                <div edit-form-cell="" class="clearfix">
-                    <div class="r-edit-field" data-itemtype="username" data-itemid="username" data-pageid="1">
-                <input type="text" class="form-control" name="username" id="username" required>
-                </div>					</div>
-                </td>
-                <td class="col-md-2"></td>
-                </tr>
-                
-                <tr>
-                
-                <td class="r-align-right r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c3" data-pageid="1">
-                <div edit-form-cell="" class="clearfix">
-                    <label data-itemtype="password_label" data-itemid="password_label" data-pageid="1" data-small="" class="r-edit-label control-label" for="password">
-                Password:
-                </label>					</div>
-                </td>
-                
-                <td class=" r-ori-vert							col-md-6						" data-single="" data-cellid="grid_c4" data-pageid="1">
-                <div edit-form-cell="" class="clearfix">
-                    <div class="r-edit-field" data-itemtype="password" data-itemid="password" data-pageid="1">
-                <input type="password" class="form-control" name="password" id="password" required>
-                </div>					</div>
-                </td>
-                <td class="col-md-2"></td>
-                </tr>
-                
-                <tr>
-                
-                <td class=" r-ori-vert							col-md-4						" data-single="" data-cellid="grid_c9" data-pageid="1">
-                <div edit-form-cell="" class="clearfix">
+                    <div class="row">
+                      
+                       
+                      <div class="col-sm-6">
+                    <img src="{% static 'images/admission_header.jpg' %}" alt="" width="550">
+                      </div>
+                      
+                  <div class="col-sm-6" style="margin:auto;">       
+                  <form autocomplete="off" id="form" class="form-row px-3" method="post" action="{% url 'admission_form' %}">
+                    {% csrf_token %}
+                    
+                                 <div class="col-sm-8 form-group" style="margin:auto;">
+                                   <div class="row">
+                                     <div class="col-sm-10" >
+                                       <label for="" class="col-form-label-sm m-0" style="font-size:20px;">Username</label> 
+                                       <div class="loginBox">
+                                        <input type="text" class="form-control" name="username" id="username" required>     
+                                                 <span class="fa fa-user"></span>
+                                        
+                                       </div> <!--  --> <div class="invalid-feedback"></div>
+                                     </div>
+                                   </div>
+                                 </div>
+                                 <div class="col-sm-8 form-group" style="margin:auto;">
+                                   <div class="row">
+                                     <div class="col-sm-10" >
+                                       <label for="" class="col-form-label-sm m-0" style="font-size:20px;">Password</label> 
+                                       <div class="loginBox">
+                                        <input type="password" class="form-control" name="password" id="password" required>  
+                                                 <span class="fa fa-key"></span>
+                                        
+                                       </div> <!--  --> <div class="invalid-feedback"></div>
+                                     </div>
+                                   </div>
+                                 </div>
+                              
+                              
+                     
+                   
+                   
+                  
+                   <div class="col-sm-8 form-group">
+                     <p class="text-right">
+                       <button type="submit" class="btn btn-danger text-white"><span>Login</span></button>
+                     </p>
+                   </div>
+                 </form>
+               
                 </div>
-                </td>
-                
-                <td class=" r-ori-vert							col-md-6						" data-single="" data-cellid="grid_c10" data-pageid="1">
-                <div edit-form-cell="" class="clearfix">
-                </div>
-                </td>
-                <td class="col-md-2"></td>
-                </tr>
-                <tr >
-                    <td colspan="5" align="right">                
-                    <button type="submit"  class="btn btn-primary" >Submit</button>
-                </td></tr>
-          </form>
-
-        </tbody>
-    </table>
-    </fieldset>
+              </div>
+            </div>
+              
+  
     </td>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </tr>
 
 {% endblock  %}
