@@ -11,7 +11,12 @@ BlOOD_CHOICE=[('AB+', 'AB+'),('A+', 'A+'),('B+', 'B+'),('O+', 'O+'),('AB-', 'AB-
         
 def year_choices():
     return [(r,r) for r in range(2009, datetime.date.today().year+1)]
-    
+
+CHOICES = [
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+
+    ]    
 BOARD_CHOICE=[
         ('Dhaka', 'Dhaka'),
         ('Rajshahi', 'Rajshahi'),
@@ -58,15 +63,8 @@ MOTHER_PROFESSION_CHOICE = [
         ]
         
 class StudentForm(forms.ModelForm):
-    CHOICES = [
-        ('Male', 'Male'),
-        ('Female', 'Female'),
-
-    ]
-    gender= forms.CharField(
-        widget=forms.RadioSelect(choices=CHOICES,),
-         
-    )
+    
+   
     session=forms.ModelChoiceField(queryset=Session.objects.all(),initial=Session.objects.first(),widget=forms.Select(attrs={'class': 'form-control form-control-sm','onchange' : 'myFunction(this.id)',}))
 
 
@@ -75,7 +73,7 @@ class StudentForm(forms.ModelForm):
         BlOOD_CHOICE=[('AB+', 'AB+'),('A+', 'A+'),('B+', 'B+'),('O+', 'O+'),('AB-', 'AB-'),('A-', 'A-'),('B-', 'B-'),('O-', 'O-'),]
         model = Student
         fields = "__all__"
-        exclude=['std_id','class_roll','exam_roll','registration','passing_year','student_category','department','section','class_year','cgpa','guardian_info','present_adress','permanent_adress','user','is_active','gender','fourth_subject']
+        exclude=['std_id','class_roll','exam_roll','registration','passing_year','student_category','department','section','class_year','cgpa','guardian_info','present_adress','permanent_adress','user','is_active','fourth_subject']
         #department=forms.ModelChoiceField(label="",queryset=Department.objects.all(),empty_label="Placeholder",)
 
         
@@ -91,6 +89,7 @@ class StudentForm(forms.ModelForm):
             'blood_group': forms.Select(choices=BlOOD_CHOICE,attrs={'class': 'form-control form-control-sm', 'placeholder':  'Your blood group'}),
             'marital_status': forms.Select(choices=MARITAL_CHOICES,attrs={'class': 'form-control form-control-sm',}),
             'religion': forms.Select(choices=RELIGION_CHOICES,attrs={'class': 'form-control form-control-sm',}),
+            'gender': forms.Select(choices=CHOICES,attrs={'class': 'form-control form-control-sm',}),
             
 
       }
@@ -123,7 +122,7 @@ class GuardianForm(forms.ModelForm):
 class SubjectChoiceForm(forms.ModelForm):
     #compulsory_subject=forms.ModelMultipleChoiceField(queryset=Subject.objects.all(),initial=Subject.objects.filter(serial__in=[ 1, 2,3]), widget=FilteredSelectMultiple('Subject',False, attrs={'class':'form-control form-control-sm'}))
     
-    #optional_subject=forms.ModelMultipleChoiceField(Subject.objects.all(), widget=FilteredSelectMultiple('Optional Subject',False, attrs={'row':'1','class': 'textfieldUSER',}))
+    #optional_subject=forms.ModelMultipleChoiceField(Subject.objects.all(), widget=FilteredSelectMultiple('Optional Subject',False, attrs={'row':'1','class': 'form-control form-control-sm',}))
     #group= forms.ModelChoiceField(queryset=Group.objects.all(),widget=forms.Select(attrs={'class':'form-control form-control-sm'}))
 
     class Meta:
@@ -168,9 +167,9 @@ class SubjectChoiceForm(forms.ModelForm):
             
         
 class AdressForm(forms.ModelForm):
-    division= forms.ModelChoiceField(queryset=None,widget=forms.Select(attrs={'class':'textfieldUSER'})),
-    district=forms.ModelChoiceField(queryset=None,widget=forms.Select(attrs={'class':'textfieldUSER'})),
-    upazilla= forms.ModelChoiceField(queryset=Upazilla.objects.all(),widget=forms.Select(attrs={'class':'textfieldUSER'})),
+    division= forms.ModelChoiceField(queryset=None,widget=forms.Select(attrs={'class':'form-control form-control-sm'})),
+    district=forms.ModelChoiceField(queryset=None,widget=forms.Select(attrs={'class':'form-control form-control-sm'})),
+    upazilla= forms.ModelChoiceField(queryset=Upazilla.objects.all(),widget=forms.Select(attrs={'class':'form-control form-control-sm'})),
              
     class Meta:
         model = Adress
@@ -179,19 +178,19 @@ class AdressForm(forms.ModelForm):
 
         
         widgets = {
-            'village_or_house': forms.TextInput(attrs={'class': 'textfieldUSER', 'placeholder':  'Village Name/house No.','onkeypress' : "myFunction(this.id);",'label':'Village/house'}),
-            'house_or_street_no': forms.TextInput(attrs={'class': 'textfieldUSER', 'placeholder':  'Street Name/No.','onkeypress' : "myFunction(this.id);",'label':'Street No.'}),
-            'post_office': forms.TextInput(attrs={'class': 'textfieldUSER', 'placeholder':  'Bogura-5800','onkeypress' : "myFunction(this.id);"}),
-            'division': forms.Select(attrs={'class': 'textfieldUSER','onchange' : "myFunctionTeacher(this.id);"}),
-            'district': forms.Select(attrs={'class': 'textfieldUSER','onchange' : "myFunctionTeacher(this.id);"}),            
-            'upazilla': forms.Select(attrs={'class': 'textfieldUSER',}),
+            'village_or_house': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Village Name/house No.','onkeypress' : "myFunction(this.id);",'label':'Village/house'}),
+            'house_or_street_no': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Street Name/No.','onkeypress' : "myFunction(this.id);",'label':'Street No.'}),
+            'post_office': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Bogura-5800','onkeypress' : "myFunction(this.id);"}),
+            'division': forms.Select(attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);"}),
+            'district': forms.Select(attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);"}),            
+            'upazilla': forms.Select(attrs={'class': 'form-control form-control-sm',}),
 
 
         }
 class PresentAdressForm(forms.ModelForm):
-    division= forms.ModelChoiceField(queryset=Division.objects.all(),widget=forms.Select(attrs={'class':'textfieldUSER'})),
-    district=forms.ModelChoiceField(queryset=None,widget=forms.Select(attrs={'class':'textfieldUSER'})),
-    upazilla= forms.ModelChoiceField(queryset=Upazilla.objects.all(),widget=forms.Select(attrs={'class':'textfieldUSER'})),
+    division= forms.ModelChoiceField(queryset=Division.objects.all(),widget=forms.Select(attrs={'class':'form-control form-control-sm'})),
+    district=forms.ModelChoiceField(queryset=None,widget=forms.Select(attrs={'class':'form-control form-control-sm'})),
+    upazilla= forms.ModelChoiceField(queryset=Upazilla.objects.all(),widget=forms.Select(attrs={'class':'form-control form-control-sm'})),
             
     class Meta:
         model = Adress
@@ -200,12 +199,12 @@ class PresentAdressForm(forms.ModelForm):
 
         
         widgets = {
-            'village_or_house': forms.TextInput(attrs={'class': 'textfieldUSER', 'placeholder':  'Village Name/house No.','onkeypress' : "myFunction(this.id);",'label':'Village/house'}),
-            'house_or_street_no': forms.TextInput(attrs={'class': 'textfieldUSER', 'placeholder':  'Street Name/No.','onkeypress' : "myFunction(this.id);",'label':'Street No.'}),
-            'post_office': forms.TextInput(attrs={'class': 'textfieldUSER', 'placeholder':  'Bogura-5800','onkeypress' : "myFunction(this.id);"}),
-            'division': forms.Select(attrs={'class': 'textfieldUSER',}),
-            'district': forms.Select(attrs={'class': 'textfieldUSER',}),            
-            'upazilla': forms.Select(attrs={'class': 'textfieldUSER',}),
+            'village_or_house': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Village Name/house No.','onkeypress' : "myFunction(this.id);",'label':'Village/house'}),
+            'house_or_street_no': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Street Name/No.','onkeypress' : "myFunction(this.id);",'label':'Street No.'}),
+            'post_office': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Bogura-5800','onkeypress' : "myFunction(this.id);"}),
+            'division': forms.Select(attrs={'class': 'form-control form-control-sm',}),
+            'district': forms.Select(attrs={'class': 'form-control form-control-sm',}),            
+            'upazilla': forms.Select(attrs={'class': 'form-control form-control-sm',}),
 
 
 
@@ -225,9 +224,9 @@ class PresentAdressForm(forms.ModelForm):
     
 class SscEquvalentForm(forms.ModelForm):
     
-    '''group=forms.ModelChoiceField(label="",queryset=Group.objects.all().values_list('id', 'title_en'),empty_label="Placeholder",)
-    session=forms.ModelChoiceField(label="",queryset=Session.objects.all().values_list('id', 'title_en'),empty_label="Placeholder",)'''
-    ssc_passing_year= forms.ChoiceField(choices=year_choices,widget=forms.Select(attrs={'class':'textfieldUSER'}))
+    # group=forms.ModelChoiceField(label="",queryset=Group.objects.all().values_list('id', 'title_en'),widget=forms.Select(attrs={'class':'form-control form-control-sm'}),empty_label="Placeholder",)
+    # session=forms.ModelChoiceField(label="",queryset=Session.objects.all().values_list('id', 'title_en'),widget=forms.Select(attrs={'class':'form-control form-control-sm'}),empty_label="Placeholder",)
+    ssc_passing_year= forms.ChoiceField(choices=year_choices,widget=forms.Select(attrs={'class':'form-control form-control-sm'}))
 
     class Meta:
         model = SscEquvalent

@@ -114,12 +114,356 @@
     </head>
     
     <body>
+
+      <div class="services" id="service_body">
+        <div><h3 style="text-align: center;text-shadow: 2px 2px 2px rgb(11, 73, 55);color:rgb(238, 103, 103);"><u>HSC ADMISSION-2025</u></h3></div>
+        
+        <div data-v-6f04a53f="" class="memberRegistration py-5">
+      
+          <div class="container-wrapper">
+            <div class="row justify-content-md-center">
+              <div class="col col-lg-10">
+                <div class="card login-body shadow-lg rounded-10 py-5">
+                  <div class="col-sm-12 form-group" >
+      
+                    <div class="progress">
+                      <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 0%;"></div>
+                  </div>  
+                </div>
+                      <div class="card-body">
+      
+      
+                  <span class="shape"><img align="center" loading="lazy" src="{% static 'images\ictparkbd_logo.jpg' %}"><img align="center" loading="lazy" style="height:60%;margin-top:10%;rotate: -50deg;" src="{% static 'images\gmrwc_logo.png' %}"></span> 
+      
+                   {%if email %}
+                  
+                  <div class="alert alert-danger" role="alert">
+                    <strong>{{email}}</strong> 
+                  </div>
+                  
+                  {% endif %}
+                  {%if phone %}
+                  
+                  <div class="alert alert-danger" role="alert">
+                    <strong>{{phone}}</strong> 
+                  </div>
+                  
+                  {% endif %} 
+                  
+                  {%if password %}
+                  
+                  <div class="alert alert-danger" role="alert">
+                    <strong>{{password}}</strong> 
+                  </div>
+                  
+                  {% endif %}
+                  
+                  {%if success %}
+                  
+                  <div class="alert alert-success" role="alert">
+                    <strong>{{success}}</strong> 
+                  </div>
+                  
+                  {% endif %}
+                  
+             
+                  <form  id="form" class="form-row px-3" method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{form.media}}
+                    <div id="qbox-container">
+                      <div id="steps-container">
+                          <div class="step d-block">
+                            <table width="100%" border="1" cellspacing="0" cellpadding="10">
+                              <thead><th colspan="5" style="height: 30px; background-color: #035a4c; color: #fff;text-shadow: 10px 10px 10px rgb(73, 25, 11);padding: 15px;font-size:23px;text-align:center;"> PERSONAL INFORMAION                                  
+                                
+                              <tbody>
+                              </tbody>
+                            </table>
+                             
+                    <div class="col-sm-12 form-group">
+                      
+                      <div class="row">
+                        {% for field in form %}
+
+                        <div class="col-sm-6">
+                          
+                          <label for="" class="col-form-label-sm m-0">{{field.label_tag}}</label> 
+                          
+                          <div class="loginBox">
+                            {{field}}
+                            <span class="fa fa-user"></span>
+                          </div> <!--  --> <div class="invalid-feedback"></div>
+                        </div>
+                        {% endfor %}
+
+                      </div>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                      
+                      <div class="row">
+                        <table width="100%" border="1" cellspacing="0" cellpadding="10">
+                          <thead><th colspan="5" style="height: 30px; background-color: #035a4c; color: #fff;text-shadow: 10px 10px 10px rgb(73, 25, 11);padding: 15px;font-size:23px;text-align:center;"> {% if certificate_type.id == 7 %}অভিভাবকের  তথ্য {% else %}  ব্যক্তিগত তথ্য  {% endif %}                                  
+                            
+                          <tbody>
+                          </tbody>
+                        </table>
+                    {% for field in present_adress_form %}
+                    
+                    <div class="col-sm-6">
+                      <label for="" class="col-form-label-sm m-0">{{field.label_tag}}</label> 
+                          
+                          <div class="loginBox">
+                            {{field}}
+                            <span class="fa fa-user"></span>
+                          </div> <!--  --> <div class="invalid-feedback"></div>
+                    </div>
+                    {% endfor %}
+                    
+                  </div>
+                </div>
+                <div class="col-sm-12 form-group">
+                      
+                  <div class="row">
+                    <table width="100%" border="1" cellspacing="0" cellpadding="10">
+                      <thead><th colspan="5" style="height: 30px; background-color: #035a4c; color: #fff;text-shadow: 10px 10px 10px rgb(73, 25, 11);padding: 15px;font-size:23px;text-align:center;"> {% if certificate_type.id == 7 %}অভিভাবকের  তথ্য {% else %}  ব্যক্তিগত তথ্য  {% endif %}                                  
+                        
+                      <tbody>
+                      </tbody>
+                    </table>
+                {% for field in present_adress_form %}
+                
+                <div class="col-sm-6">
+                  <label for="" class="col-form-label-sm m-0">{{field.label_tag}}</label> 
+                      
+                      <div class="loginBox">
+                        {{field}}
+                        <span class="fa fa-user"></span>
+                      </div> <!--  --> <div class="invalid-feedback"></div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+              </div>
+                    <div class="step d-none">
+                      <table width="100%" border="1" cellspacing="0" cellpadding="10">
+                        <thead><th colspan="5" style="height: 30px; background-color: #035a4c; color: #fff;text-shadow: 10px 10px 10px rgb(73, 25, 11);padding: 15px;font-size:23px;text-align:center;"> GUARDIAN INFORMATION                                
+                          
+                        <tbody>
+                        </tbody>
+                      </table>
+                      
+                      <div class="col-sm-12 form-group">
+                      
+                        <div class="row">
+                      {% for field in guardian_form %}
+                      <div class="col-sm-6">
+                        <label for="" class="col-form-label-sm m-0">{{field.label_tag}}</label> 
+                            
+                            <div class="loginBox">
+                              {{field}}
+                              <span class="fa fa-user"></span>
+                            </div> <!--  --> <div class="invalid-feedback"></div>
+                      </div>
+                      {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="step d-none">
+                      <table width="100%" border="1" cellspacing="0" cellpadding="10">
+                        <thead><th colspan="5" style="height: 30px; background-color: #035a4c; color: #fff;text-shadow: 10px 10px 10px rgb(73, 25, 11);padding: 15px;font-size:23px;text-align:center;"> SSC EQUIVALENT                                 
+                          
+                        <tbody>
+                        </tbody>
+                      </table>
+                      <div class="col-sm-12 form-group">
+                      
+                        <div class="row">
+                      {% for field in ssc_equivalent_form %}
+                      <div class="col-sm-6">
+                        <label for="" class="col-form-label-sm m-0">{{field.label_tag}}</label> 
+                            
+                            <div class="loginBox">
+                              {{field}}
+                              <span class="fa fa-user"></span>
+                            </div> <!--  --> <div class="invalid-feedback"></div>
+                      </div>
+                      {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="step d-none">
+                      <table width="100%" border="1" cellspacing="0" cellpadding="10">
+                        <thead><th colspan="5" style="height: 30px; background-color: #035a4c; color: #fff;text-shadow: 10px 10px 10px rgb(73, 25, 11);padding: 15px;font-size:23px;text-align:center;"> SUBJECT CHOICE                                 
+                          
+                        <tbody>
+                        </tbody>
+                      </table>
+                      <div class="col-sm-12 form-group">
+                      
+                        <div class="row">
+                      {{subject_form.media}}
+                                  {% for field in subject_form %}
+                                    {{ field.errors }}
+                                    <div class="col-sm-12">
+                                      <label for="" class="col-form-label-sm m-0">{{field.label_tag}}</label> 
+                                          
+                                          <div class="loginBox">
+                                            {{field}}
+                                            <span class="fa fa-user"></span>
+                                          </div> <!--  --> <div class="invalid-feedback"></div>
+                                    </div>
+                                  {% endfor %}
+                                </div>
+                              </div>
+                    </div>
+                    {% comment %} <div id="success">
+                      <div class="mt-5">
+                       
+                          <h4>Success! Your admission is done!</h4>
+                          <h5>Dont Reload window untill download your admission form</h5>
+                          <h4>To download admission form Click Get Admission form Button below!</h4>
+                      </div>
+                  </div> {% endcomment %}
+        
+                    <div class="step d-none">
+                      <table width="100%" border="1" cellspacing="0" cellpadding="10">
+                        <thead><th colspan="5" style="height: 30px; background-color: #035a4c; color: #fff;text-shadow: 10px 10px 10px rgb(73, 25, 11);padding: 15px;font-size:23px;text-align:center;"> CHECK BEFORE SUBMIT                                 
+                          
+                        <tbody>
+                        </tbody>
+                      </table>
+                      <div class="col-sm-12 form-group">
+                      
+                        <div class="row">
+                      <div class="mt-1">
+                        <div class="closing-text">
+
+                          <input type="hidden" value="{{group.title_en}}" name="admission_group">
+
+                            <h4>That's about it! Stay healthy!</h4>
+                            <p>We will assess your information and will let you know soon if you need to get tested for COVID-19.</p>
+                            <p>Click on the submit button to continue.</p>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+                </div>
+                
+                
+            </div>
+                <div id="q-box__buttons" >
+
+                  <button id="prev-btn" type="button" class="d-inline-block" style="height: 40px; background-color: #035a4c; color: #fff;text-shadow: 4px 4px 4px rgb(73, 25, 11);font-size:20px;padding-left:8px;padding-right:8px;">Previous</button> 
+                  <button id="next-btn" type="button" class="d-inline-block" style="height: 40px; background-color: #035a4c; color: #fff;text-shadow: 4px 4px 4px rgb(73, 25, 11);font-size:20px;padding-left:8px;padding-right:8px;">Next</button> 
+                  <button id="submit-btn" type="submit" class="d-none">Submit</button>
+              </div>
+                       
+                      
+                       
+                    
+      
+      
+                    
+
+      {% comment %}               
+                    {% if other_adress_formset %}
+                      
+                    {{other_adress_formset.management_form}}
+                    
+                    {% for other_adress in other_adress_formset %}
+                      
+                      
+                    <table width="100%" border="1" cellspacing="0" cellpadding="10">
+                      <thead><th colspan="5" style="height: 25px; background-color: #035a4c; color: #fff;text-shadow: 5px 5px 5px rgb(73, 25, 11);padding: 15px;font-size:20px;text-align:center;"> স্বত্তাধিকারীর ঠিকানা                                 
+                        </th></thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+      
+                    <div class="col-sm-12 form-group">
+                      <div class="row">
+                          <div class="col-sm-4">
+                              <label for="" class="col-form-label-sm m-0">{{other_adress.division.label_tag}}</label> <div class="loginBox">
+                                {{other_adress.division}}                      
+                                <span class="fa fa-map-marker"></span>
+                              </div> <!--  --> <div class="invalid-feedback"></div>
+                            </div>
+      
+                        <div class="col-sm-4">
+                          <label for="" class="col-form-label-sm m-0">{{other_adress.district.label_tag}}</label>
+                           <div class="loginBox">
+                            {{other_adress.district}}
+                            <span class="fa fa-home"></span>
+                          </div> <!--  --> <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="col-sm-4">
+                          <label for="" class="col-form-label-sm m-0">{{other_adress.upazilla.label_tag}}</label>
+                           <div class="loginBox">
+                            {{other_adress.upazilla}}
+                            <span class="fa fa-home"></span>
+                          </div> <!--  --> <div class="invalid-feedback"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                      <div class="row">
+                        <div class="col-sm-4">
+                          <label for="" class="col-form-label-sm m-0">{{other_adress.union.label_tag}}</label>
+                           <div class="loginBox">
+                            {{other_adress.union}}
+                            <span class="fa fa-home"></span>
+                          </div> <!--  --> <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="col-sm-4">
+                          <label for="" class="col-form-label-sm m-0">{{other_adress.village.label_tag}}</label>
+                           <div class="loginBox">
+                            {{other_adress.village}}
+                            <span class="fa fa-home"></span>
+                          </div> <!--  --> <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="col-sm-4">
+                          <label for="" class="col-form-label-sm m-0">{{other_adress.post_office.label_tag}}</label>
+                           <div class="loginBox">
+                            {{other_adress.post_office}}
+                            <span class="fa fa-home"></span>
+                          </div> <!--  --> <div class="invalid-feedback"></div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %} 
+      
+                    {% endif %}{% endcomment %}
+      
+                     
+                    {% comment %} <div class="col-sm-4 form-group mb-0">
+                      <button type="submit" class="btn btn-danger text-white"><span>সাবমিট</span></button>
+                    </div>  {% endcomment %}
+                    <div class="col-sm-9 form-group">
+                      <p class="text-right">
+                        <button type="submit" class="rounded-50 ml-2" style="height: 40px; background-color: #035a4c; color: #fff;text-shadow: 4px 4px 4px rgb(73, 25, 11);font-size:20px;padding-left:8px;padding-right:8px;">সাবমিট করুন</button>
+                      </p>
+                    </div>
+                    
+                  </div>
+                  </div> 
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="bubbleNew"><img loading="lazy" src="{%static 'images/tilokpur_logo.png'%}" class="rounded-circle" style="width: 200px;height: 200px;" /></span>
+      
+      </div>
+      
       <!-- The actual snackbar -->
       <div class="services">
-        <div  class="container-wrapper" >
+        <div  class="container-wrapper"  >
     
       
-      <div data-v-6f04a53f="" class="memberRegistration py-5">
+      <div data-v-6f04a53f="" class="memberRegistration py-5" >
         <div class="container-wrapper">
           <div class="row justify-content-md-center">
             <div class="col col-lg-10">
@@ -150,9 +494,7 @@
 </div>
 
   
-                    <div class="progress">
-                      <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 0%;"></div>
-                  </div>
+                    
     <!-- CONTAINER -->
 
     <div class="box_container" style="width: 100%; margin: 0px;">
@@ -195,7 +537,7 @@
                                             <label>
                                               {{field}}                                        
                                             </label>
-                                            <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
+                                            </span></td>
                                           <td width="5%" align="left" valign="middle">&nbsp;</td>
                                       </tr>
                                       {% endfor %}
