@@ -167,7 +167,7 @@
                   {% endif %}
                   
              
-                  <form  id="form" class="form-row px-3" method="post" action="" enctype="multipart/form-data">
+                  <form  id="form" class="form-row px-3" method="post" action="{% url 'admission_form_submit' %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{form.media}}
                     <div id="qbox-container">
@@ -179,7 +179,28 @@
                               <tbody>
                               </tbody>
                             </table>
-                             
+                            <div class="col-sm-12 form-group">
+                      
+                              <div class="row">
+                              
+        
+                                <div class="col-sm-6" style="margin:auto">
+                                  
+                                  <label for="" class="col-form-label-sm m-0">{{field.label_tag}}</label> 
+                                  
+                                  <div class="loginBox">
+                                    <select class='form-control form-control-sm' id="purpose" name="purpose">
+                                      <option value="1">
+                                        {{ payment_purpose.title }}
+                                      </option>
+                                    </select>
+                                    <span class="fa fa-user"></span>
+                                  </div> <!--  --> <div class="invalid-feedback"></div>
+                                </div>
+                               
+        
+                              </div>
+                            </div> 
                     <div class="col-sm-12 form-group">
                       
                       <div class="row">
@@ -459,34 +480,7 @@
       </div>
       
       <!-- The actual snackbar -->
-      <div class="services">
-        <div  class="container-wrapper"  >
-    
-      
-      <div data-v-6f04a53f="" class="memberRegistration py-5" >
-        <div class="container-wrapper">
-          <div class="row justify-content-md-center">
-            <div class="col col-lg-10">
-              <div class="card login-body shadow-lg rounded-10 py-5">
-                <table width="100%" border="1" cellspacing="0" cellpadding="10">
-                  <thead><th colspan="5" style="height: 40px; background-color: #035a4c; color: #fff;padding: 15px;font-size:20px;text-align:center;"> RESULT SHOW DOWNLOAD FORM </th></thead>
-                  {% if notfound %}
-                  <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 40px; background-color:rgb(168, 8, 8); color: #fff;padding: 20px;"> Result Not found!<br>re-Enter right information or Contact exam control room</th></thead>
-                  {% endif %}
-                  {% if message %}
-                  {% for message in messages %}
-                  <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 40px; background-color:rgb(168, 8, 8); color: #fff;padding: 15px;"> {{message}} </th></thead>
-                  {% endfor %}
-                  {% endif %}
-                  <tbody>
-                  </tbody>
-                </table>
-                    <div class="card-body">
-    
-                    <span class="bubbleNew"><img src="{%static 'images/ictpark_monogram.png'%}" class="rounded-circle" style="width: 200px;height: 200px;" /></span>
-    
-                    <span class="shape"><img align="center" src="{% static 'images\ictparkbd_logo.jpg' %}"><img align="center" style="height:60%;margin-top:10%;rotate: -50deg;" src="{% static 'images\tilokpur_logo.png' %}"></span> 
-            
+               
 <div id="toast-container" aria-level="polite" role="alert">
   <div class="toast toast-error" ><button class="toast-close-button" role="button">&#10006;</button>
       <div class="toast-message" >দুঃখিত! লাল চিহ্নিত বক্সে সঠিক তথ্য দিতে হবে</div>
@@ -497,410 +491,7 @@
                     
     <!-- CONTAINER -->
 
-    <div class="box_container" style="width: 100%; margin: 0px;">
-      <div class="" style="margin: auto;width: 100%;">
-          <!-- TITLE 
-          <div class="col-lg-4 offset-lg-1 mx-0 px-0">
-              <div id="title-container">
-                  <img class="covid-image" src="./img/covid-check.png">
-                  <h2>COVID-19</h2>
-                  <h3>Self Checker Form</h3>
-                  <p>A clinical assessment multi-step form that will assist individuals on deciding when to seek testing or medical care if they suspect they or someone they know has contracted COVID-19 or has come into close contact with someone who has COVID-19</p>
-              </div>
-          </div>-->
-          <!-- FORMS -->
-          <div >
-    <form class="needs-validation" action="{% url 'admission_form_submit' %}" id="form-wrapper" method="post" name="form-wrapper" novalidate="">
-          {% csrf_token %}
-              <div id="qbox-container">
-                      <div id="steps-container">
-                          <div class="step d-block">
-                            <div><h1 style="text-align: center;"><u>Personal Information</u></h1></div>
-
-                            <table width="900" border="0" align="center" valign="middle" cellspacing="0" cellpadding="0">
-
-                              <tbody>
-                              <tr>
-                                <td align="left">
-                                  <fieldset>
-                                  <table width="100%" border="1" cellspacing="0" cellpadding="2">
-                                    <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;">Personal Information</th></thead>
-                                    <tbody>
-                                    {% for field in form %}
-                                    {{ field.errors }}
-                                
-                                      <tr>
-                                          <td width="10%" align="left" valign="middle">&nbsp;</td>
-                                          <td width="10%" align="left" valign="middle" class="black12">{{field.label_tag}}</td>
-                                          <td width="10%" align="left" valign="middle" class="black12">:</td>
-                                          <td width="55%" align="left" valign="middle"><span id="sprytextfield1">
-                                            <label>
-                                              {{field}}                                        
-                                            </label>
-                                            </span></td>
-                                          <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                      </tr>
-                                      {% endfor %}
-                                      
-                                        
-                                    
-      
-                                  </tbody></table>
-                                </fieldset>
-                              </td>
-                              <!--<td align="right">
-                                <fieldset>
-                                <table width="100%" border="1" cellspacing="0" cellpadding="3">
-                                  <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;">Basic Information(Academic)</th></thead>
-
-                                  <tbody>
-                                    <tr>
-                                      <td width="10%" align="left" valign="middle">&nbsp;</td>
-                                      <td width="10%" align="left" valign="middle" class="black12">{{form.nationality.label}}</td>
-                                      <td width="10%" align="left" valign="middle" class="black12">:</td>
-                                      <td width="55%" align="left" valign="middle"><span id="sprytextfield1">
-                                        <label>
-                                          {{form.nationality}}                                        
-                                        </label>
-                                        <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
-                                      <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                  </tr>
-                                    <tr>
-                                      <td width="10%" align="left" valign="middle">&nbsp;</td>
-                                      <td width="10%" align="left" valign="middle" class="black12">{{form.birth_registration.label}}</td>
-                                      <td width="10%" align="left" valign="middle" class="black12">:</td>
-                                      <td width="55%" align="left" valign="middle"><span id="sprytextfield1">
-                                        <label>
-                                          {{form.birth_registration}}                                        
-                                        </label>
-                                        <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
-                                      <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                  </tr>
-                                     
-                                      <tr>
-                                        <td width="10%" align="left" valign="middle">&nbsp;</td>
-                                        <td width="10%" align="left" valign="middle" class="black12">{{form.gender.label}}</td>
-                                        <td width="10%" align="left" valign="middle" class="black12">:</td>
-                                        <td width="25%" align="left" valign="middle"><span id="sprytextfield1">
-                                          <label>
-                                            {{form.gender}}                                        
-                                          </label>
-                                          <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
-                                        
-                                    </tr>
-                                  
-                                  <tr>
-                                      <td width="10%" align="left" valign="middle">&nbsp;</td>
-                                      <td width="10%" align="left" valign="middle" class="black12">{{form.exam_roll.label}}</td>
-                                      <td width="10%" align="left" valign="middle" class="black12">:</td>
-                                      <td width="55%" align="left" valign="middle"><span id="sprytextfield1">
-                                        <label>
-                                          {{form.exam_roll}}                                        
-                                        </label>
-                                        <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
-                                      <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                  </tr>
-                                  <tr>
-                                    <td width="10%" align="left" valign="middle">&nbsp;</td>
-                                    <td width="10%" align="left" valign="middle" class="black12">{{form.registration.label}}</td>
-                                    <td width="10%" align="left" valign="middle" class="black12">:</td>
-                                    <td width="55%" align="left" valign="middle"><span id="sprytextfield1">
-                                      <label>
-                                        {{form.registration}}                                        
-                                      </label>
-                                      <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
-                                    <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                  </tr>
-                                  <tr>
-                                    <td width="10%" align="left" valign="middle">&nbsp;</td>
-                                    <td width="10%" align="left" valign="middle" class="black12">{{form.session.label}}</td>
-                                    <td width="10%" align="left" valign="middle" class="black12">:</td>
-                                    <td width="55%" align="left" valign="middle"><span id="sprytextfield1">
-                                      <label>
-                                        {{form.session}}                                        
-                                      </label>
-                                      <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
-                                    <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                </tr>
-                                
-                                  <tr>
-                                    <td width="10%" align="left" valign="middle">&nbsp;</td>
-                                    <td width="10%" align="left" valign="middle" class="black12">{{form.group.label}}</td>
-                                    <td width="10%" align="left" valign="middle" class="black12">:</td>
-                                    <td width="55%" align="left" valign="middle"><span id="sprytextfield1">
-                                      <label>
-                                        {{form.group}}                                        
-                                      </label>
-                                      <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
-                                    <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                  </tr>
-                                  <tr>
-                                    <td width="10%" align="left" valign="middle">&nbsp;</td>
-                                    <td width="10%" align="left" valign="middle" class="black12">{{form.marital_status.label}}</td>
-                                    <td width="10%" align="left" valign="middle" class="black12">:</td>
-                                    <td width="55%" align="left" valign="middle"><span id="sprytextfield1">
-                                      <label>
-                                        {{form.marital_status}}                                        
-                                      </label>
-                                      <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
-                                    <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                <tr>
-                                  <td width="10%" align="left" valign="middle">&nbsp;</td>
-                                  <td width="10%" align="left" valign="middle" class="black12">{{form.blood_group.label}}</td>
-                                  <td width="10%" align="left" valign="middle" class="black12">:</td>
-                                  <td width="55%" align="left" valign="middle"><span id="sprytextfield1">
-                                    <label>
-                                      {{form.blood_group}}                                        
-                                    </label>
-                                    <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
-                                  <td width="5%" align="left" valign="middle">&nbsp;</td>
-                              </tr>
-                              
-                                                               
-                              </tbody></table>
-                              </fieldset>
-                            </td>-->
-                            </tr>
-                                
-                            </tbody>
-                          </table>
-                            <table width="900" border="0" align="center" valign="middle" cellspacing="0" cellpadding="0">
-                              <tbody>
-                              <tr>
-                                <td align="left">
-                                  <fieldset>
-                                    <table width="100%" border="1" cellspacing="" cellpadding="5">
-                                      <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;"><th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;">Permanent Adress</th></thead>
-                                      <tbody>
-                                        {% for field in adress_form %}
-                                        <tr>
-                                            <td width="10%" align="left" valign="middle">&nbsp;</td>
-                                            <td width="10%" align="left" valign="middle" class="black12">{{field.label_tag}}</td>
-                                            <td width="0%" align="left" valign="middle" class="black12">:</td>
-                                            <td width="70%" align="left" valign="middle"><span id="sprytextfield1">
-                                              <label>
-                                                {{field}}                                        
-                                              </label>
-                                              <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
-                                            <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                        </tr>
-                                        {% endfor %}
-                                        
-                                    </tbody></table>
-                                  </fieldset>
-                              </td>
-                              <td align="left">
-                                <fieldset>
-                                  <table width="100%" border="1" cellspacing="0" cellpadding="3">
-                                    <thead style="height: 25px; background-color: #245b80; color: #fff;">
-                                      <th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;">Present Adress</th>
-                                    </thead>
-                                    <tbody>
-                                      <tr><td colspan="5" align="right"><small>same as Permanent Adress</small> <input type="checkbox" id="present_adress"> </td></tr>
-                                      {% for field in present_adress_form %}
-                                        <tr>
-                                            <td width="10%" align="left" valign="middle">&nbsp;</td>
-                                            <td width="10%" align="left" valign="middle" class="black12">{{field.label_tag}}</td>
-                                            <td width="0%" align="left" valign="middle" class="black12">:</td>
-                                            <td width="70%" align="left" valign="middle"><span id="sprytextfield1">
-                                              <label>
-                                                {{field}} 
-                                                                               
-                                              </label>
-                                              <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
-                                            <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                        </tr>
-                                        {% endfor %}                                      
-                                        
-                                  </tbody></table>
-                                </fieldset>
-                            </td>
-                                </tr>
-                                
-                            </tbody>
-                          </table>
-                            
-                          </div>
-                          <div class="step d-none">
-                          <div><h1 style="text-align: center;"><u>Guardian Information </u></h1></div>
-
-                            <table width="900" border="0" align="center" valign="middle" cellspacing="0" cellpadding="0">
-
-                              <tbody>
-                              <tr>
-                                <td align="left">
-                                  <fieldset>
-                            
-                              <table width="100%" border="1" cellspacing="0" cellpadding="3">
-                                <thead style="height: 25px; background-color: #245b80; color: #fff;">
-                                  <th colspan="5" style="height: 25px; background-color: #245b80; color: #fff; padding: 15px; margin-bottom: 15px;">Fill your guardian information</th>
-                                </thead>
-                                <tbody>
-                                  {% for field in guardian_form %}
-                                    {{ field.errors }}
-                                
-                                  <tr>
-                                      <td width="10%" align="left" valign="middle">&nbsp;</td>
-                                      <td width="10%" align="left" valign="middle" class="black12">{{ field.label_tag }}</td>
-                                      <td width="10%" align="left" valign="middle" class="black12">:</td>
-                                      <td width="55%" align="left" valign="middle"><span id="sprytextfield1">
-                                        <label>
-                                          {{ field }}
-                                        </label>
-                                        <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
-                                      <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                  </tr>
-                                  {% endfor %}
-  
-                              
-                                    
-                                
-  
-                              </tbody></table>
-                            </fieldset>
-                                </td>
-                              </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                          <div class="step d-none">
-
-                            <div><h1 style="text-align: center;"><u>Academic Information</u></h1></div>
-
-                            <table width="900" border="0" align="center" valign="middle" cellspacing="0" cellpadding="0">
-
-                              <tbody>
-                              <tr>
-                                <td align="left">
-                                  <fieldset>
-                            
-                              <table width="100%" border="1" cellspacing="0" cellpadding="3">
-                                <thead style="height: 25px; background-color: #245b80; color: #fff;">
-                                  <th colspan="5" style="height: 25px; background-color: #245b80; color: #fff; padding: 15px; margin-bottom: 15px;">SSC or Equivalent Information</th>
-                                </thead>
-                                <tbody>
-                                  {% for field in ssc_equivalent_form %}
-                                    {{ field.errors }}
-                                
-                                  <tr>
-                                      <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                      <td width="25%" align="left" valign="middle" class="black12">{{ field.label_tag }}</td>
-                                      <td width="5%" align="left" valign="middle" class="black12">:</td>
-                                      <td width="65%" align="left" valign="middle"><span id="sprytextfield1">
-                                        <label>
-                                          {{ field }}
-                                        </label>
-                                        <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
-                                      <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                  </tr>
-                                  {% endfor %}
-  
-                              
-                                    
-                                
-  
-                              </tbody></table>
-                            </fieldset>
-                                </td>
-                              </tr>
-                              </tbody>
-                            </table>
-                              
-                          </div>
-                          <div class="step d-none">
-                              
-                            <div><h1 style="text-align: center;"><u>Subject Choice Entry</u></h1></div>
-
-                            <table width="900" border="0" align="center" valign="middle" cellspacing="0" cellpadding="0">
-
-                              <tbody>
-                              <tr>
-                                <td align="left">
-                                  <fieldset>
-                            
-                              <table width="100%" border="1" cellspacing="0" cellpadding="3">
-                                <thead style="height: 25px; background-color: #245b80; color: #fff;">
-                                  <th colspan="5" style="height: 25px; background-color: #245b80; color: #fff; padding: 15px; margin-bottom: 15px;">Choose your desiered subject</th>
-                                </thead>
-                                <tbody>
-                                  {{subject_form.media}}
-                                  {% for field in subject_form %}
-                                    {{ field.errors }}
-                                
-                                  <tr>
-                                      <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                      <td width="15%" align="left" valign="middle" class="black12">{{ field.label_tag }}</td>
-                                      <td width="5%" align="left" valign="middle" class="black12">:</td>
-                                      <td width="75%" align="left" valign="middle"><span id="sprytextfield1">
-                                        <label>
-                                          {{ field }}
-                                        </label>
-                                        <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
-                                      <td width="5%" align="left" valign="middle">&nbsp;</td>
-                                  </tr>
-                                  {% endfor %}
-                              
-                                    
-                                
-  
-                              </tbody></table>
-                            </fieldset>
-                                </td>
-                              </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div id="success">
-                            <div class="mt-5">
-                             
-                                <h4>Success! Your admission is done!</h4>
-                                <h5>Dont Reload window untill download your admission form</h5>
-                                <h4>To download admission form Click Get Admission form Button below!</h4>
-                            </div>
-                        </div>
-              
-                          <div class="step d-none">
-                            <div class="mt-1">
-                              <div class="closing-text">
-                                <input type="hidden" value="{{group.title_en}}" name="admission_group">
-
-                                  <h4>That's about it! Stay healthy!</h4>
-                                  <p>We will assess your information and will let you know soon if you need to get tested for COVID-19.</p>
-                                  <p>Click on the submit button to continue.</p>
-                              </div>
-                          </div>
-                      </div>
-                      
-                      
-                  </div>
-                      <div id="q-box__buttons" >
-                        <button id="prev-btn" type="button" class="d-inline-block">Previous</button> 
-                        <button id="next-btn" type="button" class="d-inline-block">Next</button> 
-                        <button id="submit-btn" type="submit" class="d-none">Submit</button>
-                    </div>   
-              </div>
-              
-            </form>
-
-            <div id="download_form_id">
-              <div class="mt-5">
-
-                <form id="form_download_id" method="post" action="{% url 'form-download' %}" target="_blank" >
-                  {% csrf_token %}
-                <input type="hidden" value="{{student}}" id="student_id" name="student_id">
-                <div id="q-box__buttons" >
-
-                  <button type="submit" id="btn_admission_form" style="width:300px;">Download Admission form</button>
-                  </div>
-                </form>
-                  <a style="margin-top: 20px; margin-bottom: 20px; margin-left: 10%;" class="back-link" href="">Go back from the beginning ➜</a>
-              </div>
-          </div>
-
-          </div>
-      </div>
-  </div>
+   
   <!-- PRELOADER -->
   <div id="preloader-wrapper">
     <div id="preloader"></div>

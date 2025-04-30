@@ -4,6 +4,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 # import GeeksModel from models.py
 from .models import Student,SubjectChoice,Upazilla,District,Division,Adress,SscEquvalent,GuardianInfo,Subject,Session,Group,Class
 from django.db.models import Q,Count
+from payment.models import PaymentPurpose
 from django_select2.forms import ModelSelect2Widget
 # create a ModelForm
 MARITAL_CHOICES = [('Unmarried', 'Unmarried'),('Married', 'Married'),('Divorced','Divorced')]
@@ -63,8 +64,6 @@ MOTHER_PROFESSION_CHOICE = [
         ]
         
 class StudentForm(forms.ModelForm):
-    
-   
     session=forms.ModelChoiceField(queryset=Session.objects.all(),initial=Session.objects.first(),widget=forms.Select(attrs={'class': 'form-control form-control-sm','onchange' : 'myFunction(this.id)',}))
 
 
@@ -75,8 +74,6 @@ class StudentForm(forms.ModelForm):
         fields = "__all__"
         exclude=['std_id','class_roll','exam_roll','registration','passing_year','student_category','department','section','class_year','cgpa','guardian_info','present_adress','permanent_adress','user','is_active','fourth_subject']
         #department=forms.ModelChoiceField(label="",queryset=Department.objects.all(),empty_label="Placeholder",)
-
-        
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control form-control-sm',  'placeholder':  'Name in English','onkeypress' : "myFunction(this.id)",'value':'sumon'}),
             'name_bangla': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'নাম লিখুন(বাংলায়)','onkeypress' : "myFunction(this.id)",'value':'sumon'}),
@@ -92,7 +89,14 @@ class StudentForm(forms.ModelForm):
             'gender': forms.Select(choices=CHOICES,attrs={'class': 'form-control form-control-sm',}),
             
 
-      }
+      }    
+    def __init__(self, *args, **kwargs):
+            payment_type = kwargs.pop('instance', None)
+            super(StudentForm, self).__init__(*args, **kwargs)
+
+        
+   
+        
 
 class GuardianForm(forms.ModelForm):
     

@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from student.models import Student , Choice
 from .forms import SearchPaymentForm
-from .models import PaymentPurpose
+from .models import PaymentPurpose, PaymentType
 from django.shortcuts import render, redirect
 from django.http import HttpResponse 
 from django.views.generic import View, TemplateView, DetailView
@@ -49,11 +49,11 @@ class CheckoutSuccessView(View):
         context={}
         data = self.request.POST
         #print(data)
-
+        tran_type=PaymentType.objects.filter(id=data['value_d'])
         tran_purpose=PaymentPurpose.objects.filter(id=data['value_d']).first()
         student=Student.objects.filter(class_roll=data['value_a']).first()
         context['tran_purpose']=tran_purpose
-        #print(tran_purpose.payment_type.id)
+        print(tran_purpose.payment_type.id)
         transaction=None
         try:
             transaction=Transaction.objects.create(
@@ -107,6 +107,8 @@ class CheckoutSuccessView(View):
 
             if tran_purpose.payment_type.id == 1:
                 student=Student.objects.filter(phone=data['value_c']).last()
+                print(student)
+
                 password="Student@"+data['value_c']
                 user = get_user_model.objects.create_user(username=data['value_c'],
                                  email=data['value_c'],last_name="Student",
@@ -117,7 +119,7 @@ class CheckoutSuccessView(View):
                 for std in students:
                     std.delete()
 
-                #print(student)
+                print('2:'+student)
                 context['purpose']=tran_purpose
                 context['student']=student
             messages.success(request,'Payment Successful!!')
@@ -241,6 +243,92 @@ class CheckoutCanceledView(View):
         message='Payment Canceled'
         context['message']=message
         return render(request,self.template_name,context)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class CheckoutIPNView(View):
+    model = Transaction
+    template_name = 'payment/payment_receipt.html'
+    
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('nothing to see')
+
+    def post(self, request, *args, **kwargs):
+        
+        context={}
+        data = self.request.POST
+        post_body={}
+        # print(data)
+        tran_purpose=PaymentPurpose.objects.filter(id=data['value_d']).first()
+        student=Student.objects.filter(class_roll=data['value_a']).first()
+        if data['status'] == 'VALID':
+            post_body['val_id'] = data['val_id']
+            response = sslcommez.validationTransactionOrder(post_body['val_id'])
+            transaction=Transaction.objects.create(
+                            class_roll=data['value_a'],
+                            name = data['value_b'],
+                            group=student.group,
+                            session=student.session,
+                            department=student.department,
+                            phone=data['value_c'],
+                            email=data['value_c'],
+                            tran_id=data['tran_id'],
+                            tran_purpose=tran_purpose,
+                            val_id=data['val_id'],
+                            amount=data['amount'],
+                            card_type=data['card_type'],
+                            card_no=data['card_no'],
+                            store_amount=data['store_amount'],
+                            bank_tran_id=data['bank_tran_id'],
+                            status=data['status'],
+                            tran_date=data['tran_date'],
+                            currency=data['currency'],
+                            card_issuer=data['card_issuer'],
+                            card_brand=data['card_brand'],
+                            card_issuer_country=data['card_issuer_country'],
+                            card_issuer_country_code=data['card_issuer_country_code'],
+                            verify_sign=data['verify_sign'],
+                            verify_sign_sha2=data['verify_sign_sha2'],
+                            currency_rate=data['currency_rate'],
+                            risk_title=data['risk_title'],
+                            risk_level=data['risk_level'],
+            
+                        )
+        else:
+            transaction=Transaction.objects.create(
+                            class_roll=data['value_a'],
+                            name = data['value_b'],
+                            group=student.group,
+                            session=student.session,
+                            department=student.department,
+                            phone=data['value_c'],
+                            email=data['value_c'],
+                            tran_id=data['tran_id'],
+                            tran_purpose=tran_purpose,
+                            val_id="None",
+                            amount=data['amount'],
+                            card_type=data['card_type'],
+                            card_no=data['card_no'],
+                            store_amount=0,
+                            bank_tran_id=data['bank_tran_id'],
+                            status=data['status'],
+                            tran_date=data['tran_date'],
+                            currency=data['currency'],
+                            card_issuer=data['card_issuer'],
+                            card_brand=data['card_brand'],
+                            card_issuer_country=data['card_issuer_country'],
+                            card_issuer_country_code=data['card_issuer_country_code'],
+                            verify_sign=data['verify_sign'],
+                            verify_sign_sha2=data['verify_sign_sha2'],
+                            currency_rate=data['currency_rate'],
+                            risk_title='None',
+                            risk_level='0',
+            
+                        )            # if response['status']== 'VALID' or response['status']== 'VALIDATED' or response['status'] == 'INVALID_TRANSACTION':
+        
+        messages.success(request,'Something Went Wrong')
+        context['messages']=messages
+        # print('IPN Hit Exeption: ',data)
+        return redirect('/')
 
 def searchPayment(request):
     context={}

@@ -5,7 +5,10 @@ from student.models import Group,Student,Session,SubjectChoice,SscEquvalent,Stud
 from django.contrib.auth import get_user_model
 from sslcommerz_lib import SSLCOMMERZ
 from payment import sslcommerz 
+from .forms import AdmissionLoginForm
 from .models import StudentAdmission
+from payment.models import PaymentPurpose
+
 from django.views.generic.edit import FormView
 from django.template.loader import render_to_string
 UserModel=get_user_model()
@@ -17,30 +20,30 @@ board={
 }
 # Create your views here.
 def admissionLogin(request ):
-    form = StudentForm()
-    #print(form)
+    form = AdmissionLoginForm()
+    
     return render(request, 'admission/admission_login.html',{'form':form})
 # Create your views here.
 # Create your views here.
 
 def admissionForm(request):
-    print('bdchsdbhs')
     if request.POST.get('username') and request.POST.get('password') :
         str=request.POST.get('username')
-        print(str)
+        str1=request.POST.get('purpose')
+        print("Purpose: ",str1)
         try:
             #student=StudentAdmission.objects.filter(ssc_roll=request.POST.get('password'),board=board[str[-3:]],status='Not Admitted').first()
-
+            payment_purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
             group=Group.objects.filter(title_en='Science').first()
             if group:
-                form = StudentForm()
+                form = StudentForm(instance=payment_purpose)
                 subject_form = SubjectChoiceForm(group=group)
                 adress_form = AdressForm()
                 present_adress_form = AdressForm()
                 ssc_equivalent_form=SscEquvalentForm()
                 guardian_form=GuardianForm()
                 print(group.title_en)
-                return render(request, 'admission/admission.html',{'group':group,'form':form,'subject_form':subject_form,'adress_form':adress_form,'ssc_equivalent_form':ssc_equivalent_form,'guardian_form':guardian_form,'present_adress_form':present_adress_form})
+                return render(request, 'admission/admission.html',{'payment_purpose':payment_purpose,'group':group,'form':form,'subject_form':subject_form,'adress_form':adress_form,'ssc_equivalent_form':ssc_equivalent_form,'guardian_form':guardian_form,'present_adress_form':present_adress_form})
                 
 
             else:
@@ -69,7 +72,7 @@ def admissionFormSubmit(request):
     flag3=0
     if request.method=='POST':
         group=None
-
+        print("got it")
         student_form=None
         print(request.POST.get('name'))
         email=request.POST.get('email')
@@ -97,8 +100,6 @@ def admissionFormSubmit(request):
         adress_form = AdressForm(request.POST)
         
 
-        
-        
         if form.is_valid():
             student_form=form.save(commit=False)
             student_form.gender=request.POST.get('gender')
