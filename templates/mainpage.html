@@ -49,7 +49,7 @@
                               <td align="left">
                                 <fieldset>
                                 <table width="100%" border="1" cellspacing="0" cellpadding="2">
-                                  <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 25px; background-color: #009999; color: #fff;padding: 15px;"> <a href="{% url 'search_payment' %}" class="OffWhite12b" style="font-family: kalpurush;font-size:20px;">Online Fee (অনলাইন ফি প্রদান)</a> </th></thead>
+                                  <thead ><th colspan="5" style="height: 25px; background-color: #034; color: #fff;padding: 15px;"> <a href="{% url 'search_payment' %}"  style="font-family: kalpurush;font-size:20px;">Online Fee (অনলাইন ফি প্রদান)</a> </th></thead>
                                   <tbody>
 
                                     <tr>
@@ -63,7 +63,7 @@
                                             ২। সেশন ফি 
                                             <br>৩। অন্যান্য ফি
                                           </label>
-                                          <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
+                                          <span class="textfieldRequiredMsg"></span></span></td>
 
                                       </tr>
                                     
@@ -80,7 +80,7 @@
                         </table>
                         <fieldset>
                                   <table width="100%" border="1" cellspacing="0" cellpadding="5">
-                                    <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;"><th colspan="5" style="height: 25px; background-color: #009999; color: #fff;padding: 15px;"> <a href="{% url 'search_result' %}" class="OffWhite12b" style="font-family: kalpurush;font-size:20px;">Results (ফলাফলসমুহ)</a> </th></thead>
+                                    <thead ><th colspan="5" style="height: 25px; background-color: #034; color: #fff;padding: 15px;"> <a href="{% url 'search_result' %}"  style="font-family: kalpurush;font-size:20px;">Results (ফলাফলসমুহ)</a> </th></thead>
                                     <tbody>
                                       <tr>
                                           <td width="10%" align="left" valign="middle">&nbsp;</td>
@@ -95,7 +95,7 @@
                                                 <br>
                                                 ৩। টেস্ট বা নির্বাচনী পরীক্ষ
                                             </label>
-                                            <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
+                                            <span class="textfieldRequiredMsg"></span></span></td>
                                           <td width="5%" align="left" valign="middle">&nbsp;</td>
                                       </tr>
                                       
@@ -105,8 +105,8 @@
 
                               <fieldset>
                                 <table width="100%" border="1" cellspacing="0" cellpadding="3">
-                                  <thead style="height: 25px; background-color: #245b80; color: #fff;">
-                                    <th colspan="5" style="height: 25px; background-color: #009999; color: #fff;padding: 15px;"><a href="{% url 'admission_login' %}" class="OffWhite12b" style="font-family: kalpurush;font-size:20px;">Online Admission (অনলাইন ভর্তি) </a></th>
+                                  <thead style="height: 25px; background-color: #034; color: #fff;">
+                                    <th colspan="5" style="height: 25px; background-color: #034; color: #fff;padding: 15px;"><a href="{% url 'admission_login' %}"  style="font-family: kalpurush;font-size:20px;">Online Admission (অনলাইন ভর্তি) </a></th>
                                   </thead>
                                   <tbody>
                                     <tr><td colspan="5" align="center">
@@ -136,7 +136,7 @@
                           
                               <fieldset>
                                 <table width="100%" border="1" cellspacing="" cellpadding="5">
-                                  <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;"><th colspan="5" style="height: 25px; background-color: #009999; color: #fff;padding: 15px;"><a href="" class="OffWhite12b" style="font-family: kalpurush;font-size:20px;">Certificates (সনদসমূহ)</a></th></thead>
+                                  <thead ><th colspan="5" style="height: 25px; background-color: #034; color: #fff;padding: 15px;"><a href="" style="font-family: kalpurush;font-size:20px;">Certificates (সনদসমূহ)</a></th></thead>
                                   <tbody>
                                     <tr>
                                         <td width="10%" align="left" valign="middle">&nbsp;</td>
@@ -155,7 +155,7 @@
 
 
                                           </label>
-                                          <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
+                                          <span class="textfieldRequiredMsg"></span></span></td>
                                         <td width="5%" align="left" valign="middle">&nbsp;</td>
                                     </tr>
                                     <tr>
@@ -165,7 +165,7 @@
                                         <label>
                                           {{form.nid_file}}                                        
                                         </label>
-                                        <span class="textfieldRequiredMsg">User ID is required!</span></span></td>
+                                        <span class="textfieldRequiredMsg"></span></span></td>
                                       <td width="5%" align="left" valign="middle">&nbsp;</td>
                                   </tr>
                                   
@@ -197,10 +197,10 @@
               <input type="hidden" value="{{student}}" id="student_id" name="student_id">
               <div id="q-box__buttons" >
 
-                <button type="submit" id="btn_admission_form" style="width:300px;">Download Admission form</button>
+               
                 </div>
               </form>
-                <a style="margin-top: 20px; margin-bottom: 20px; margin-left: 10%;" class="back-link" href="">Go back from the beginning ➜</a>
+                <!--<a style="margin-top: 20px; margin-bottom: 20px; margin-left: 10%;" class="back-link" href="">Go back from the beginning ➜</a>-->
             </div>
         </div>
 

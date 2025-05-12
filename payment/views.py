@@ -49,8 +49,8 @@ class CheckoutSuccessView(View):
         context={}
         data = self.request.POST
         #print(data)
-        tran_type=PaymentType.objects.filter(id=data['value_d'])
-        tran_purpose=PaymentPurpose.objects.filter(id=data['value_d']).first()
+        tran_type=PaymentType.objects.filter(id=data['value_d']).first()
+        tran_purpose=PaymentPurpose.objects.filter(payment_type=tran_type).last()
         student=Student.objects.filter(class_roll=data['value_a']).first()
         context['tran_purpose']=tran_purpose
         print(tran_purpose.payment_type.id)
@@ -107,21 +107,23 @@ class CheckoutSuccessView(View):
 
             if tran_purpose.payment_type.id == 1:
                 student=Student.objects.filter(phone=data['value_c']).last()
-                print(student)
+                print("Student payment: ",student)
+                subject_choice=SubjectChoice.objects.filter(student=student).first()
+                # password="Student@"+data['value_c']
+                # user = get_user_model.objects.create_user(username=data['value_c'],
+                #                  email=data['value_c'],last_name="Student",
+                #                  password=password,is_active=False)
+                # student.user=user
+                # student.save()
+                # students=Student.objects.filter(phone=data['value_b'],user=None)
+                # for std in students:
+                #     std.delete()
 
-                password="Student@"+data['value_c']
-                user = get_user_model.objects.create_user(username=data['value_c'],
-                                 email=data['value_c'],last_name="Student",
-                                 password=password,is_active=False)
-                student.user=user
-                student.save()
-                students=Student.objects.filter(phone=data['value_b'],user=None)
-                for std in students:
-                    std.delete()
-
-                print('2:'+student)
                 context['purpose']=tran_purpose
                 context['student']=student
+                context['subject_choice']=subject_choice
+                return render(request,'admission/admission_form.html',context)
+
             messages.success(request,'Payment Successful!!')
             
         except:

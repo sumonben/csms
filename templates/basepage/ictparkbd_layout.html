@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>সরকারি মুজিবুর রহমান মহিলা কলেজ</title>
     
-    <link rel="shortcut icon" href="{%  static 'images/tilokpur_logo.png'%}">
+    <link rel="shortcut icon" href="{%  static 'images/gmrwc_logo.png'%}">
     <link rel="stylesheet" href="{% static 'css/ictparkbd/twitterstyle.css' %}" />
    
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" />
@@ -151,39 +151,15 @@
                                </p>                            </div>
                             <div  style="margin:auto;">
                               <p >
-                                <a  style="display:inline-block;" href="https://ictparkbd.com/" target="_blank">
+                                <a  style="display:inline-block;" href="/" target="_blank">
                                 Developed By:<img class="developer" alt="Tarique Sumon" src="{% static 'images/ictparkbd_logo.jpg'%}" loading="lazy">
-                                <img style="width:20px;height:20px;" alt="Tarique Sumon" src="{% static 'images/ictpark_monogram.png'%}" loading="lazy">
+                                <!--<img style="width:20px;height:20px;" alt="Tarique Sumon" src="{% static 'images/ictpark_monogram.png'%}" loading="lazy">-->
                                 </a>
                             </p>                            
                           </div>
                             
-                               {% comment %} <div class="col-lg-3" >
-                                   <p style="margin:auto">©Copyright 2024</p>
-                               </div>
-                               <div class="col-lg-5 text-center" style="float:right;">
-                                   <div class="d-flex align-items-center justify-content-start">
-                                       <p>We Accept</p>
-                                       <ul class="nav">
-                                              <img alt="img3" width="250"  data-src="{% static 'images/ictparkbd_logo.jpg'%}" src="{% static 'images/ssl_logo.png'%}">
-                                       </ul>
-                                   </div>
-                               </div>
-                               <div class="col-lg-4" >
-                                   <p style="float:left;">
-                                       Contributed by :
-                                       <strong><a href="http://israbentech.com/" target="_blank"><img alt="Tarique Sumon" data-src="/images/sumon.jpg" src="{% static 'images/logo.png'%}" lazy="loaded"> |
-                                       </a></strong>
-                                       <strong><a href="http://tilakpur.akkelpur.gov.bd/" target="_blank"><img alt="Tarique Sumon" data-src="/images/sumon.jpg" src="{% static 'images/tilokpur_logo.png'%}" lazy="loaded"> 
-                                       </a></strong>
-                                      </p>
-                                      <p style="float:right;">
-                                       Developed By:<img width="100" alt="Tarique Sumon" src="{% static 'images/ictparkbd_logo.jpg'%}" lazy="loaded">
-                                       <a style="display:inline-block;" href="https://ictparkbd.com/" target="_blank"><img  alt="Tarique Sumon" src="{% static 'images/ictpark_monogram.png'%}" lazy="loaded">
-                                       </a>
-                                   </p>
-                               </div>  {% endcomment %}
-                               <span class="bubbleNew"><img src="{%static 'images/ictpark_monogram.png'%}" class="rounded-circle"  /></span>
+                               
+                               <span class="bubbleNew"><img src="{%static 'images/gmrwc_logo.png'%}" class="rounded-circle"  /></span>
 
                            </div>
                        </div>
@@ -199,7 +175,8 @@
                   scrollFunction()
 
               };
-          
+              
+              
               function scrollFunction() {
                 var x = window.matchMedia("(max-width: 989px)")
                   if (document.body.scrollTop >50 || document.documentElement.scrollTop > 50) {
@@ -207,29 +184,61 @@
 
                     document.getElementById("heading").style= "padding-top:-20px;font-size:30px;";
 
-                    {% comment %} if (x.matches) { 
-                      // If media query matches
-                    } else {
-                      document.getElementById("heading").style= "padding-top:-20px;font-size:30px;";
+                   if (x.matches) { 
+                    document.getElementById("heading").style= "padding-top:-20px;font-size:14px;";
+                    document.getElementById("sub-heading").style= "padding-top:-20px;font-size:13px;";
+                                      } else {
+                      document.getElementById("heading").style= "padding-top:-20px;font-size:20px;";
                       document.getElementById("sub-heading").style.display = "none";
 
                      
-                    } {% endcomment %}
+                    } 
                       
                   } else {
                     document.getElementById("header").className = "header";
                     document.getElementById("sub-heading").style.display = "block";
 
-                    {% comment %} if (x.matches) { 
-                      // If media query matches
-                    } else {
+              if (x.matches) { 
+                document.getElementById("heading").style= "padding-top:-20px;font-size:14px;";
+              } else {
                     document.getElementById("heading").style= "padding-top:-20px;font-size:30px;";
-                    } {% endcomment %}
+                    }  
 
 
                   }
                  
               }
+          
+            //   function scrollFunction() {
+            //     var x = window.matchMedia("(max-width: 989px)")
+            //       if (document.body.scrollTop >50 || document.documentElement.scrollTop > 50) {
+            //         document.getElementById("header").className = "header sticky";
+
+            //         document.getElementById("heading").style= "padding-top:-20px;font-size:30px;";
+
+            //         {% comment %} if (x.matches) { 
+            //           // If media query matches
+            //         } else {
+            //           document.getElementById("heading").style= "padding-top:-20px;font-size:30px;";
+            //           document.getElementById("sub-heading").style.display = "none";
+
+                     
+            //         } {% endcomment %}
+                      
+            //       } else {
+            //         document.getElementById("header").className = "header";
+            //         document.getElementById("sub-heading").style.display = "block";
+
+            //         {% comment %} if (x.matches) { 
+            //           // If media query matches
+            //         } else {
+            //         document.getElementById("heading").style= "padding-top:-20px;font-size:30px;";
+            //         } {% endcomment %}
+
+
+            //       }
+                 
+            //   }
           </script>
           <script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
 

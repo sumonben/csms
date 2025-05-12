@@ -2338,13 +2338,29 @@ pre code {
     width: 100%;
     height: calc(1.5em + .75rem +2px);
     padding: .1rem .75rem;
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: bold;
     line-height: 1.5;
     color: #035a4c;
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;
+    border-radius: .25rem;
+    -webkit-transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out
+}
+.form-control-focus {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem +2px);
+    padding: .1rem .75rem;
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 1.5;
+    color: #035a4c;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 2px solid #fc0303;
     border-radius: .25rem;
     -webkit-transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out
@@ -2457,7 +2473,7 @@ select.form-control:focus::-ms-value {
 .form-control-sm {
     height: calc(1.5em + .5rem + 2px);
     padding: .25rem .5rem;
-    font-size: 1.2rem;
+    font-size: 1.8rem;
     line-height: 1.5;
     border-radius: .2rem
 }
@@ -2465,7 +2481,7 @@ select.form-control:focus::-ms-value {
 .form-control-lg {
     height: calc(1.5em + 1rem + 2px);
     padding: .5rem 1rem;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     line-height: 1.5;
     border-radius: .3rem
 }
