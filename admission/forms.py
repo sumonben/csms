@@ -11,3 +11,12 @@ class AdmissionLoginForm(forms.ModelForm):
     class Meta:
         model = PaymentPurpose
         fields = []
+
+class SearchAdmissionForm(forms.ModelForm):
+    roll= forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm',}))
+    phone= forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm',}))
+    purpose= forms.ModelChoiceField(required=True,queryset=PaymentPurpose.objects.filter(is_active=True,payment_type=1),widget=forms.Select(attrs={'class': 'form-control form-control-sm','required':'true'}))
+
+    class Meta:
+        model = PaymentPurpose
+        fields = []

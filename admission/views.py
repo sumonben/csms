@@ -5,10 +5,10 @@ from student.models import Group,Student,Session,SubjectChoice,SscEquvalent,Stud
 from django.contrib.auth import get_user_model
 from sslcommerz_lib import SSLCOMMERZ
 from payment import sslcommerz 
-from .forms import AdmissionLoginForm
+from .forms import AdmissionLoginForm,SearchAdmissionForm
 from .models import StudentAdmission
 from payment.models import PaymentPurpose
-
+from django.views.generic import View, TemplateView, DetailView
 from django.views.generic.edit import FormView
 from django.template.loader import render_to_string
 UserModel=get_user_model()
@@ -230,7 +230,6 @@ def formDownload(request):
         print("sumon",phone)
 
         student=Student.objects.filter(phone=phone).first()
-        print(student)
         subject_choice=SubjectChoice.objects.filter(student=student).first()
         
         ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
@@ -252,3 +251,25 @@ def SubprocessesView(request):
             district=list(district.values())
             print(district)
         return JsonResponse({'status': 'success','meaasge':'Account created Successfully','district':district},safe=False)
+
+class SearchAdmissionView(View):
+    template_name = 'admission/search_admission_form.html'
+    
+    def get(self, request, *args, **kwargs):
+        context={}
+        form=SearchAdmissionForm()
+        context['form'] = form
+        return render(request, self.template_name,context)
+
+    def post(self, request, *args, **kwargs):
+        context={}
+        roll=request.POST.get('roll').strip()
+        student=Student.objects.filter(class_roll=request.POST.get('roll').strip()).last()
+        if student is None:
+            form=SearchAdmissionForm()
+            context['notfound']="Student Not Found, Please complete admission proccess!"
+            context['form'] = form
+            return render(request, self.template_name,context)
+        subject_choice=SubjectChoice.objects.filter(student=student).first()
+        ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
+        return render(request, 'admission/admission_dummy.html',{'student':student,'ssc_equivalent':ssc_equivalent,'subject_choice':subject_choice})

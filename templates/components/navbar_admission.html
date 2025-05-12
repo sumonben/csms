@@ -159,7 +159,7 @@
                     
                 </li>
                 
-                <li class="nav-item nav-item dropdown"><a href="{% url 'search_result' %}" aria-haspopup="true" aria-expanded="false" class="{% if request.resolver_match.url_name == 'search_result' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Check Payment</a>
+                <li class="nav-item nav-item dropdown"><a href="{% url 'search_admission_form' %}" aria-haspopup="true" aria-expanded="false" class="{% if request.resolver_match.url_name == 'search_admission_form' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Check Payment</a>
                     
                 </li>
                 <li class="nav-item nav-item dropdown"><a href="{% url 'admission_login' %}" class="{% if request.resolver_match.url_name in 'admission_login' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}" aria-expanded="false" aria-current="page">Download receipt</a>

@@ -325,7 +325,7 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
     </div>
     <div class="graph-image graph-7">
       </div>
-        <img id="graph-image" height="800px" src="{% static 'images/gmrwc_logo.png' %}" alt="" style="opacity: 0.1; left: 0; right: 0; position: relative; margin-left: 11%; margin-right: 11%; margin-top: -1100px;">
+        <img id="graph-image" height="800px" src="{% static 'images/gmrwc_logo.png' %}" alt="" style="opacity: 0.1; left: 0; right: 0; position: relative; margin-left: 11%; margin-right:11%;margin-top: -1100px;">
         
         
         </div>
@@ -379,7 +379,8 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
          docprint.document.write('<head><title>HSC-{{student.session}}-{{student.group}}-{{student.class_roll}} </title>');
          docprint.document.write('<style type="text/css">body{ margin:0px;');
          docprint.document.write('font-family:verdana,Arial;color:#000;');
-         docprint.document.write('font-family:Verdana, Geneva, sans-serif; font-size:16px;}');
+         docprint.document.write('font-family:Verdana, Geneva, sans-serif; font-size:16px;}'); 
+         docprint.document.write('table{-webkit-print-color-adjust: exact;} ');
          docprint.document.write('a{color:#000;text-decoration:none;} ');
          docprint.document.write('.graph-image img{display:inline;position:fixed;align-items: center;}');
          docprint.document.write('.table_ssc{border:2px solid #eeeff0; background-color: #eeeff0;padding:0.1em;}');
