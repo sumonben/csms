@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="utf-8" />
+    
+    <meta name="description" content="Govt. Mujibur Rahman Women's College Student Management System">
+    <meta name="keywords" content="Govt. Mujibur Rahman Women's College">
+    <meta name="author" content="Tarique Sumon ">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>সরকারি মুজিবুর রহমান মহিলা কলেজ</title>
+    
+    <link rel="shortcut icon" href="{%  static 'images/gmrwc_logo.png'%}">
+    <link rel="stylesheet" href="{% static 'css/ictparkbd/twitterstyle.css' %}" />
+   
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" />
+    <link rel="stylesheet" href="{% static 'css/ictparkbd/application.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'css/ictparkbd/userstyle.css' %}" />
+
+       <!-- -- -->
+    <link rel="stylesheet" href="{% static 'css/ictparkbd/profile.css' %}" />
+    <!-- - View--- --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+    <link href="{% static 'css/ictparkbd/frontend.css'%}" rel="stylesheet">
+    
+    
+    <style>
+      {% comment %} @font-face {
+        font-family: "kalpurush";
+        src: url("//file-rajshahi.portal.gov.bd/media/central/themes/theme-default/fonts/Kalpurush.woff") format("woff"),
+             url("//file-rajshahi.portal.gov.bd/media/central/themes/theme-default/fonts/Kalpurush.ttf") format("truetype"),
+              url("//file-rajshahi.portal.gov.bd/media/central/themes/theme-default/fonts/Kalpurush.svg#Kalpurush") format("svg"),
+                url("//file-rajshahi.portal.gov.bd/media/central/themes/theme-default/fonts/Kalpurush.eot?#iefix") format("embedded-opentype");
+    
+      font-weight: normal;
+        font-style: normal;
+      }
+      @media only screen and (min-width:320px) and (max-width:959px) and (max-width:786){
+        @font-face {
+              font-family: "kalpurush";
+              src: url("//file-rajshahi.portal.gov.bd/media/central/themes/theme-default/fonts/Kalpurush.woff") format("woff");
+             
+              font-weight: normal;
+              font-style: normal;
+            }
+    
+    } {% endcomment %}
+      
+      .pagebody{
+        margin-top: 118px;
+      }
+      #rightpan {
+        width: 250px;
+        float: right;
+        position: relative;
+        background-color: transparent;
+      }
+      .client{
+        width:60px;
+        height:60px;
+
+      }
+      .developer{
+        width:150px;
+        height:40px;
+      }
+      .provider{
+        width:150px;
+        height:40px;
+      }
+      @media (max-width: 768px) {
+        #service_body{
+          margin-top:-30px;
+      }
+        .pagebody{
+          margin-top: 0%;
+        }
+        #rightpan {
+          display:none;
+        }
+        
+        .client{
+          width:40px;
+          height:40px;
+  
+        }
+        .developer{
+          width:100px;
+          height:30px;
+        }
+        .provider{
+          width:100px;
+          height:30px;
+        }
+      }
+    </style>
+  </head>
+
+  <body data-aos-easing="ease-out-quad" data-aos-duration="1200" data-aos-delay="0" >
+    <div id="app">
+        <div id="allpage">
+            <div data-v-6f04a53f="" id="app"> 
+               
+      
+ <main data-v-6f04a53f="" class="main">
+  <!---->
+  <div data-v-6f04a53f="" class="home" > 
+    {% include 'components/navbar_admission.html'%}           
+
+    {% block content %}
+    
+    {% endblock %}
+    {% comment %} <a href="" class="btn btn-whatsnew">আবেদন করুন</a> <a href="#" class="scroll-top"><i class="fa fa-arrow-up"></i></a> {% endcomment %}
+
+ </div>
+
+ </main>
+
+    <a href="#" class="scroll-top"><i class="fa fa-arrow-up"></i></a>
+    <a href="#" class="scroll-top active"><i class="fa fa-arrow-up"></i></a>
+  </div>
+</div>
+
+</div>
+ <footer data-v-6f04a53f="" style="width:100%">
+                   
+                   <div class="footer-bottom">
+
+
+                       <div class="container-wrapper">
+
+                           <div class="row align-items-center">
+                            
+                            <div  style="margin:auto;">
+                              <p >©Copyright 2025<img style="width:20px;" loading="lazy" alt="Tarique Sumon" data-src="/images/sumon.jpg" src="{% static 'images/gmrwc_logo.png'%}" lazy="loaded"></p>
+                            </div>
+                            <div  style="margin:auto;">
+                              <p >
+                                <strong><a class="provider" href="https://sslcommerz.com/" target="_blank"><img class="provider" loading="lazy" alt="Tarique Sumon"  src="{% static 'images/ssl_logo.png'%}" lazy="loaded"> 
+                                </a></strong>
+                               
+                               </p>     
+                             
+                            </strong>
+                            </div>
+                            <div  style="margin:auto;">
+                              <p >
+                                Contributed by :
+                                <strong><a class="client" href="https://gmrwc.edu.bd/" target="_blank"><img class="client" loading="lazy" alt="Tarique Sumon" data-src="/images/sumon.jpg" src="{% static 'images/gmrwc_logo.png'%}" lazy="loaded"> 
+                                </a></strong>
+                               </p>                            </div>
+                            <div  style="margin:auto;">
+                              <p >
+                                <a  style="display:inline-block;" href="/" target="_blank">
+                                Developed By:<img class="developer" alt="Tarique Sumon" src="{% static 'images/ictparkbd_logo.jpg'%}" loading="lazy">
+                                <!--<img style="width:20px;height:20px;" alt="Tarique Sumon" src="{% static 'images/ictpark_monogram.png'%}" loading="lazy">-->
+                                </a>
+                            </p>                            
+                          </div>
+                            
+                               
+                               <span class="bubbleNew"><img src="{%static 'images/gmrwc_logo.png'%}" class="rounded-circle"  /></span>
+
+                           </div>
+                       </div>
+                   </div> <!----> 
+
+               </footer> <!---->       
+          
+            <!-- #endregion --> 
+            <script>
+             
+              // When the user scrolls down 50px from the top of the document, resize the header's font size
+              window.onscroll = function() {
+                  scrollFunction()
+
+              };
+              
+              
+              function scrollFunction() {
+                var x = window.matchMedia("(max-width: 989px)")
+                  if (document.body.scrollTop >50 || document.documentElement.scrollTop > 50) {
+                    document.getElementById("header").className = "header sticky";
+
+                    document.getElementById("heading").style= "padding-top:-20px;font-size:30px;";
+
+                   if (x.matches) { 
+                    document.getElementById("heading").style= "padding-top:-20px;font-size:14px;";
+                    document.getElementById("sub-heading").style= "padding-top:-20px;font-size:13px;";
+                                      } else {
+                      document.getElementById("heading").style= "padding-top:-20px;font-size:20px;";
+                      document.getElementById("sub-heading").style.display = "none";
+
+                     
+                    } 
+                      
+                  } else {
+                    document.getElementById("header").className = "header";
+                    document.getElementById("sub-heading").style.display = "block";
+
+              if (x.matches) { 
+                document.getElementById("heading").style= "padding-top:-20px;font-size:14px;";
+              } else {
+                    document.getElementById("heading").style= "padding-top:-20px;font-size:30px;";
+                    }  
+
+
+                  }
+                 
+              }
+          
+            //   function scrollFunction() {
+            //     var x = window.matchMedia("(max-width: 989px)")
+            //       if (document.body.scrollTop >50 || document.documentElement.scrollTop > 50) {
+            //         document.getElementById("header").className = "header sticky";
+
+            //         document.getElementById("heading").style= "padding-top:-20px;font-size:30px;";
+
+            //         {% comment %} if (x.matches) { 
+            //           // If media query matches
+            //         } else {
+            //           document.getElementById("heading").style= "padding-top:-20px;font-size:30px;";
+            //           document.getElementById("sub-heading").style.display = "none";
+
+                     
+            //         } {% endcomment %}
+                      
+            //       } else {
+            //         document.getElementById("header").className = "header";
+            //         document.getElementById("sub-heading").style.display = "block";
+
+            //         {% comment %} if (x.matches) { 
+            //           // If media query matches
+            //         } else {
+            //         document.getElementById("heading").style= "padding-top:-20px;font-size:30px;";
+            //         } {% endcomment %}
+
+
+            //       }
+                 
+            //   }
+          </script>
+          <script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
+
+           <!-- -- -->
+           <script src="{% static 'js/frontend.js' %}"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+</html>

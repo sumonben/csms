@@ -109,6 +109,7 @@ class CheckoutSuccessView(View):
                 student=Student.objects.filter(phone=data['value_c']).last()
                 print("Student payment: ",student)
                 subject_choice=SubjectChoice.objects.filter(student=student).first()
+                ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
                 # password="Student@"+data['value_c']
                 # user = get_user_model.objects.create_user(username=data['value_c'],
                 #                  email=data['value_c'],last_name="Student",
@@ -121,6 +122,7 @@ class CheckoutSuccessView(View):
 
                 context['purpose']=tran_purpose
                 context['student']=student
+                context['ssc_equivalent']=ssc_equivalent
                 context['subject_choice']=subject_choice
                 return render(request,'admission/admission_form.html',context)
 

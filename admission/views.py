@@ -236,7 +236,7 @@ def formDownload(request):
         ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
 
 
-        return render(request, 'admission/admission_form.html',{'student':student,'ssc_equivalent':ssc_equivalent,'subject_choice':subject_choice})
+        return render(request, 'admission/admission_dummy.html',{'student':student,'ssc_equivalent':ssc_equivalent,'subject_choice':subject_choice})
 
 def SubprocessesView(request):
         print(request.GET.get('id'),request.GET.get('value'))

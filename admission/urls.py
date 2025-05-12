@@ -12,7 +12,7 @@ urlpatterns = [
     path('login/',views.admissionLogin, name='admission_login'),
     path('admission_form/', views.admissionForm, name="admission_form"),
     path('admission_form_submit/', views.admissionFormSubmit, name="admission_form_submit"),
-    path('form-download/', views.formDownload, name='form-download'),
+    path('form_download/', views.formDownload, name='form_download'),
     path('', views.SubprocessesView, name='get_district'),
 
     path('jsi18n/', django_views.i18n.JavaScriptCatalog.as_view(), name='jsi18n'),

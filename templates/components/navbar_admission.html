@@ -1,0 +1,202 @@
+{% load static %}
+<style>
+    .heading{
+        color:#fff;
+        text-shadow: 8px 8px 8px rgb(65, 7, 7);
+        font-size: 30px;
+        text-align:center;
+        font-family:kalpurush;
+        font-weight:bold;
+        
+
+    }
+    .sub-heading{
+        color:#fff;
+        text-shadow: 2px 2px 2px rgb(65, 7, 7);
+        font-size:17px;
+        font-family:kalpurush;
+
+
+    }
+    #main-heading{
+        width:100px;
+        margin-top:-40px;
+    }
+    
+    .header.sticky #main-heading{
+        margin-top: -5px;
+    }
+    .header.sticky .heading{
+        font-size:35px;
+        line-height:1;
+    } 
+    .header.sticky .sub-heading{
+        display:none;
+    } 
+    @media(max-width:767px){
+        
+        #logo_img{
+            width:50px;
+            height:50px;
+
+        }
+        .heading{
+            color:#fff;
+            text-shadow: 4px 4px 4px rgb(65, 7, 7);
+            font-size: 14px;
+            padding:0px;
+            margin-left:-10px;
+            margin-top:-20px;
+            text-align:center;
+            font-weight:bold;
+            word-wrap: break-word;
+        } 
+        .sub-heading{
+            color:#fff;
+            margin-left:10px;
+            text-shadow: 2px 2px 2px rgb(65, 7, 7);
+            font-size:14px;
+
+    
+        }
+        #main-heading{
+            width:100px;
+            margin-top:-15px;
+            margin-left:-130px;
+        }
+        .header.sticky #main-heading{
+            margin-top: -15px;
+        }
+        .header.sticky .heading{
+            font-size:22px;
+        } 
+        .header.sticky .sub-heading{
+            display:block;
+        } 
+    }
+    @media(min-width:768px) and (max-width:989px){
+        #navbarSupportedContent{
+            background-color:#035a4c;
+        }
+        .navbar-toggler{
+            margin-top:-20px;
+
+        }
+        .heading{
+            color:#fff;
+            text-shadow: 1px 1px 1px rgb(65, 7, 7);
+            font-size: 40px;
+            margin-left:-150px;
+            margin-top:-110px;
+            padding:0px;
+            text-align:center;
+        } 
+        .header .sub-heading{
+            color:#fff;
+            font-size:15px;
+            margin-left:-150px;
+    
+        }
+        #main-heading{
+            width:100px;
+            margin-left:-130px;
+        }
+        .header.sticky #main-heading{
+            margin-top:-30px;
+        } 
+        .header.sticky .heading{
+            font-size:30px;
+        } 
+        .header.sub-heading{
+            display:block;
+        }.header .sticky .sub-heading{
+            display:block;
+        } 
+    }
+
+</style>
+<header data-v-6f04a53f="" class="header" id="header" style="border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;" >
+    <div class="search-box">
+        <div class="box">
+            <form id="searchform2"> 
+           
+            <input list="browsers" type="search" placeholder="What are you looking for?"> <span class="mdi mdi-magnify"></span>
+                <!---->
+            </form> <button type="button" class="close text-light search-box-close"><i class="mdi mdi-close"></i></button>
+        </div>
+    </div>
+    <div class="container-wrapper" >
+        <div class="top-header">
+            <ul class="nav align-items-center justify-content-end" style="position: relative;">
+                <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"> HSC Admission 2025 </a></li>
+            </ul>
+        </div>
+  <div class="main-header">
+                  
+        <span class="shape2New"> </span><span class="shape3New"> </span><span class="shape1New"> </span>
+    <nav class="navbar navbar-expand-lg p-lg-0" style="margin-left:-15px;" >
+        <a  href="/" class="navbar-brand logo" aria-current="page"  > 
+            <span><img id="logo_img" src="{% static 'images/gmrwc_logo.png'%}"></span>
+
+        </a>
+        <a id="main-heading" href="/" class="navbar-brand logo active router-link-active" aria-current="page" > 
+           
+                                          
+                  <span class="heading" id="heading">GOVT. MUJIBUR RAHMAN WOMEN'S COLLEGE</span><br>
+                  <span id="sub-heading" class="sub-heading"   >BAGURA SADAR, BOGURA</span>
+
+               
+             
+        </a>
+        
+        <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler mMenu collapsed"><span class="fas fa-bars"></span></button>
+        <div id="navbarSupportedContent" class="navbar-collapse collapse" style="">
+            
+            <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler mMenu collapsed" style="margin-top:20px;float:right;"><span class="fa fa-close"></span></button>
+            <ul class="navbar-nav ml-auto" style="float:left; margin-left:20%;">
+                <li class="nav-item" ><a href="/" class="{% if request.resolver_match.url_name in 'home' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}" aria-current="page">Home</a></li>
+                <li class="nav-item dropdown" ><a href="{% url 'form_download' %}" id="navbarDropdown"  aria-haspopup="true" aria-expanded="false" class="{% if request.resolver_match.url_name == 'form_download' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Download Admission Form</a>
+                    
+                </li>
+                
+                <li class="nav-item nav-item dropdown"><a href="{% url 'search_result' %}" aria-haspopup="true" aria-expanded="false" class="{% if request.resolver_match.url_name == 'search_result' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Check Payment</a>
+                    
+                </li>
+                <li class="nav-item nav-item dropdown"><a href="{% url 'admission_login' %}" class="{% if request.resolver_match.url_name in 'admission_login' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}" aria-expanded="false" aria-current="page">Download receipt</a>
+                    
+                </li>
+
+               
+               
+                
+            </ul>
+           
+        <div class="mobile-search-box">
+                <div class="box">
+                    
+                    <form id="searchform">
+                        <div class="input-group mb-2"><input list="browsers" type="search" placeholder="Search Something" class="form-control shadow-sm">
+                            <div class="input-group-prepend">
+                                
+                                <div class="input-group-text"><span class="fa fa-search"></span></div>
+                            </div>
+                        </div>
+                    </form> <button type="button" class="close text-light search-box-close"><i class="mdi mdi-close"></i></button>
+                </div>
+                <strong><a  style="float:right;width:80px;height:80px" href="https://bangladesh.gov.bd/" target="_blank"><img style="float:right;width:80px;height:80px"  alt="Tarique Sumon" data-src="/images/sumon.jpg" src="{% static 'images/logo.png'%}" lazy="loaded"> 
+                </a></strong>
+                <strong><a  style="float:left;width:80px" href="https://bangladesh.gov.bd/" target="_blank"><img  alt="Tarique Sumon" data-src="/images/sumon.jpg" src="{% static 'images/gmrwc_logo.png'%}" lazy="loaded"> 
+                </a></strong> 
+            </div>
+
+            
+           
+        </div>
+
+    </nav>
+  </div>
+  </div>
+  </header>  
+
+  
+
