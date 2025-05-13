@@ -1,11 +1,13 @@
 from django.contrib import admin
 from django.contrib import admin
+from django.http import HttpResponse
 from import_export.admin import ExportActionMixin,ImportExportMixin
 from .models import Student,Subject,StudentCategory,Class,Session,Group,Division,District,Upazilla,Union,GuardianInfo,Adress,SubjectChoice,SscEquvalent,Choice,TestSubject
 from import_export.admin import ExportActionMixin,ImportExportMixin
 from import_export.widgets import ManyToManyWidget,ForeignKeyWidget
 from import_export import resources,fields
 from django.forms import Field
+import csv
 # Register your models here.
 class SubjectResource(resources.ModelResource):
     class Meta:
@@ -42,7 +44,34 @@ class StudentAdmin(ImportExportMixin,admin.ModelAdmin):
     list_display=[ 'class_roll','name','email','phone','student_category','department','session','user_link']
     list_display_links = ['name','email']
     list_filter=['department','student_category','session','group','class_year','is_active']
-    # resource_class = StudentResource
+    actions = ("export_as_csv",)
+    def export_as_csv(self, request, queryset):
+
+        meta = self.model._meta
+        field_names = [field.name for field in meta.fields]
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)
+        writer = csv.writer(response)
+        header = field_names + ['Subject1','Subject2','Subject3','Subject4','Subject5','Subject6','Optional Subject',]
+        writer.writerow(header)
+        for obj in queryset:
+            row = [getattr(obj, field) for field in field_names]
+            subject_choice=SubjectChoice.objects.filter(student=obj).first()
+            for subject in subject_choice.compulsory_subject.all():
+                if row:
+                    print("Subject_choice:",subject)
+
+                    row.append(subject)
+            for subject in subject_choice.optional_subject.all():
+                if row:
+                    row.append(subject)
+            if row:
+                row.append(subject_choice.fourth_subject)
+            writer.writerow(row)
+        return response
+
+    export_as_csv.short_description = "Export Selected"
 
 @admin.register(Session)
 class StudentSessionAdmin(ImportExportMixin,admin.ModelAdmin):
