@@ -11,6 +11,13 @@ from payment.models import PaymentPurpose
 from django.views.generic import View, TemplateView, DetailView
 from django.views.generic.edit import FormView
 from django.template.loader import render_to_string
+import random
+import string
+
+
+def generate_student_id( size=8, chars=string.digits):
+    return "".join(random.choice(chars) for _ in range(size))
+
 UserModel=get_user_model()
 board={
     'DHA':'Dhaka',
@@ -107,40 +114,43 @@ def admissionFormSubmit(request):
             group=Group.objects.filter(title_en=request.POST.get('admission_group')).first()
             student_form.group=group
             session=Session.objects.first()
-            std_count=Student.objects.filter(group=group,session=session).count()
-            print(session)
-            session_string=session.title_en
-            str1=session_string[-2:]
-            roll=int(str1)*10000
-            print(roll)
-            if group.title_en in 'Science':
-                s_roll=roll+1001+std_count
-                section=s_roll-roll
-                if section<= 1250:
-                    student_form.section='A'
-                elif section> 1250 and section<= 1550:
-                    student_form.section='B'
-                else:
-                    student_form.section='C'
-                print(s_roll)
-                student_form.class_roll=str(s_roll)
+            student=Student.objects.filter(is_active=True).last()
+            student_form.class_roll=generate_student_id()
 
-            if group.title_en in 'Humanities':
-                s_roll=roll+2001+std_count
-                section=s_roll-roll
-                if section<= 2250:
-                    student_form.section='A'
-                elif section> 2250 and section<= 2550:
-                    student_form.section='B'
-                else:
-                    student_form.section='C'
-                student_form.class_roll=str(s_roll)
-            if group.title_en in 'Business Studies':
-                s_roll=roll+3001+std_count
-                section=s_roll-roll
-                student_form.section='A'
+            # std_count=Student.objects.filter(group=group,session=session).count()
+            # print(session)
+            # session_string=session.title_en
+            # str1=session_string[-5:-3]
+            # roll=int(str1)*10000
+            # print(roll)
+            # if group.title_en in 'Science':
+            #     s_roll=roll+1001+std_count
+            #     section=s_roll-roll
+            #     if section<= 1250:
+            #         student_form.section='A'
+            #     elif section> 1250 and section<= 1550:
+            #         student_form.section='B'
+            #     else:
+            #         student_form.section='C'
+            #     print(s_roll)
+            #     student_form.class_roll=str(s_roll)
+
+            # if group.title_en in 'Humanities':
+            #     s_roll=roll+2001+std_count
+            #     section=s_roll-roll
+            #     if section<= 2250:
+            #         student_form.section='A'
+            #     elif section> 2250 and section<= 2550:
+            #         student_form.section='B'
+            #     else:
+            #         student_form.section='C'
+            #     student_form.class_roll=str(s_roll)
+            # if group.title_en in 'Business Studies':
+            #     s_roll=roll+3001+std_count
+            #     section=s_roll-roll
+            #     student_form.section='A'
                
-                student_form.class_roll=str(s_roll)
+            #     student_form.class_roll=str(s_roll)
             
             if guardin_form.is_valid():
                 guardin=guardin_form.save()
@@ -151,11 +161,11 @@ def admissionFormSubmit(request):
                 
             
             
-            student_category=StudentCategory.objects.filter(id=3).first()
+            student_category=StudentCategory.objects.filter(title_en="HSC").first()
             student_form.student_category=student_category
             student_form.save()
 
-            print('6. Student form',email,username)
+            print('6. Student form',email,username,student)
         print(form.errors)
         print(group)
         subject_form = SubjectChoiceForm(request.POST,group=group)

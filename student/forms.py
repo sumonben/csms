@@ -14,7 +14,6 @@ def year_choices():
     return [(r,r) for r in range(2009, datetime.date.today().year+1)]
 
 CHOICES = [
-        ('Male', 'Male'),
         ('Female', 'Female'),
 
     ]    
@@ -72,7 +71,7 @@ class StudentForm(forms.ModelForm):
         BlOOD_CHOICE=[('AB+', 'AB+'),('A+', 'A+'),('B+', 'B+'),('O+', 'O+'),('AB-', 'AB-'),('A-', 'A-'),('B-', 'B-'),('O-', 'O-'),]
         model = Student
         fields = "__all__"
-        exclude=['std_id','class_roll','exam_roll','registration','passing_year','student_category','department','section','class_year','cgpa','guardian_info','present_adress','permanent_adress','user','is_active','fourth_subject']
+        exclude=['std_id','class_roll','exam_roll','registration','passing_year','student_category','department','section','class_year','cgpa','guardian_info','present_adress','permanent_adress','user','is_active','fourth_subject','signature']
         #department=forms.ModelChoiceField(label="",queryset=Department.objects.all(),empty_label="Placeholder",)
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control form-control-sm',  'placeholder':  'Name in English','onkeypress' : "myFunction(this.id)",'value':'sumon'}),

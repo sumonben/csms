@@ -9,32 +9,6 @@ from import_export import resources,fields
 from django.forms import Field
 import csv
 # Register your models here.
-class SubjectResource(resources.ModelResource):
-    class Meta:
-        model = Subject
-        fields = ('name_en', 'name')
-
-class SubjectChoiceResource(resources.ModelResource):
-    
-    compulsory_subject = fields.Field(
-        column_name="Compulsory Subject",
-        attribute='compulsory_subject',
-        widget=ManyToManyWidget(Subject, field='name_en',separator='|')
-    )
-    class Meta:
-        model = SubjectChoice
-        fields = ('serial', 'compulsory_subject')
-
-
-class StudentResource(resources.ModelResource):
-    
-    group = fields.Field(
-        column_name="Group",
-        attribute='group',
-        widget=ForeignKeyWidget(Group, field='title_en')
-    )
-    class Meta:
-        model = Student
         
 
 
@@ -90,9 +64,8 @@ class SscEquvalentAdmin(ExportActionMixin,admin.ModelAdmin):
     list_filter=['id', 'ssc_or_equvalent','ssc_board']
 @admin.register(SubjectChoice)
 class SubjectChoiceAdmin(ImportExportMixin,admin.ModelAdmin):
-        list_display=['id','serial',]
+        list_display=['id','serial','student']
         filter_horizontal = ['compulsory_subject','optional_subject']
-        resource_class = SubjectChoiceResource
 
 
 @admin.register(Adress)
@@ -105,7 +78,6 @@ class StudentCategoryAdmin(ExportActionMixin,admin.ModelAdmin):
     list_display=[ 'serial','title','title_en']
     list_display_links = ['serial','title']
     save_as = True
-    resource_class = StudentResource
     
 
 @admin.register(Division)

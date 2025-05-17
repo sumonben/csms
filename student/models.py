@@ -9,8 +9,16 @@ from django.utils.html import format_html
 from django.template.defaultfilters import escape
 from import_export.resources import ModelResource
 from smart_selects.db_fields import ChainedForeignKey
-UserModel=get_user_model()
+from datetime import datetime
+import os
 
+
+UserModel=get_user_model()
+def rename_image(instance, filename):
+        ext = filename.split('.')[-1]
+        filename = str(instance.class_roll)+'.'+ext
+        year=str(datetime.now().year)
+        return os.path.join('media/student/'+year, filename)
 # Create your models here.
 class Group(models.Model):
     serial=models.IntegerField(default=10)
@@ -69,7 +77,7 @@ class Session(models.Model):
     title_en=models.CharField(max_length=100,unique=True,blank=True,null=True)
 
     class Meta:
-        ordering = ['serial']
+        ordering = ['-id']
     def __str__(self):
         return self.title_en
     
@@ -94,6 +102,7 @@ class Subject(models.Model):
     group=models.ManyToManyField(Group, blank=True,)
     department=models.ManyToManyField(Department, blank=True,)
     type=models.CharField(max_length=25,blank=True,null=True)
+    is_practical=models.BooleanField(default=False)
     is_available=models.BooleanField(default=True)
 
 
@@ -232,7 +241,7 @@ class Student(models.Model):
     guardian_info=models.ForeignKey(GuardianInfo,on_delete=models.SET_NULL,null=True, blank=True,)
     present_adress=models.ForeignKey(Adress,null=True, blank=True,related_name="present_adress",on_delete=models.SET_NULL)
     permanent_adress=models.ForeignKey(Adress,null=True, blank=True,related_name="permanent_adress",on_delete=models.SET_NULL)
-    image=models.ImageField(upload_to='media/student/%Y',blank=True,null=True) 
+    image=models.ImageField(upload_to=rename_image,blank=True,null=True) 
     signature=models.ImageField(upload_to='media/student/%Y',blank=True,null=True)
     user=models.OneToOneField(UserModel,blank=True,null=True,on_delete=models.CASCADE)
     is_active=models.BooleanField(default=False)
@@ -252,6 +261,10 @@ class Student(models.Model):
     
     def __unicode__(self):
         return self.name_bangla
+    def delete(self, *args, **kwargs):
+        if bool(self.image) == True :
+            os.remove(self.image.path)
+        super(Student, self).delete(*args, **kwargs)
     
     
     
@@ -305,7 +318,7 @@ class Choice(models.Model):
     subject6=models.ForeignKey(Subject,related_name='subject6',blank=True,null=True,on_delete=models.SET_NULL)
     fourth_subject=models.ForeignKey(Subject,blank=True,null=True,on_delete=models.SET_NULL)
     class Meta:
-        ordering = ['class_roll']
+        ordering = ['id']
     def __str__(self):
         if self.class_roll is not None:
             return self.class_roll+': '+self.name
