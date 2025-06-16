@@ -216,7 +216,7 @@ class Adress(models.Model):
             
 class Student(models.Model):
     std_id=models.IntegerField(default=10)
-    name=models.CharField(max_length=100,blank=True, null=True)
+    name=models.CharField(max_length=100,blank=True, null=True,verbose_name="Name In English:")
     name_bangla=models.CharField(max_length=100,blank=True, null=True)
     email=models.EmailField(max_length=50,blank=True, null=True)
     phone=models.CharField(max_length=11,blank=True, null=True)

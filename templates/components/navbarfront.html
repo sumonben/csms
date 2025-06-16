@@ -179,6 +179,9 @@
                 <li class="nav-item nav-item dropdown"><a href=""   aria-expanded="false" class="{% if request.resolver_match.url_name in 'download_license_form' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Certificates</a>
                    
                 </li> 
+                <li class="nav-item nav-item dropdown"><a href="{% url 'get_payment_receipt' %}"   aria-expanded="false" class="{% if request.resolver_match.url_name in 'get_payment_receipt' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Payment Receipt</a>
+                   
+                </li> 
                 {% if request.user.is_superuser %}
                 <li class="nav-item nav-item dropdown"><a href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="{% if request.resolver_match.url_name in 'check_certificate_form' or  request.resolver_match.url_name in 'check_license_form' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Admin Option
                 </a>

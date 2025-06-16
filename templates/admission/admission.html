@@ -634,7 +634,7 @@
           if (y[i].value == '' && y[i].hasAttribute('required') ) {
      
   
-              y[i].className='textfieldUSERinfoInvalid';
+               y[i].focus();
             
             valid = false;
      
@@ -660,14 +660,14 @@
         //alert("valid:"+valid);
         if(!valid){
            current_step--;
-        var x = document.getElementById("toast-container");
+        //var x = document.getElementById("toast-container");
   
     // Add the "show" class to DIV
-        x.className = "show";
+       // x.className = "show";
   
     // After 3 seconds, remove the show class from DIV
         setTimeout(function(){ x.className = x.className.replace("show", ""); }, 11000);
-           /*var x = document.getElementById("toast-container");
+           var x = document.getElementById("toast-container");
                      x.className = "toast-top-center";
                      x.style.visibility="vissible"
   
@@ -675,7 +675,7 @@
                          x.className = x.className.replace("toast-top-center","");
                         
                          
-                      }, 8000);*/
+                      }, 8000);
                       
      
         }

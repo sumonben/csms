@@ -74,24 +74,28 @@ class StudentForm(forms.ModelForm):
         exclude=['std_id','class_roll','exam_roll','registration','passing_year','student_category','department','section','class_year','cgpa','guardian_info','present_adress','permanent_adress','user','is_active','fourth_subject','signature']
         #department=forms.ModelChoiceField(label="",queryset=Department.objects.all(),empty_label="Placeholder",)
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control form-control-sm',  'placeholder':  'Name in English','onkeypress' : "myFunction(this.id)",'value':'sumon'}),
+            'name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Name in English','onkeypress' : "myFunction(this.id)",'value':'sumon'}),
             'name_bangla': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'নাম লিখুন(বাংলায়)','onkeypress' : "myFunction(this.id)",'value':'sumon'}),
             'email': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Email','onkeypress' : "myFunction(this.id)",'value':'sumo@gmail.com'}),
             'phone': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  '11 digits ','onkeypress' : "myFunction(this.id)",'value':'01712534564'}),
             'date_of_birth': forms.DateInput(format=('%d-%m-%Y'),attrs={'class': 'form-control form-control-sm', 'placeholder': 'Select a date','type': 'date'}),
-            'group': forms.Select(attrs={'class': 'form-control form-control-sm', 'style': 'margin-bottom:3px;','onchange' : "studentGroup(this.id)"}),
+            'group': forms.Select(choices=Group.objects.all()[0:2],attrs={'class': 'form-control form-control-sm', 'style': 'margin-bottom:3px;','onchange' : "studentGroup(this.id)"}),
             'birth_registration': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Birth registration Number'}),
             'nationality': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'nationality'}),
             'blood_group': forms.Select(choices=BlOOD_CHOICE,attrs={'class': 'form-control form-control-sm', 'placeholder':  'Your blood group'}),
             'marital_status': forms.Select(choices=MARITAL_CHOICES,attrs={'class': 'form-control form-control-sm',}),
             'religion': forms.Select(choices=RELIGION_CHOICES,attrs={'class': 'form-control form-control-sm',}),
             'gender': forms.Select(choices=CHOICES,attrs={'class': 'form-control form-control-sm',}),
+            'image': forms.FileInput(attrs={'class': 'form-control form-control-sm','required':True}),
             
 
       }    
     def __init__(self, *args, **kwargs):
-            payment_type = kwargs.pop('instance', None)
+            student = kwargs.pop('instance', None)
             super(StudentForm, self).__init__(*args, **kwargs)
+            if student:
+                 self.fields['name']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.name}))
+
 
         
    

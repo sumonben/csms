@@ -1,5 +1,5 @@
 from django.db import models
-from student.models import Group, Session,Department
+from student.models import Group, Session,Department,StudentCategory
 # Create your models here.
 class PaymentType(models.Model):
     serial=models.IntegerField(default=10)
@@ -25,6 +25,9 @@ class PaymentPurpose(models.Model):
     end_date=models.DateTimeField(blank=True, null=True)
     payment_type=models.ForeignKey(PaymentType,blank=True,null=True,on_delete=models.SET_NULL)
     amount=models.IntegerField(default=10)
+    amount_science=models.IntegerField(default=10)
+    amount_humanities=models.IntegerField(default=10)
+    amount_bussiness=models.IntegerField(default=10)
     is_active=models.BooleanField(default=False)
     class Meta:
         ordering = ['serial']
@@ -39,13 +42,14 @@ class Transaction(models.Model):
     name = models.CharField(max_length=150)
     phone=models.CharField(max_length=11,blank=True,null=True,)
     email=models.EmailField(max_length=50,blank=True,null=True)
+    student_category=models.ForeignKey(StudentCategory,blank=True,null=True,on_delete=models.SET_NULL)
     group=models.ForeignKey(Group,blank=True,null=True,on_delete=models.SET_NULL)
     session=models.ForeignKey(Session,blank=True,null=True,on_delete=models.SET_NULL)
     department=models.ForeignKey(Department,blank=True,null=True,on_delete=models.SET_NULL)
     phone=models.CharField(max_length=11,blank=True,null=True,)
     email=models.EmailField(max_length=50,blank=True,null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    tran_id = models.CharField(max_length=15,unique=True)
+    tran_id = models.CharField(max_length=100,unique=True)
     tran_purpose=models.ForeignKey(PaymentPurpose,blank=True,null=True,on_delete=models.SET_NULL)
     val_id = models.CharField(max_length=75)
     card_type = models.CharField(max_length=150)
@@ -70,7 +74,28 @@ class Transaction(models.Model):
     def __str__(self):
         return self.tran_id
 
-        
+class PaymentConsession(models.Model):
+
+    class_roll = models.CharField(max_length=150)
+    name = models.CharField(max_length=150)
+    phone=models.CharField(max_length=11,blank=True,null=True,)
+    email=models.EmailField(max_length=50,blank=True,null=True)
+    student_category=models.ForeignKey(StudentCategory,blank=True,null=True,on_delete=models.SET_NULL)
+    group=models.ForeignKey(Group,blank=True,null=True,on_delete=models.SET_NULL)
+    session=models.ForeignKey(Session,blank=True,null=True,on_delete=models.SET_NULL)
+    department=models.ForeignKey(Department,blank=True,null=True,on_delete=models.SET_NULL)
+    phone=models.CharField(max_length=11,blank=True,null=True,)
+    email=models.EmailField(max_length=50,blank=True,null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    tran_purpose=models.ForeignKey(PaymentPurpose,blank=True,null=True,on_delete=models.SET_NULL)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    
+    class Meta:
+        verbose_name = "Payment Consession"
+        verbose_name_plural = "Payment Consession"
+    def __str__(self):
+        return str(self.class_roll)+": "+self.name 
+
 class PaymentGateway(models.Model):
 
     store_id = models.CharField(max_length=500, blank=True, null=True)

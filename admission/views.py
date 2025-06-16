@@ -28,7 +28,6 @@ board={
 # Create your views here.
 def admissionLogin(request ):
     form = AdmissionLoginForm()
-    
     return render(request, 'admission/admission_login.html',{'form':form})
 # Create your views here.
 # Create your views here.
@@ -36,29 +35,40 @@ def admissionLogin(request ):
 def admissionForm(request):
     if request.POST.get('username') and request.POST.get('password') :
         str=request.POST.get('username')
-        str1=request.POST.get('purpose')
-        print("Purpose: ",str1)
-        try:
-            #student=StudentAdmission.objects.filter(ssc_roll=request.POST.get('password'),board=board[str[-3:]],status='Not Admitted').first()
-            payment_purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
-            group=Group.objects.filter(title_en='Science').first()
-            if group:
-                form = StudentForm(instance=payment_purpose)
-                subject_form = SubjectChoiceForm(group=group)
-                adress_form = AdressForm()
-                present_adress_form = AdressForm()
-                ssc_equivalent_form=SscEquvalentForm()
-                guardian_form=GuardianForm()
-                print(group.title_en)
-                return render(request, 'admission/admission.html',{'payment_purpose':payment_purpose,'group':group,'form':form,'subject_form':subject_form,'adress_form':adress_form,'ssc_equivalent_form':ssc_equivalent_form,'guardian_form':guardian_form,'present_adress_form':present_adress_form})
-                
-
-            else:
-                subject_form = None
+        str1=request.POST.get('password')
+        str=str[6:9]
+        if str in board:
+            try:
+                str=board[str]
+            except():
                 return redirect('admission_login')
-        except():
-            print("Exception")
-            return redirect('admission_login')
+
+
+        str2=request.POST.get('purpose')
+        student=StudentAdmission.objects.filter(ssc_roll=str1,board=str,status="Not Admitted").last()
+        if student:
+            try:
+                #student=StudentAdmission.objects.filter(ssc_roll=request.POST.get('password'),board=board[str[-3:]],status='Not Admitted').first()
+                payment_purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
+                group=Group.objects.filter(title_en=student.group).first()
+                print('Student: ',student.group)
+                if group:
+                    form = StudentForm(instance=student)
+                    subject_form = SubjectChoiceForm(group=group)
+                    adress_form = AdressForm()
+                    present_adress_form = AdressForm()
+                    ssc_equivalent_form=SscEquvalentForm()
+                    guardian_form=GuardianForm()
+                    print(group.title_en)
+                    return render(request, 'admission/admission.html',{'payment_purpose':payment_purpose,'group':group,'form':form,'subject_form':subject_form,'adress_form':adress_form,'ssc_equivalent_form':ssc_equivalent_form,'guardian_form':guardian_form,'present_adress_form':present_adress_form})
+                    
+
+                else:
+                    subject_form = None
+                    return redirect('admission_login')
+            except():
+                print("Exception")
+                return redirect('admission_login')
 
             
     return redirect('admission_login')

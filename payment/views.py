@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from student.models import Student , Choice
-from .forms import SearchPaymentForm
+from .forms import SearchPaymentForm,SearchPaymentReceiptForm
 from .models import PaymentPurpose, PaymentType
 from django.shortcuts import render, redirect
 from django.http import HttpResponse 
@@ -10,15 +10,14 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse,HttpResponseNotFound
-from .models import Transaction,PaymentPurpose
+from .models import Transaction,PaymentPurpose,PaymentConsession
 from student.models import Student,GuardianInfo,SscEquvalent,SubjectChoice,Session
 from .sslcommerz import sslcommerz_payment_gateway
 from sslcommerz_lib import SSLCOMMERZ 
 from django.contrib.auth import get_user_model
 from datetime import datetime
 import os
-from django.conf import settings
-
+import uuid
 # Create your views here.
 cradentials = {'store_id': 'israb672a4e32dfea5',
             'store_pass': 'israb672a4e32dfea5@ssl', 'issandbox': True} 
@@ -448,11 +447,18 @@ def searchPayment(request):
         student=Student.objects.filter(class_roll=request.POST.get('roll').strip()).first()
         subject_choice=Choice.objects.filter(class_roll=request.POST.get('roll').strip()).first()
         purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose'),is_active=True).first()
-        if student:
+        payment_consession=PaymentConsession.objects.filter(class_roll=student.class_roll, group=student.group,student_category=student.student_category, department=student.department,tran_purpose=purpose).last()
+        transaction=Transaction.objects.filter(class_roll=request.POST.get('roll').strip(),status="VALID", tran_purpose=purpose).first()
+        if transaction:
+            context['notfound']="You already paid for "+ purpose.title_en +", You can download your receipt from 'http://127.0.0.1:8000/payment/get_payment_receipt/' "
+        elif student:
             #print(student,purpose)
 
             context['student']=student
             context['purpose']=purpose
+            context['payment_consession']=payment_consession
+
+
             
             #return render(request, 'payment/search_payment.html', context=context)
 
@@ -483,3 +489,24 @@ def ProceedPayment(request):
     form=SearchPaymentForm()
     context['form']=form
     return render(request, 'payment/search_payment.html', context=context)
+
+def getPaymentReceipt(request):
+    context={}
+    flag1=0
+    flag2=0
+    
+    if request.method=='POST':
+        student=Student.objects.filter(class_roll=request.POST.get('roll').strip()).first()
+        subject_choice=Choice.objects.filter(class_roll=request.POST.get('roll').strip()).first()
+        purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose'),is_active=True).first()
+        transaction=Transaction.objects.filter(class_roll=request.POST.get('roll').strip(),tran_purpose=purpose).last()
+        if student and transaction:
+            context['student']=student
+            context['purpose']=purpose
+            return render(request, 'payment/payment_receipt.html', context=context)
+        else:
+            context['notfound']="Student not found!! Re=Enter Right Information or Contact  control room"    
+    
+    form=SearchPaymentReceiptForm()
+    context['form']=form
+    return render(request, 'payment/search_payment_receipt.html', context=context)

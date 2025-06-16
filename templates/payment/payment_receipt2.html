@@ -1,0 +1,352 @@
+{% extends 'basepage/basepage_payment.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  button#print, button#next-btn, button#submit-btn {
+  font-size: 17px;
+  font-weight: bold;
+  position: relative;
+  width: 300px;
+  height: 50px;
+  background: #DC3545;
+  margin-left: 50%;
+  margin-top: 20px;
+  overflow: hidden;
+  z-index: 1;
+  cursor: pointer;
+  transition: color .3s;
+  text-align: center;
+  color: #fff;
+  border: 0;
+  -webkit-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+button#print:after, button#next-btn:after, button#submit-btn:after {
+  position: absolute;
+  top: 90%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #05812a;
+  content: "";
+  z-index: -2;
+  transition: transform .3s;
+}
+button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover::after {
+  transform: translateY(-80%);
+  transition: transform .3s;
+}
+    .top-left {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+}
+  .column{
+   background-color:#999999;
+   }
+   .graph-7{
+    background: url('{% static "images/gmrwc_logo.png" %}') no-repeat;
+}
+.graph-image img{display: none;}
+
+@media print{
+  .graph-image img{
+    display:inline;
+    position:fixed;
+    align-items: center;
+}
+  table th, table td {
+        border:1px solid #b9b1b1;
+        background-color: #999999;
+        padding:0.1em;
+        -webkit-print-color-adjust: exact; 
+
+        }
+}
+
+
+
+</style>
+<div>    
+  <button id="print"  onclick="goToPrint()" >Download or Print PDF</button>
+<div class="container home-page" id="column" >
+    <table width="100%" border="0" align="center" style="margin-bottom: 10px;" >
+        <thead style=" background-color: #a6d1fb; color: #e03838;">
+          <th width="10%" style=" background-color:  #a6d1fb; color: #0f0f0f; padding: 15px; margin-bottom: 15px;"><img id="graph-image" height="80px" src="{% static 'images/gmrwc_logo.png' %}" alt="" style=" left: 0; right: 0; position: relative;">
+          </th>
+          <th width="65%" align="left" style=" background-color:  #a6d1fb; color: #1c0b0b; padding: 15px; margin-bottom: 15px;">Government Republic of Bangladesh<p style="font-size: 25px;"><b>Govt. Mujibur Rahman Women's college, Bogura.</p></th>
+
+          <th width="25%" align="right" style=" background-color:  #a6d1fb; color: #582a2a; padding: 15px; margin-bottom: 15px;"><p style="font-size: 20px;"><b>HSC Admission 2024-25</b></p> Student Copy</th>
+
+      </thead>
+      <tbody>
+
+      </tbody>
+      </table>
+      <table width="100%" border="0" cellspacing="3" cellpadding="3" align="center">
+          
+        <tbody>
+            <td  style="padding: 10px;" width="30px" height="30px" valign="middle"><p style="font-size: 20px;"><b>Class Roll:{{student.class_roll}}<br>Group: {{student.group}}</b></p></td>
+            <td  style="padding: 10px;" width="30px" height="30px" align="right" valign="middle">Session: {{student.session}}<br>Section: {{student.section}}</td>
+
+       </tbody>
+       </table>
+       
+    <fieldset>
+    <font size="15">                
+        <table width="100%" border="0" align="center" font="">
+          
+          <tbody>
+            <tr >
+                <td rowspan="7" colspan="1"  style="padding: 10px;" valign="middle">
+                    {% if student.image %}
+                    <img width="200px" height="200px" src="{{student.image.url}}" alt="" >
+                    {% else %}
+                    <img width="200px" height="200px" src="{% static 'images/gmrwc_logo.png' %}" alt="" >
+                    {% endif %}
+                </td>
+                
+            </tr>
+            
+            <tr>
+                <td width="250px" colspan="2" align="left" valign="middle"><b></b>&nbsp;Name:</b></td>
+                <td width="550px" colspan="3" align="left" valign="middle" class="black12">{{student.name}}</td>
+                
+            </tr>
+            
+            <tr>
+                <td colspan="2" align="left" valign="middle">&nbsp;Mobile No.:</td>
+                <td colspan="3" align="left" valign="middle" class="black12">{{student.phone}}</td>
+                
+            </tr>
+            <tr>
+                <td colspan="2" align="left" valign="middle">&nbsp;Email:</td>
+                <td colspan="3" align="left" valign="middle" class="black12">{{student.email}}</td>
+                
+            </tr>
+            <tr>
+                <td colspan="2" align="left" valign="middle">&nbsp;Birth Registration:</td>
+                <td colspan="3" align="left" valign="middle" class="black12">{{student.birth_registration}}</td>
+                
+            </tr>
+           
+
+        </tbody></table>
+    </font>
+      </fieldset>
+      
+      <fieldset>
+                            
+        <table width="100%" border="0" cellspacing="3" cellpadding="3" align="center">
+          
+          <tbody>
+            
+            
+            <tr>
+                <td width="250px" colspan="2" align="left" valign="middle">&nbsp;Gender :</td>
+                <td width="550px" colspan="3" align="left" valign="middle" class="black12">{{student.gender}}</td>
+                <td width="250px" colspan="2" align="left" valign="middle">&nbsp;Blood Group: </td>
+                <td width="550px" colspan="3" align="left" valign="middle" class="black12">{{student.blood_group}}</td>
+                
+            </tr>
+            <tr>
+                <td width="250px" colspan="2" align="left" valign="middle">&nbsp;Date of Birth:</td>
+                <td width="550px" colspan="3" align="left" valign="middle" class="black12">{{student.date_of_birth}}</td>
+                
+                <td colspan="2" align="left" valign="middle">&nbsp;Religion:</td>
+                <td colspan="3" align="left" valign="middle" class="black12">{{student.religion}}</td>
+                
+            </tr>
+            <tr>
+                <td colspan="2" align="left" valign="middle">&nbsp;Marital Status:</td>
+                <td colspan="3" align="left" valign="middle" class="black12">{{student.marital_status}}</td>
+                <td colspan="2" align="left" valign="middle">&nbsp;Nationality:</td>
+                <td colspan="3" align="left" valign="middle" class="black12">{{student.nationality}}</td>
+                
+            </tr>
+           
+            
+            
+        </tbody></table>
+      </fieldset>
+      
+      
+
+      <fieldset>
+                        
+      </fieldset>
+                            
+      
+      <fieldset>
+                            
+        <table width="100%" border="0" align="center">
+          <thead>
+                <th colspan="4" align="left"><b>Subject Obtained<b></th>
+  
+          </thead>
+          <tbody>
+            
+            <tr>
+                {% for subject in subject_choice.compulsory_subject.all|slice:"0:2" %}
+
+
+                <td width="40%"  align="left" valign="middle"> {{subject.name_en}} </td>
+                <td width="10%" align="left" valign="middle"> {{subject.code}} </td>
+
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for subject in subject_choice.compulsory_subject.all|slice:"2:4" %}
+
+
+                <td  align="left" valign="middle"> {{subject.name_en}} </td>
+                <td  align="left" valign="middle"> {{subject.code}} </td>
+
+                {% endfor %}
+            </tr>
+            
+            <tr>
+                {% for subject in subject_choice.compulsory_subject.all|slice:"4:" %}
+
+
+                <td  align="left" valign="middle"> {{subject.name_en}} </td>
+                <td  align="left" valign="middle"> {{subject.code}} </td>
+
+                {% endfor %}
+                {% if subject_choice.optional_subject %}
+                {% for subject in subject_choice.optional_subject.all %}
+
+
+                <td  align="left" valign="middle"> {{subject.name_en}} </td>
+                <td  align="left" valign="middle"> {{subject.code}} </td>
+
+                {% endfor %}
+                {% endif %}
+            </tr>
+            <tr>
+
+
+                <td  align="left" valign="middle"> {{subject_choice.fourth_subject.name_en}}   (4<sup>th</sup>&nbsp;Subject)</td>
+                <td  align="left" valign="middle"> {{subject_choice.fourth_subject.code}} </td>
+
+            </tr>
+            
+            
+            
+            
+        </tbody>
+    </table>
+    <table id="second" width="100%" border="2" align="center" style="border:5px;text-align:center;">
+                    
+                      <tbody>
+                        
+                        <tr>
+
+                             <td > <img id='barcode' src="https://api.qrserver.com/v1/create-qr-code/?data={{student.class_roll}}:{{student.name}}:{{student.session}}:{{transaction.tran_id}}:{{transaction.created_at}}&amp;size=200x200" width="120px" height="120px" alt="" title="{{student.class_roll}}:{{student.name}}" width="50" height="50" /></td>
+
+                            
+                        </tr>
+                        
+                        
+                    </tbody>
+                </table>  
+      </fieldset>
+        <table width="100%" border="0" style="margin-top: 20%;" valign="bottom">
+          
+            <tbody>
+              
+              <tr>
+                  <td  align="left" valign="middle"> student Signature</td>
+                  <td  align="left" valign="middle" class="black12">Guardian Signature</td>
+                  <td  align="left" valign="middle">Office Signature</td>
+                  <td  align="left" valign="middle" class="black12"> Principal Signature</td>
+                  
+              </tr>
+              
+              
+          </tbody>
+      </table>  
+            
+
+    <div class="row"  >
+        <div class="col" >
+            <div class="top-left">
+                
+    </div>
+    <div class="graph-image graph-7">
+      </div>
+        <img id="graph-image" height="800px" src="{% static 'images/gmrwc_logo.png' %}" alt="" style="opacity: 0.1; left: 0; right: 0; position: relative; margin-left: 11%; margin-right:11%;margin-top: -1100px;">
+        
+        
+        </div>
+    </div>
+
+</div>
+<div style="position: relative;"></div>
+<button id="print" class="btn btn-success"  onclick="goToPrint()"  >Download or Print PDF</button>
+
+</div>
+
+</div>
+
+
+    <script>
+        function goTuoPrint(){
+            window.print();
+         /*   var divToPrint = document.getElementById('column');
+    var htmlToPrint = '' +
+        '<style type="text/css">' +
+            '.column {'+
+        'background:url({% static "images/gmrwc_logo.png" %}) no-repeat;' +
+            '}'+
+        'table th, table td {' +
+        'border:1px solid #000;' +
+        'padding:0.5em;' +
+        '}' +
+        '@media print{'+
+  '.graph-image{display:inline;}'+
+'}'+
+        '</style>';
+    htmlToPrint += divToPrint.outerHTML;
+    newWin = window.open("");
+    newWin.document.write(htmlToPrint);
+    newWin.print();
+    newWin.close();
+           // document.getElementById("print").style.display="none";
+           // window.print();*/
+        }
+
+      function goToPrint() {
+        var disp_setting="toolbar=yes,location=no,";
+      disp_setting+="directories=yes,menubar=yes,";
+      disp_setting+="scrollbars=yes,width=650, height=600, left=100, top=25";
+         var content_vlue = document.getElementById('column').innerHTML;
+         var docprint=window.open();
+         docprint.document.open();
+         docprint.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"');
+         docprint.document.write('"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
+         docprint.document.write('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">');
+         docprint.document.write('<head><title>HSC-{{student.session}}-{{student.group}}-{{student.class_roll}} </title>');
+         docprint.document.write('<style type="text/css">body{ margin:0px;');
+         docprint.document.write('font-family:verdana,Arial;color:#000;');
+         docprint.document.write('font-family:Verdana, Geneva, sans-serif; font-size:16px;}'); 
+         docprint.document.write('table{-webkit-print-color-adjust: exact;} ');
+         docprint.document.write('a{color:#000;text-decoration:none;} ');
+         docprint.document.write('.graph-image img{display:inline;position:fixed;align-items: center;}');
+         docprint.document.write('.table_ssc{border:2px solid #eeeff0; background-color: #eeeff0;padding:0.1em;}');
+
+         docprint.document.write('table th, table td {border:2px solid #eeeff0; background-color: #eeeff0;padding:0.1em;}</style>');
+         docprint.document.write('</head><body onLoad="self.print()"><center>');
+         docprint.document.write(content_vlue);
+         docprint.document.write('</center></body></html>');
+         docprint.document.close();
+      }
+
+    </script>
+    
+{% endblock %}

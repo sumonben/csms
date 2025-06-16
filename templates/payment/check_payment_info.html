@@ -33,7 +33,11 @@
            </tr>
            <tr>
             <td>Amout:</td>
+            {% if payment_consession %}
+            <td>{{payment_consession.amount}}</td>
+            {% else %}
             <td>{{purpose.amount}}</td>
+            {% endif %}
            </tr>
             {% endif %}
       </tbody>

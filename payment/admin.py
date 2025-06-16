@@ -40,3 +40,7 @@ class UserAdmin(admin.ModelAdmin):
 class PaymentTypeAdmin(admin.ModelAdmin):
     list_display=[  'id','serial','title','title_en']
     filter_fields=[  'id','title','title_en']
+@admin.register(PaymentConsession)
+class PaymentConsessionAdmin(admin.ModelAdmin):
+    list_display = ['class_roll','name','group','session','department',]
+    filter_fields=[  'class_roll',]

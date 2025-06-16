@@ -2,29 +2,38 @@ import string
 import random
 from django.conf import settings
 from sslcommerz_lib import SSLCOMMERZ
-from .models import PaymentGateway
+from .models import PaymentGateway, PaymentConsession,PaymentPurpose
+import uuid
 
+# def generator_trangection_id( size=6, chars=string.ascii_uppercase + string.digits):
+#     return "".join(random.choice(chars) for _ in range(size))
 
-def generator_trangection_id( size=6, chars=string.ascii_uppercase + string.digits):
-    return "".join(random.choice(chars) for _ in range(size))
-
-
+def generator_trangection_id():
+    print(uuid.uuid4().hex)
+    return uuid.uuid4().hex
     
 
 def sslcommerz_payment_gateway(request, student,purpose):
     
     print(student,purpose)
+
     gateway = PaymentGateway.objects.all().first()
     cradentials = {'store_id': 'israb672a4e32dfea5',
             'store_pass': 'israb672a4e32dfea5@ssl', 'issandbox': True} 
-    
-    cradentials = {'store_id': 'gmrwcedubdlive',
-            'store_pass': '677CD7B61AB5A81511', 'issandbox': False} 
+    # purpose=PaymentPurpose.objects.filter(id=purpose).last()
+    payment_consession=PaymentConsession.objects.filter(class_roll=student.class_roll, group=student.group,student_category=student.student_category, department=student.department,tran_purpose=purpose).last()
+    # cradentials = {'store_id': 'gmrwcedubdlive',
+    #         'store_pass': '677CD7B61AB5A81511', 'issandbox': False} 
     
     sslcommez = SSLCOMMERZ(cradentials)
     body = {}
     body['student'] = student
-    body['total_amount'] = purpose.amount
+    if payment_consession:
+        body['total_amount'] = payment_consession.amount
+    else:
+        body['total_amount'] = purpose.amount
+
+        
     body['currency'] = "BDT"
     body['tran_id'] = generator_trangection_id()
     body['success_url'] ='http://' +str(request.META['HTTP_HOST'])+'/payment/success/'
@@ -56,7 +65,7 @@ def sslcommerz_payment_gateway(request, student,purpose):
 
 
     response = sslcommez.createSession(body)
-    print(response)   
+    #print(response)   
     return  response["GatewayPageURL"]
     return 'https://securepay.sslcommerz.com/gwprocess/v4/api.php?Q=pay&SESSIONKEY=' + response["sessionkey"]
 

@@ -1,4 +1,4 @@
-{% extends 'basepage/basepage_payment.html' %}
+{% extends 'basepage/basepage_receipt.html' %}
 
 {% block content %}
 {% load static %}
@@ -45,34 +45,23 @@
     display:none;
 }
 table{
+    
         -webkit-print-color-adjust: exact; 
 
 }
 #first,#second{
-    width:90%;
+    width:100%;
 }
-@media(max-width:767px){
 #container_id{
     width:100%;
     margin=0; 
 }
-table{
-    width:100%;
-  
-}
-#first,#second{
-    width:100%;
-}
-}
- #second td {
-    border:1px solid #b9b1b1;
-    
-    background-color:rgb(207, 241, 218);
-    padding:0.5em;
+#second td {
+    border:2px solid #b9b1b1;
     -webkit-print-color-adjust: exact; 
 
     }
-    #main_body{
+#main_body{
           background-image:url('/static/images/logo_opacity.png');
           background-repeat: no-repeat;
           background-position: center;
@@ -80,61 +69,96 @@ table{
         
       
       }
+      
+      
+@media print and (min-width: 480px) {
+
+            #submit-btn {
+              display: none !important;;
+            }
+  }
+    
 </style>
-<div class="container home-page" id="column" >
 
-    <button id="submit-btn" class="btn-default" onclick="goToPrint()" >Download or Print</button>
 
-    <div id="container_id" >
+            <table id="middle_head"  width="100%"  align="center" > 
+                      <tr>
+                        <td rowspan="3">
+                        </td> 
+                        <td align="center">                   
+                      <span class="GrayBlue20bold" style="color:#76576;font-size:38px;">{{exam}}
+                        </span>
+                      </td>
+                          
+                        </tr>
+                        <tr>
+                        <th width="100%" style=" text-align:center; background-color: transparent; color:rgb(223, 49, 49); padding: 10px;"><p style="font-size: 36px;line-height: 1.2;"><b>{{purpose.title_en}}</p></th>
 
-              <table id="first" border="2" align="center" >
-                <thead style=" background-color: #a6d1fb; color: #e03838;">
-                    <th width="100%" style=" text-align:center; background-color:  #a6d1fb; color:rgb(223, 49, 49); padding: 15px; margin-bottom: 15px;line-height: 1;"><p style="font-size: 25px;line-height: 1.2;"><b>{{purpose.title_en}}</p></th>
-                </thead>
-                  <thead>
-                    <th width="100%" style=" text-align:center; background-color:  #a6d1fb; color:rgb(223, 49, 49); padding: 15px; margin-bottom: 15px;line-height: 1;"><p style="font-size: 25px;line-height: 1.2;"><b>{{purpose.subtitle_en}}</p></th>
-                </thead>
-                <tbody>
-          
-                </tbody>
-            </table>
+                        </tr>
+                          <tr>
+                            <td  width="100%" align="center" valign="middle"><img src="{% static 'images/gmrwc_logo.png'%}" width="100" height="100" ><h3 width="100%" style=" text-align:center; background-color: transparent; color:rgb(223, 49, 49);"><p style="font-size: 35px;line-height: 1.2;"><b>{{purpose.subtitle_en}}</p></h3>
+                        
+                        {% if student.group.title_en == 'Science' %}
+                         <button id="add-form" style="font-size:50px;  border-radius: 25px;background-color:rgb(251, 253, 253); color: rgb(245, 22, 6);text-shadow: 3px 3px 3px rgb(73, 25, 11);font-weight:bold;text-transform: uppercase;padding:10px;margin-bottom:10px"  type="button">{{student.group}}</button>
+                        {% elif student.group.title_en == 'Humanities' %}
+                        <button id="add-form" style="font-size:50px;  border-radius: 25px;background-color:rgb(251, 253, 253); color: rgb(11, 2, 138);text-shadow: 3px 3px 3px rgb(73, 25, 11);font-weight:bold;text-transform: uppercase;padding:10px;margin-bottom:10px"  type="button">{{student.group}}</button>
+                        {% else %}
+                        <button id="add-form" style="font-size:50px;  border-radius: 25px;background-color:rgb(251, 253, 253); color: rgb(184, 158, 13);text-shadow: 3px 3px 3px rgb(73, 25, 11);font-weight:bold;text-transform: uppercase;padding:10px;margin-bottom:10px"  type="button">{{student.group}} </button>
+                        {% endif %}
+                        <br>
+                       
+                            </td>
+                        </tr>
+                         
+                            
+                    </table>
                 
                  
                                       
-             <table id="second" width="100%" border="2" align="center" style="border:5px">
+             <table id="second"  width="90%" border="2" align="center" cellpadding="3px" style="border:5px;font-size:25px;font-weight:bold;width:90%;">
                     
                     <tbody>
                         <tr>
-                          <td width="250px" colspan="2" align="left" valign="middle"><b></b>&nbsp;Roll:</b></td>
-                          <td id="roll" width="550px" colspan="3" align="left" valign="middle" class="black12">{{student.class_roll}}</td>
+                          <td width="250px" colspan="2" align="right" valign="middle"><b></b>&nbsp;Roll:</b></td>
+                          <td id="roll" width="550px" colspan="3" align="center" valign="middle" >{{student.class_roll}}</td>
                           
                       </tr>
                       <tr>
-                          <td colspan="2" align="left" valign="middle">&nbsp;Name:</td>
-                          <td colspan="3" align="left" valign="middle" class="black12">{{student.name}}</td>
+                          <td colspan="2" align="right" valign="middle">&nbsp;Name:</td>
+                          <td colspan="3" align="center" valign="middle" >{{student.name}}</td>
                           
                       </tr>
                       <tr>
-                          <td colspan="2" align="left" valign="middle">&nbsp;Session:</td>
-                          <td colspan="3" align="left" valign="middle" class="black12">{{student.session}}</td>
+                          <td colspan="2" align="right" valign="middle">&nbsp;Session:</td>
+                          <td colspan="3" align="center" valign="middle" >{{student.session}}</td>
                           
                       </tr>
                       <tr>
-                          <td colspan="2" align="left" valign="middle">&nbsp;Group:</td>
-                          <td colspan="1" align="left" valign="middle" class="black12">{{student.group}}</td>
+                          <td colspan="2" align="right" valign="middle">&nbsp;Group:</td>
+                          <td colspan="1" align="center" valign="middle" >{{student.group}}</td>
                           
-                          <td colspan="1" align="left" valign="middle">&nbsp;Section: </td>
-                          <td colspan="1" align="left" valign="middle" class="black12">{{student.section}}</td>
+                          <td colspan="1" align="right" valign="middle">&nbsp;Section: </td>
+                          <td colspan="1" align="center" valign="middle" >{{student.section}}</td>
                           
                       </tr>
                       <tr>
-                        <td colspan="2" align="left" valign="middle">&nbsp;Amount Paid: </td>
-                        <td colspan="3" align="left" valign="middle" class="black12">{{purpose.amount}}</td>
+                        <td colspan="2" align="right" valign="middle">&nbsp;Amount Paid: </td>
+                        <td colspan="3" align="center" valign="middle" >
+                            {% if student.group.title_en == 'Science' %}
+                                {{purpose.amount_science}}
+                            {% elif student.group.title_en == 'Humanities' %}
+                                {{purpose.amount_humanities}}
+                            {% else %}
+                                {{purpose.amount_bussiness}}
+                            {% endif %}
+                            &nbsp; with online charge(1.5%)
+                        </td>
                         
                     </tr>
                     <tr>
-                      <td colspan="2" align="left" valign="middle">&nbsp;Phone: </td>
-                      <td colspan="3" align="left" valign="middle" class="black12">{{student.phone}}</td>
+                      <td colspan="2" align="right" valign="middle">&nbsp;Phone: </td>
+                      <td colspan="3" align="center" valign="middle" >0{{student.phone}}</td>
+                      
                      
                       
                   </tr>
@@ -147,16 +171,17 @@ table{
                 
           
                                       
-                
+                    <button id="submit-btn" class="btn-default" onclick="window.print()" >Download or Print</button>
+
                       
-                <table id="second" width="100%" border="2" align="center" style="border:5px;text-align:center;">
+                <table  width="90%" border="2" align="center" style="border:5px;text-align:center; margin-top:20%;margin-bottom:5px;">
                     
                       <tbody>
                         
                         <tr>
 
-                             <td > <img id='barcode' src="https://api.qrserver.com/v1/create-qr-code/?data={{student.class_roll}}:{{student.name}}:{{student.session}}:{{transaction.tran_id}}:{{transaction.created_at}}&amp;size=200x200" width="120px" height="120px" alt="" title="{{student.class_roll}}:{{student.name}}" width="50" height="50" /></td>
-
+                             <td align="left" > <img id='barcode' src="https://api.qrserver.com/v1/create-qr-code/?data={{student.class_roll}}:{{student.name}}:{{student.session}}:{{transaction.tran_id}}:{{transaction.created_at}}&amp;size=200x200" width="120px" height="120px" alt="" title="{{student.class_roll}}:{{student.name}}" width="50" height="50" /></td>
+                            <td align="right"><img  src="{% static 'images/principal_signature.png' %}" width="120px" height="120px" alt="" title="{{student.class_roll}}:{{student.name}}" width="50" height="50" /><h3>Principal<h3><br></td>
                             
                         </tr>
                         
@@ -164,21 +189,65 @@ table{
                     </tbody>
                 </table>  
                       
-           <div style="float:right;margin:10px;"><img  src="{% static 'images/principal_signature.png' %}" width="120px" height="120px" alt="" title="{{student.class_roll}}:{{student.name}}" width="50" height="50" /><br>Principal<br></div>
 
                         
                     
                 
-          </div>
+    <script>
+                  function goTuoPrint(){
+                      window.print();
+                   /*   var divToPrint = document.getElementById('column');
+              var htmlToPrint = '' +
+                  '<style type="text/css">' +
+                      '.column {'+
+                  'background:url({% static "images/gmrwc_logo.png" %}) no-repeat;' +
+                      '}'+
+                  'table th, table td {' +
+                  'border:1px solid #000;' +
+                  'padding:0.5em;' +
+                  '}' +
+                  '@media print{'+
+            '.graph-image{display:inline;}'+
+          '}'+
+                  '</style>';
+              htmlToPrint += divToPrint.outerHTML;
+              newWin = window.open("");
+              newWin.document.write(htmlToPrint);
+              newWin.print();
+              newWin.close();
+                     // document.getElementById("print").style.display="none";
+                     // window.print();*/
+                  }
           
+                function goToPrint() {
+                  var disp_setting="toolbar=yes,location=no,";
+                disp_setting+="directories=yes,menubar=yes,";
+                disp_setting+="scrollbars=yes,width=650, height=600, left=100, top=25";
+                   var content_vlue = document.getElementById('column').innerHTML;
+                   var docprint=window.open();
+                   docprint.document.open();
+                   docprint.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"');
+                   docprint.document.write('"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
+                   docprint.document.write('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">');
+                   docprint.document.write('<head><title>HSC-{{student.session}}-{{student.group}}-{{student.class_roll}} </title>');
+                   docprint.document.write('<style type="text/css">body{ margin:0px;');
+                   docprint.document.write('font-family:verdana,Arial;color:#000;');
+                   docprint.document.write('font-family:Verdana, Geneva, sans-serif; font-size:16px;}');
+                   docprint.document.write('a{color:#000;text-decoration:none;} ');
+                   docprint.document.write('.graph-image img{display:inline;result:fixed;align-items: center;}');
+                   docprint.document.write('.table_ssc{border:2px solid #eeeff0; background-color: #eeeff0;padding:0.1em;}');
+          
+                   docprint.document.write('table th, table td {border:2px solid #eeeff0; background-color: #eeeff0;padding:0.1em;}</style>');
+                   docprint.document.write('</head><body onLoad="self.print()"><center>');
+                   docprint.document.write(content_vlue);
+                   docprint.document.write('</center></body></html>');
+                   docprint.document.close();
+                }
+          
+              </script>       
 
 <script>
-    function goToPrint(){
-        document.getElementById("submit-btn").style.display="none";
-        window.print();
-        document.getElementById("submit-btn").style.display="block";
-
-    }
+   
 
     $( document ).ready(function() {
         const d = new Date();
