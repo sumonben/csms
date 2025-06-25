@@ -82,17 +82,17 @@ class StudentCategoryAdmin(ExportActionMixin,admin.ModelAdmin):
 
 @admin.register(Division)
 class DivisionAdmin(ImportExportMixin,admin.ModelAdmin):
-    list_display=[ 'name','name_en','link']
+    list_display=[ 'id','name','name_en','link']
     list_display_links = ['name','name_en']
 @admin.register(District)
 class DistrictAdmin(ImportExportMixin,admin.ModelAdmin):
-    list_display=[ 'name','name_en','division','link']
+    list_display=[ 'id','name','name_en','division','link']
     list_display_links = ['name','name_en']
     list_filter=['division']
 
 @admin.register(Upazilla)
 class UpazillaAdmin(ImportExportMixin,admin.ModelAdmin):
-    list_display=[ 'name','name_en','district','link']
+    list_display=[ 'id','name','name_en','district','link']
     list_display_links = ['name','name_en']
     list_filter=['district']
 

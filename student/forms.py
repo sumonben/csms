@@ -1,7 +1,7 @@
 import datetime
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
-# import GeeksModel from models.py
+from django.forms import modelformset_factory
 from .models import Student,SubjectChoice,Upazilla,District,Division,Adress,SscEquvalent,GuardianInfo,Subject,Session,Group,Class
 from django.db.models import Q,Count
 from payment.models import PaymentPurpose
@@ -172,7 +172,19 @@ class SubjectChoiceForm(forms.ModelForm):
                 #self.fields['compulsory_subject'].widget = FilteredSelectMultiple('Subject',False, attrs={'class':'form-control form-control-sm'})
 
             
-        
+AdressFormSet = modelformset_factory(
+    Adress, fields=("village_or_house","house_or_street_no", "post_office","upazilla","district","division"), extra=2,
+    widgets = {
+            'village_or_house': forms.TextInput(attrs={'class': 'form-control form-control-sm','label':'Village/house','required':True}),
+            'house_or_street_no': forms.TextInput(attrs={'class': 'form-control form-control-sm','label':'Village/house','required':True}),
+            'post_office': forms.TextInput(attrs={'class': 'form-control form-control-sm','required':True}),
+            'upazilla': forms.Select(choices=None,attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.','required':True}),
+            'district': forms.Select(choices=None,attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.','required':True}),
+            'division': forms.Select(choices=Division.objects.all(),attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.','required':True}),
+
+}
+)
+
 class AdressForm(forms.ModelForm):
     division= forms.ModelChoiceField(queryset=None,widget=forms.Select(attrs={'class':'form-control form-control-sm'})),
     district=forms.ModelChoiceField(queryset=None,widget=forms.Select(attrs={'class':'form-control form-control-sm'})),

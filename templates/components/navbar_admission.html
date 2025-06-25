@@ -7,6 +7,7 @@
         text-align:center;
         font-family:kalpurush;
         font-weight:bold;
+        margin-left:-10px;
         
 
     }
@@ -142,7 +143,7 @@
         <a id="main-heading" href="/" class="navbar-brand logo active router-link-active" aria-current="page" > 
            
                                           
-                  <span class="heading" id="heading">GOVT. MUJIBUR RAHMAN WOMEN'S COLLEGE</span><br>
+                  <span class="heading" id="heading">GOVT. MOJIBOR RAHMAN BHANDARI WOMEN'S COLLEGE</span><br>
                   <span id="sub-heading" class="sub-heading"   >BAGURA SADAR, BOGURA</span>
 
                
@@ -155,16 +156,29 @@
             <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler mMenu collapsed" style="margin-top:20px;float:right;"><span class="fa fa-close"></span></button>
             <ul class="navbar-nav ml-auto" style="float:left; margin-left:20%;">
                 <li class="nav-item" ><a href="/" class="{% if request.resolver_match.url_name in 'home' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}" aria-current="page">Home</a></li>
-                <li class="nav-item dropdown" ><a href="{% url 'form_download' %}" id="navbarDropdown"  aria-haspopup="true" aria-expanded="false" class="{% if request.resolver_match.url_name == 'form_download' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Download Admission Form</a>
+                <li class="nav-item dropdown" ><a href="{% url 'search_admission_form' %}" id="navbarDropdown"  aria-haspopup="true" aria-expanded="false" class="{% if request.resolver_match.url_name == 'search_admission_form' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Get Admission Form</a>
                     
                 </li>
                 
                 <li class="nav-item nav-item dropdown"><a href="{% url 'search_admission_form' %}" aria-haspopup="true" aria-expanded="false" class="{% if request.resolver_match.url_name == 'search_admission_form' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Check Payment</a>
                     
                 </li>
-                <li class="nav-item nav-item dropdown"><a href="{% url 'admission_login' %}" class="{% if request.resolver_match.url_name in 'admission_login' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}" aria-expanded="false" aria-current="page">Download receipt</a>
+                <li class="nav-item nav-item dropdown"><a href="" class="{% if request.resolver_match.url_name in 'home' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}" aria-expanded="false" aria-current="page">Get receipt</a>
                     
                 </li>
+                
+                <li class="nav-item nav-item dropdown"><a href="{% url 'admission_login' %}" class="{% if request.resolver_match.url_name in 'admission_login' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}" aria-expanded="false" aria-current="page">Admission</a>
+                    
+                </li>
+                
+                {% if request.user.is_superuser %}
+                                
+                <li class="nav-item nav-item dropdown"><a href="{% url 'get_student_id_card' %}" class="{% if request.resolver_match.url_name in 'get_student_id_card' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}" aria-expanded="false" aria-current="page">Student IDCard</a>
+                    
+                </li>
+                    
+                {% endif %}
+                    
 
                
                
