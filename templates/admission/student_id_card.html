@@ -1,182 +1,280 @@
-
-{% extends 'basepage/ictparkbd_layout_admission.html' %}
- 
-{% block content %}
 {% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Libre Barcode 39' rel='stylesheet'>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+
 <style>
-    .main_body{
-        width:100%;
-        height:100%;
-        color:red;
-    }
-    option{
-      color:#035a4c;
-      font-weight:bold;
-      font-size:17px;
-    }
-    option:hover:after{
-      background-color:#035a4c;
-      font-weight:bold;
-    }
-    @media(max-width:767px){
-        .main_body{
-            width:100%;
-            height:700px;
-            color:red;
-            background-color:green;
-        }   
-    }
-    .card {
+.card {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   width: 200px;
-  height: 200px;
-  display: inline;
-
+  height:300px;
 }
 
 .card:hover {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
-.card_body {
+.container {
   padding: 2px 16px;
 }
+
+   .flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    width:100%;
+    margin: 0 auto;
+}
+
+.flex-item {
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media print and (min-width: 480px) {
+    body{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    }
+    .pagebreak { page-break-before: always; }
+    .flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 auto;
+    text-align:center;
+
+}
+
+.flex-item {
+    background-color: #ffffff;
+    
+    text-align: center;
+    
+}
+    table{
+    
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+        }
+            #submit-btn {
+              display: none !important;;
+            }
+  }
 </style>
+</head>
+<body>
 
-{% if students %}
-    <h2>Card</h2>
-
-<div class="card">
-  <img src="{% static 'images/gmrwc_logo.png'%}" alt="Avatar" style="width:80px;height:80px" >
-  <div class="card_body">
-    <h4><b>{{students.name}}</b></h4> 
-    <p>Architect & Engineer</p> 
-  </div>
-</div>
-<div class="card">
-  <img src="{% static 'images/gmrwc_logo.png'%}" alt="Avatar" style="width:80px;height:80px" >
-  <div class="card_body">
-    <h4><b>{{students.name}}</b></h4> 
-    <p>Architect & Engineer</p> 
-  </div>
-</div>
- {% else %}   
-<div class="services">
-  <div><h2 style="text-align: center;color: #035a4c ;text-shadow: 2px 2px 2px rgb(65, 7, 7);"><u>Student's Id Card</u></h2></div>
-  
-  <div data-v-6f04a53f="" class="memberRegistration py-5" >
-    <div class="container-wrapper">
-      <div class="row justify-content-md-center">
-        <div class="col col-lg-10">
-          <div class="card login-body shadow-lg rounded-10 py-5">
-            <table width="100%" border="1" cellspacing="0" cellpadding="10">
-              <thead><th colspan="5" style="height: 40px; background-color: #035a4c; color: #fff;padding: 15px;font-size:20px;text-align:center;"> Enter Roll Range </th></thead>
-              {% if notfound %}
-              <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 40px; background-color:rgb(168, 8, 8); color: #fff;padding: 20px;"> Student not found!! Re=Enter Right Information or Contact  control room</th></thead>
-              {% endif %}
-              {% if message %}
-              <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 40px; background-color:rgb(168, 8, 8); color: #fff;padding: 15px;"> {{message}} </th></thead>
-              {% endif %}
-              <tbody>
-              </tbody>
-            </table>
-                <div class="card-body">
-
-                <span class="bubbleNew"><img src="{%static 'images/ictpark_monogram.png'%}" class="rounded-circle" style="width: 200px;height: 200px;" /></span>
-
-                <span class="shape"><img align="center" src="{% static 'images\9999.jpg' %}"><img align="center" style="height:60%;margin-top:10%;rotate: -50deg;" src="{% static 'images\gmrwc_logo.png' %}"></span> 
-                {%if email %}
-            
-            <div class="alert alert-danger" role="alert">
-              <strong>{{email}}</strong> 
-            </div>
-            
-            {% endif %}
-            {%if phone %}
-            
-            <div class="alert alert-danger" role="alert">
-              <strong>{{phone}}</strong> 
-            </div>
-            
-            {% endif %} 
-            
-            {%if password %}
-            
-            <div class="alert alert-danger" role="alert">
-              <strong>{{password}}</strong> 
-            </div>
-            
-            {% endif %}
-            
-            {%if success %}
-            
-            <div class="alert alert-success" role="alert">
-              <strong>{{success}}</strong> 
-            </div>
-            
-            {% endif %}
-            
-            <form autocomplete="off" id="form" class="form-row px-3" method="post" action="{% url 'get_student_id_card' %}" target="_blank">
-               {% csrf_token %}
-                            <div class="col-sm-8 form-group" style="margin:auto;">
-                              <div class="row">
-                                <div class="col-sm-10" >
-                                  <label for="" class="col-form-label-sm m-0" style="font-size:20px;">{{form.roll.label}}</label> 
-                                  <div class="loginBox">
-                                            {{form.roll}}     
-                                            <span class="fa fa-universal-access"></span>
-                                   
-                                  </div> <!--  --> <div class="invalid-feedback"></div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-sm-8 form-group" style="margin:auto;">
-                              <div class="row">
-                                <div class="col-sm-10" >
-                                  <label for="" class="col-form-label-sm m-0" style="font-size:20px;">{{form.phone.label}}</label> 
-                                  <div class="loginBox">
-                                            {{form.phone}}     
-                                            <span class="fa fa-universal-access"></span>
-                                   
-                                  </div> <!--  --> <div class="invalid-feedback"></div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-sm-8 form-group" style="margin:auto;">
-                              <div class="row">
-                                <div class="col-sm-10" >
-                                  <label for="" class="col-form-label-sm m-0" style="font-size:20px;">{{form.purpose.label}}</label> 
-                                  <div class="loginBox">
-                                            {{form.purpose}}     
-                                            <span class="fa fa-certificate"></span>
-                                   
-                                  </div> <!--  --> <div class="invalid-feedback"></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
+<div class="flex-container">
+    {% for student in students %}
+    
+        <div class="flex-item">
+        <table align="center" cellspacing="0" style="background-color:pink;width:200px;height:270px;font-weight:bold;margin-right:7px;" >
+            <tr style="background-color:red;text-align:center;color:white;font-weight:bold;font-size:12px;padding-top:10px;padding-bottom:5px;">
+                <td colspan="2" style="padding-top:10px;padding-bottom:5px;">
+                    GOVT. MOJIBOR RAHMAN BHANDARI WOMEN'S COLLEGE
+                </td>
+            </tr>
+                <tr>
+                <td colspan="2" style="background-color:blue;text-align:center;color:#fff">
+                        Student ID Card
+                </td>
+            </tr>
+            <tr>
                 
-              
-              
-             
-              <div class="col-sm-9 form-group">
-                <p class="text-right">
-                  <button type="submit" class="btn btn-danger text-white"><span>সাবমিট</span></button>
-                </p>
-              </div>
-            </form>
-          </div>
+                <td align="center">
+                <img src="{% static 'images/gmrwc_logo.png' %}" alt="Avatar" style="width:60px">
+                <p style="line-height:0.004em;margin-top:4px;font-size:9px;">gmrwc.edu.bd</p>
+
+        </td>
+            <td align="center">
+                <img src="{% static 'images/gmrwc_logo.png' %}" alt="Avatar" style="width:85px">
+
+        </td>
+        </tr>
+        
+        
+        
+            <tr>
+                <th colspan="2" style="text-align:center;color:#000;font-size:12px;background-color:#e67e97">
+                    {{student.name}}
+                </th>
+            </tr>
+            <tr style="text-align:center;background-color:#e39bad;font-size:9px;">
+                <td >
+                    Class:11-12
+                </td>
+                <td>
+                    Group: Business Studies
+                </td>
+            </tr>
+            <tr style="text-align:center;background-color:#deb6bf;font-size:9px;">
+                <td>
+                Roll: {{student.class_roll}}
+                </td>
+                <td>
+                    Section: {{student.section}}
+                </td>
+            </tr>
+            <tr style="text-align:center;background-color:#e9e6e6;font-size:9px;">
+                <td>
+                    Session: {{student.session}}
+                </td>
+                <td>
+                    Blood Group: {{student.blood_group}}
+                </td>
+            </tr>
+            <tr style="text-align:center;background-color:#e7bfbf;font-size:9px;">
+                <td colspan="2">
+                    Father's Name: Md. Hasinur Rahman Hasu
+                </td>
+                
+            </tr>
+            <tr style="text-align:center;background-color:#e8aeae;font-size:9px;">
+                <td colspan="2">
+                    Guardian's Mobile No. : 01712539569
+                </td>
+                
+            </tr>
+            <tr valign="bottom" align="center" bgcolor="#fff">
+                <td style="font-size:8px;">
+                    Expiry Date: 30-06-2027
+                </td>
+                <td style="font-size:8px;">
+                    <img src="{% static 'images/principal_signature.png' %}" width="60px" height="20px"><br>
+                    Principal Signature
+                </td>
+            </tr>
+            <tr>
+                <td  colspan="2" align="center" >
+
+        <svg id="barcode" ></svg>
+                </td>
+            
+            </tr>
+            <tr>
+                <td  colspan="2" align="center" bgcolor="red">
+
+        
+                </td>
+            
+            </tr>
+        </table>
         </div>
-      </div>
-    </div>
-  </div>
+        
+    <script>
+    JsBarcode("#barcode", "{{student.class_roll}}", {
+      format: "CODE128",
+      lineColor: "#0aa",
+      textMargin: 0,
+      width:3,
+      height:20,
+      displayValue: false
+    });
+  </script>
+        {% endfor %}
 </div>
 
-<!-- CONTAINER -->
-{% endif %}
+<div class="pagebreak"></div>  
+
+<div class="flex-container">
+    {% for student in students %}
+    
+        <div class="flex-item">
+        <table align="center" cellspacing="0" style="width:200px;height:270px;font-weight:bold;margin-right:7px;" >
+             <tr>
+                <td colspan="2" style="text-align:center;color:#000;height:60px;">
+                        IF FOUND PLEASE RETURN TO 
+                </td>
+            </tr>
+            <tr style="background-color:red;text-align:center;color:white;font-weight:bold;font-size:11px;padding-top:10px;padding-bottom:5px;">
+                <td colspan="2" style="padding-top:11px;padding-bottom:5px;">
+                    GOVT. MOJIBOR RAHMAN BHANDARI WOMEN'S COLLEGE<br>
+                    BOGURA SADAR, BAGURA
+                </td>
+            </tr>
+               
+            <tr>
+                
+                <td align="center" colspan="2">
+                <img src="{% static 'images/gmrwc_logo.png' %}" alt="Avatar" style="width:60px">
+                <p style="line-height:0.004em;margin-top:4px;font-size:9px;">gmrwc.edu.bd</p>
+
+       
+        </tr>
+        
+        
+        
+            <tr>
+                <th colspan="2" style="text-align:center;color:#fff;font-size:12px;">
+                    {{student.name}}
+                </th>
+            </tr>
+            <tr  style="text-align:center;color:#000;font-size:12px;">
+                <td colspan="2" >
+                    Office Contact: 01309119250
+                </td>
+                
+            </tr>
+            <tr style="text-align:center;color:#000;font-size:12px;">
+               <td colspan="2">
+                    Email: gmrwcollege@gmail.com
+                </td>
+            </tr>
+            <tr style="text-align:center;color:#fff;font-size:12px;">
+                <td>
+                    Session: {{student.session}}
+                </td>
+                <td>
+                    Blood Group: {{student.blood_group}}
+                </td>
+            </tr>
+            
+           
+
+            <tr>
+                <td  colspan="2" align="center" >
+
+            <svg id="barcode" ></svg>
+                </td>
+            
+            </tr>
+            <tr>
+                <td  colspan="2" align="center" bgcolor="red">
+
+        
+                </td>
+            
+            </tr>
+        </table>
+        </div>
+        
+    <script>
+    JsBarcode("#barcode", "{{student.class_roll}}", {
+      format: "CODE128",
+      lineColor: "#0aa",
+      textMargin: 0,
+      width:3,
+      height:20,
+      displayValue: false
+    });
+  </script>
+        {% endfor %}
+</div>
+
+  
 
 
- 
-{% endblock  %}
+</body>
+</html> 

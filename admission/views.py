@@ -5,7 +5,7 @@ from student.models import Group,Student,Session,SubjectChoice,SscEquvalent,Stud
 from django.contrib.auth import get_user_model
 from sslcommerz_lib import SSLCOMMERZ
 from payment import sslcommerz 
-from .forms import AdmissionLoginForm,SearchAdmissionForm
+from .forms import AdmissionLoginForm,SearchAdmissionForm,SearchIDCardForm
 from student.forms import AdressFormSet
 from .models import StudentAdmission
 from payment.models import PaymentPurpose
@@ -310,29 +310,36 @@ class SearchAdmissionView(View):
         subject_choice=SubjectChoice.objects.filter(student=student).first()
         ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
         return render(request, 'admission/admission_dummy.html',{'student':student,'ssc_equivalent':ssc_equivalent,'subject_choice':subject_choice})
+
 class IDCardView(View):
-    template_name = 'admission/student_id_card.html'
+    template_name = 'admission/get_id_card.html'
     
     def get(self, request, *args, **kwargs):
         context={}
-        form=SearchAdmissionForm()
+        form=SearchIDCardForm()
         context['form'] = form
         return render(request, self.template_name,context)
 
     def post(self, request, *args, **kwargs):
         context={}
-        roll=request.POST.get('roll').strip()
-        student=Student.objects.filter(class_roll=request.POST.get('roll').strip()).last()
-        if student is None:
-            form=SearchAdmissionForm()
+        roll_from=request.POST.get('roll_from').strip()
+        roll_to=request.POST.get('roll_to').strip()
+        group=request.POST.get('group').strip()
+        session=request.POST.get('session').strip()
+        student1=Student.objects.filter(class_roll=request.POST.get('roll_from').strip()).last()
+        student2=Student.objects.filter(class_roll=request.POST.get('roll_to').strip()).last()
+        students=None
+        if student1 and student2:
+            students=Student.objects.filter(id__range=(student1.id,student2.id),session=session,group=group)
+        print(students)
+        if students is None:
+            form=SearchIDCardForm()
             context['notfound']="Student Not Found, Please complete admission proccess!"
             context['form'] = form
             return render(request, self.template_name,context)
-        context['student'] = student
+        context['students'] = students
         context['session'] = "form"
         context['form'] = "form"
 
 
-        subject_choice=SubjectChoice.objects.filter(student=student).first()
-        ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
-        return render(request, 'admission/student_id_card2.html',context)
+        return render(request, 'admission/student_id_card.html',context)
