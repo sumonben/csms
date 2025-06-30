@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib import admin
 from django.http import HttpResponse
 from import_export.admin import ExportActionMixin,ImportExportMixin
-from .models import Student,Subject,StudentCategory,Class,Session,Group,Division,District,Upazilla,Union,GuardianInfo,Adress,SubjectChoice,SscEquvalent,Choice,TestSubject
+from .models import Student,Subject,StudentCategory,Class,Session,Group,Division,District,Upazilla,Union,GuardianInfo,Adress,SubjectChoice,SscEquvalent,Choice,TestSubject,Department
 from import_export.admin import ExportActionMixin,ImportExportMixin
 from import_export.widgets import ManyToManyWidget,ForeignKeyWidget
 from import_export import resources,fields
@@ -107,6 +107,12 @@ class GroupAdmin(admin.ModelAdmin):
     list_display=[  'id','serial','title_en',]
     list_filter=[  'title_en',]
     list_display_links = ['serial','title_en',]
+
+@admin.register(Department)
+class DepartmentAdmin(ImportExportMixin,admin.ModelAdmin):
+    list_display=[  'id','serial','name','name_en']
+    list_filter=[  'name_en',]
+    list_display_links = ['id','serial','name','name_en']
 
 @admin.register(TestSubject)
 class TestSubjectAdmin(ImportExportMixin,admin.ModelAdmin):

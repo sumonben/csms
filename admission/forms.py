@@ -24,7 +24,7 @@ class SearchAdmissionForm(forms.ModelForm):
 class SearchIDCardForm(forms.ModelForm):
     roll_from= forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm',}))
     roll_to= forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm',}))
-    session= forms.ModelChoiceField(required=True,queryset=Session.objects.all().order_by('-id')[0:2],widget=forms.Select(attrs={'class': 'form-control form-control-sm','required':'true'}))
+    session= forms.ModelChoiceField(required=True,queryset=Session.objects.all(),widget=forms.Select(attrs={'class': 'form-control form-control-sm','required':'true'}))
     group= forms.ModelChoiceField(required=True,queryset=Group.objects.all()[0:3],widget=forms.Select(attrs={'class': 'form-control form-control-sm','required':'true'}))
 
     class Meta:
