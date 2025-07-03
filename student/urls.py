@@ -11,4 +11,5 @@ urlpatterns = [
         path('jsi18n/', django_views.i18n.JavaScriptCatalog.as_view(), name='jsi18n'),
 
 
+
 ]

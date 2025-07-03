@@ -51,11 +51,10 @@ class CheckoutSuccessView(View):
         context={}
         data = self.request.POST
         #print(data)
-        tran_type=PaymentType.objects.filter(id=data['value_d']).first()
-        tran_purpose=PaymentPurpose.objects.filter(payment_type=tran_type).last()
+        # tran_type=PaymentType.objects.filter(id=data['value_d']).first()
+        tran_purpose=PaymentPurpose.objects.filter(id=data['value_d']).last()
         student=Student.objects.filter(class_roll=data['value_a']).first()
         context['tran_purpose']=tran_purpose
-        print(tran_purpose.payment_type.id)
         if tran_purpose.payment_type.id == 1:
                 student.std_id=student.class_roll
                 subject_choice=SubjectChoice.objects.filter(student=student).first()

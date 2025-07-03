@@ -1,11 +1,12 @@
 from django.http import JsonResponse
 from django.shortcuts import render,redirect
 from student.forms import StudentForm,AdressForm,PresentAdressForm,SscEquvalentForm,SubjectChoiceForm,GuardianForm
-from student.models import Group,Student,Session,SubjectChoice,SscEquvalent,StudentCategory,Division,District,Upazilla,Union
+from student.models import Group,Student,Session,SubjectChoice,SscEquvalent,StudentCategory,Division,District,Upazilla,Union,Adress
 from django.contrib.auth import get_user_model
 from sslcommerz_lib import SSLCOMMERZ
 from payment import sslcommerz 
-from .forms import AdmissionLoginForm,SearchAdmissionForm
+from .forms import AdmissionLoginForm,SearchAdmissionForm,SearchIDCardForm
+from student.forms import AdressFormSet
 from .models import StudentAdmission
 from payment.models import PaymentPurpose
 from django.views.generic import View, TemplateView, DetailView
@@ -34,6 +35,7 @@ def admissionLogin(request ):
 
 def admissionForm(request):
     if request.POST.get('username') and request.POST.get('password') :
+        
         str=request.POST.get('username')
         str1=request.POST.get('password')
         str=str[6:9]
@@ -48,6 +50,7 @@ def admissionForm(request):
         student=StudentAdmission.objects.filter(ssc_roll=str1,board=str,status="Not Admitted").last()
         if student:
             try:
+                context={}
                 #student=StudentAdmission.objects.filter(ssc_roll=request.POST.get('password'),board=board[str[-3:]],status='Not Admitted').first()
                 payment_purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
                 group=Group.objects.filter(title_en=student.group).first()
@@ -55,12 +58,14 @@ def admissionForm(request):
                 if group:
                     form = StudentForm(instance=student)
                     subject_form = SubjectChoiceForm(group=group)
+                    adress_formset = AdressFormSet(queryset=Adress.objects.none())
                     adress_form = AdressForm()
                     present_adress_form = AdressForm()
                     ssc_equivalent_form=SscEquvalentForm()
                     guardian_form=GuardianForm()
-                    print(group.title_en)
-                    return render(request, 'admission/admission.html',{'payment_purpose':payment_purpose,'group':group,'form':form,'subject_form':subject_form,'adress_form':adress_form,'ssc_equivalent_form':ssc_equivalent_form,'guardian_form':guardian_form,'present_adress_form':present_adress_form})
+                    context={'payment_purpose':payment_purpose,'group':group,'form':form,'subject_form':subject_form,'adress_form':adress_form,'ssc_equivalent_form':ssc_equivalent_form,'guardian_form':guardian_form,'present_adress_form':present_adress_form}
+                    context['adress_formset']=adress_formset
+                    return render(request, 'admission/admission.html',context)
                     
 
                 else:
@@ -114,6 +119,8 @@ def admissionFormSubmit(request):
         form = StudentForm(request.POST, request.FILES)
         ssc_equivalent_form = SscEquvalentForm(request.POST)
         guardin_form = GuardianForm(request.POST)
+        formset = AdressFormSet(data=request.POST)
+
         adress_form = AdressForm(request.POST)
         
 
@@ -165,9 +172,19 @@ def admissionFormSubmit(request):
             if guardin_form.is_valid():
                 guardin=guardin_form.save()
                 student_form.guardian_info=guardin
-            if adress_form.is_valid:
-                adress=adress_form.save()
-                student_form.permanent_adress=adress
+            if formset.is_valid():
+                adresses=formset.save()
+                for index, adress in enumerate(adresses):
+                    adress.save()
+                    if index == 0:
+                        student_form.permanent_adress=adress
+                    else:
+                        student_form.present_adress=adress
+
+
+            # if adress_form.is_valid:
+            #     adress=adress_form.save()
+            #     student_form.permanent_adress=adress
                 
             
             
@@ -259,12 +276,12 @@ def formDownload(request):
 
 def SubprocessesView(request):
         print(request.GET.get('id'),request.GET.get('value'))
-        if request.GET.get('id')=='id_division':
+        if request.GET.get('id')=='id_form-0-division' or request.GET.get('id')=='id_form-1-division':
             division=Division.objects.filter(id=request.GET.get('value')).first()
             district=District.objects.filter(division=division)
             district=list(district.values())
             print(district)
-        if request.GET.get('id')=='id_district':
+        if request.GET.get('id')=='id_form-0-district' or request.GET.get('id')=='id_form-1-district' :
             division=District.objects.filter(id=request.GET.get('value')).first()
             print(division)
             district=Upazilla.objects.filter(district=division)
@@ -293,3 +310,36 @@ class SearchAdmissionView(View):
         subject_choice=SubjectChoice.objects.filter(student=student).first()
         ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
         return render(request, 'admission/admission_dummy.html',{'student':student,'ssc_equivalent':ssc_equivalent,'subject_choice':subject_choice})
+
+class IDCardView(View):
+    template_name = 'admission/get_id_card.html'
+    
+    def get(self, request, *args, **kwargs):
+        context={}
+        form=SearchIDCardForm()
+        context['form'] = form
+        return render(request, self.template_name,context)
+
+    def post(self, request, *args, **kwargs):
+        context={}
+        roll_from=request.POST.get('roll_from').strip()
+        roll_to=request.POST.get('roll_to').strip()
+        group=request.POST.get('group').strip()
+        session=request.POST.get('session').strip()
+        student1=Student.objects.filter(class_roll=request.POST.get('roll_from').strip()).last()
+        student2=Student.objects.filter(class_roll=request.POST.get('roll_to').strip()).last()
+        students=None
+        if student1 and student2:
+            students=Student.objects.filter(id__range=(student1.id,student2.id))
+        print(students)
+        if students is None:
+            form=SearchIDCardForm()
+            context['notfound']="Student Not Found, Please complete admission proccess!"
+            context['form'] = form
+            return render(request, self.template_name,context)
+        context['students'] = students
+        context['session'] = "form"
+        context['form'] = "form"
+
+
+        return render(request, 'admission/student_id_card.html',context)

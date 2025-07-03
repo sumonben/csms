@@ -57,7 +57,7 @@ class Department(models.Model):
     class Meta:
         ordering = ['serial']
     def __str__(self):
-        return self.name
+        return self.name_en
 
 
 class Branch(models.Model):
@@ -257,7 +257,11 @@ class Student(models.Model):
     user_link.short_description = "User"
     
     def __str__(self):
-        return self.name +':'+ self.phone
+        if self.phone:
+            return self.name +':'+ self.phone
+        else:
+            return self.name +':'+ self.class_roll
+
     
     def __unicode__(self):
         return self.name_bangla

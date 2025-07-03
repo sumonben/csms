@@ -224,47 +224,85 @@
                         
                         <div class="row">
                           <table width="100%" border="1" cellspacing="0" cellpadding="10">
-                            <thead><th colspan="5" style="height: 30px; background-color: #035a4c; color: #fff;text-shadow: 10px 10px 10px rgb(73, 25, 11);padding: 15px;font-size:23px;text-align:center;"> {% if certificate_type.id == 7 %}অভিভাবকের  তথ্য {% else %}  ব্যক্তিগত তথ্য  {% endif %}                                  
+                            <thead><th colspan="5" style="height: 30px; background-color: #035a4c; color: #fff;text-shadow: 10px 10px 10px rgb(73, 25, 11);padding: 15px;font-size:23px;text-align:center;">         Permanent Address                        
                               
                             <tbody>
                             </tbody>
                           </table>
-                      {% for field in present_adress_form %}
+
                       
-                      <div class="col-sm-6">
-                        <label for="" class="col-form-label-sm m-0">{{field.label_tag}}</label> 
-                            
-                            <div class="loginBox">
-                              {{field}}
-                              <span class="fa fa-user"></span>
-                            </div> <!--  --> <div class="invalid-feedback"></div>
-                      </div>
-                      {% endfor %}
+                          {% if adress_formset %}
+             
+                   
+
+                        {{adress_formset.management_form}}
+
+                        {% for form in adress_formset %}
+                        
+                        {% if forloop.counter == 2 %}
+                          <table width="100%" border="1" cellspacing="0" cellpadding="10">
+                            <thead><th colspan="5" style="height: 30px; background-color: #035a4c; color: #fff;text-shadow: 10px 10px 10px rgb(73, 25, 11);padding: 15px;font-size:23px;text-align:center;"> Present Address                                
+                              
+                            <tbody>
+                            </tbody>
+                          </table>
+
+                        {% endif %}
+                          <div class="col-sm-12 form-group">
+                            <div class="row">
+                              <div class="col-sm-4">
+                                <label for="" class="col-form-label-sm m-0">{{form.division.label_tag}}</label>
+                                 <div class="loginBox">
+                                  {{form.division}}
+                                  <span class="fa fa-home"></span>
+                                </div> <!--  --> <div class="invalid-feedback"></div>
+                              </div>
+                              <div class="col-sm-4">
+                                <label for="" class="col-form-label-sm m-0">{{form.district.label_tag}}</label> <div class="loginBox">
+                                  {{form.district}}                      
+                                  <span class="fa fa-map-marker"></span>
+                                </div> <!--  --> <div class="invalid-feedback"></div>
+                              </div>
+                              <div class="col-sm-4">
+                                <label for="" class="col-form-label-sm m-0">{{form.upazilla.label_tag}}</label> <div class="loginBox">
+                                  {{form.upazilla}}                      
+                                  <span class="fa fa-map-marker"></span>
+                                </div> <!--  --> <div class="invalid-feedback"></div>
+                              </div>
+                              <div class="col-sm-4">
+                                    <label for="" class="col-form-label-sm m-0">{{form.post_office.label_tag}}</label> <div class="loginBox">
+                                      {{form.post_office}}                      
+                                      <span class="fa fa-map-marker"></span>
+                                    </div> <!--  --> <div class="invalid-feedback"></div>
+                                  </div>
+                               
+                              <div class="col-sm-4">
+                                    <label for="" class="col-form-label-sm m-0">{{form.house_or_street_no.label_tag}}</label> <div class="loginBox">
+                                      {{form.house_or_street_no}}                      
+                                      <span class="fa fa-map-marker"></span>
+                                    </div> <!--  --> <div class="invalid-feedback"></div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                    <label for="" class="col-form-label-sm m-0">{{form.village_or_house.label_tag}}</label> <div class="loginBox">
+                                      {{form.village_or_house}}                      
+                                      <span class="fa fa-map-marker"></span>
+                                    </div> <!--  --> <div class="invalid-feedback"></div>
+                                  </div>
+                              
+                              
+                            </div>
+                          </div>
+                        
+                        {% endfor %}
+
+
+               
+              {% endif %}
+
                       
                     </div>
                   </div>
-                  <div class="col-sm-12 form-group">
-                        
-                    <div class="row">
-                      <table width="100%" border="1" cellspacing="0" cellpadding="10">
-                        <thead><th colspan="5" style="height: 30px; background-color: #035a4c; color: #fff;text-shadow: 10px 10px 10px rgb(73, 25, 11);padding: 15px;font-size:23px;text-align:center;"> {% if certificate_type.id == 7 %}অভিভাবকের  তথ্য {% else %}  ব্যক্তিগত তথ্য  {% endif %}                                  
-                          
-                        <tbody>
-                        </tbody>
-                      </table>
-                  {% for field in present_adress_form %}
                   
-                  <div class="col-sm-6">
-                    <label for="" class="col-form-label-sm m-0">{{field.label_tag}}</label> 
-                        
-                        <div class="loginBox">
-                          {{field}}
-                          <span class="fa fa-user"></span>
-                        </div> <!--  --> <div class="invalid-feedback"></div>
-                  </div>
-                  {% endfor %}
-                </div>
-              </div>
                 </div>
                       <div class="step d-none">
                         <table width="100%" border="1" cellspacing="0" cellpadding="10">
@@ -817,7 +855,11 @@
   </script>
   <script>
     function myFunctionTeacher(id){
+      var csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+
       var division=document.getElementById(id).value;
+      var $j = jQuery.noConflict();
+
       url="{% url 'get_district'%}";
       alert(url);
       
@@ -825,28 +867,48 @@
         type: 'GET',
         url: "{% url 'get_district'%}",  // Adjust the URL as per your project structure
         data: {id:id,'value':division},
-       
+        headers: {
+               'X-CSRFToken': csrfToken
+           },
        
         success: function (response) {
           alert(response.district);
             //document.getElementById("student_form").reset();
             if (response.status === 'success') {
-              if(id=='id_division'){
-              $("#id_district option").remove();
-              $("#id_district").append('<option '+'value="0">'+ '-----------' +'</option>');
+              if(id=='id_form-0-division'){
+              $("#id_form-0-district option").remove();
+              $("#id_form-0-district").append('<option '+'value="0">'+ '-----------' +'</option>');
                     for (var i = response.district.length - 1; i >= 0; i--) {
-                                  $("#id_district").append('<option '+'value="'+response.district[i].id+'">'+ response.district[i].name_en +'</option>');
+                                  $("#id_form-0-district").append('<option '+'value="'+response.district[i].id+'">'+ response.district[i].name_en +'</option>');
                               }
                 }
-              if(id=='id_district'){
+              if(id=='id_form-0-district'){
   
-                $("#id_upazilla option").remove();
-              $("#id_upazilla").append('<option '+'value="0">'+ '-------------' +'</option>');
+                $("#id_form-0-upazilla option").remove();
+              $("#id_form-0-upazilla").append('<option '+'value="0">'+ '-------------' +'</option>');
                     for (var i = response.district.length - 1; i >= 0; i--) {
-                                  $("#id_upazilla").append('<option '+'value="'+response.district[i].id+'">'+ response.district[i].name_en +'</option>');
+                                  $("#id_form-0-upazilla").append('<option '+'value="'+response.district[i].id+'">'+ response.district[i].name_en +'</option>');
                               }
   
               }
+
+              if(id=='id_form-1-division'){
+              $("#id_form-1-district option").remove();
+              $("#id_form-1-district").append('<option '+'value="0">'+ '-----------' +'</option>');
+                    for (var i = response.district.length - 1; i >= 0; i--) {
+                                  $("#id_form-1-district").append('<option '+'value="'+response.district[i].id+'">'+ response.district[i].name_en +'</option>');
+                              }
+                }
+              if(id=='id_form-1-district'){
+  
+                $("#id_form-1-upazilla option").remove();
+              $("#id_form-1-upazilla").append('<option '+'value="0">'+ '-------------' +'</option>');
+                    for (var i = response.district.length - 1; i >= 0; i--) {
+                                  $("#id_form-1-upazilla").append('<option '+'value="'+response.district[i].id+'">'+ response.district[i].name_en +'</option>');
+                              }
+  
+              }
+  
   
             } else {
              ///alert("Success message not found");
@@ -865,7 +927,6 @@
     } 
     </script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   
   <script>
     

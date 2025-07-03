@@ -28,8 +28,13 @@
             <td>{{student.class_roll}}</td>
            </tr>
            <tr>
+            {%if student.department %}
+            <td>Department:</td>
+            <td>{{student.department}}</td>
+            {% else %}
             <td>Group:</td>
             <td>{{student.group}}</td>
+            {% endif %}
            </tr>
            <tr>
             <td>Amout:</td>

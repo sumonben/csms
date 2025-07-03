@@ -7,6 +7,7 @@
         text-align:center;
         font-family:kalpurush;
         font-weight:bold;
+        margin-left:-10px;
         
 
     }
@@ -43,10 +44,10 @@
         .heading{
             color:#fff;
             text-shadow: 4px 4px 4px rgb(65, 7, 7);
-            font-size: 14px;
+            font-size: 13px;
             padding:0px;
-            margin-left:-10px;
-            margin-top:-20px;
+            margin-left:-28px;
+            margin-top:-35px;
             text-align:center;
             font-weight:bold;
             word-wrap: break-word;
@@ -152,8 +153,8 @@
         <a id="main-heading" href="/" class="navbar-brand logo active router-link-active" aria-current="page" > 
            
                                           
-                  <span class="heading" id="heading">GOVT. MUJIBUR RAHMAN WOMEN'S COLLEGE</span><br>
-                  <span id="sub-heading" class="sub-heading"   >BAGURA SADAR, BOGURA</span>
+                  <span class="heading" id="heading">GOVT. MOJIBOR RAHMAN BHANDARI WOMEN'S COLLEGE</span><br>
+                  <span id="sub-heading" class="sub-heading"   >BOGURA SADAR, BOGURA</span>
 
                
              
@@ -178,7 +179,7 @@
 
                 <li class="nav-item nav-item dropdown"><a href=""   aria-expanded="false" class="{% if request.resolver_match.url_name in 'download_license_form' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Certificates</a>
                    
-                </li> 
+                </li>
                 <li class="nav-item nav-item dropdown"><a href="{% url 'get_payment_receipt' %}"   aria-expanded="false" class="{% if request.resolver_match.url_name in 'get_payment_receipt' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Payment Receipt</a>
                    
                 </li> 
