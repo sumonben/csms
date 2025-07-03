@@ -16,10 +16,10 @@ class Attendance(models.Model):
     
 class DailyAttendance(models.Model):
     date=models.DateField(auto_now_add=True, null=True)
-    science=models.ImageField(default=0)
-    humanities=models.ImageField(default=0)
-    business_studies=models.ImageField(default=0)
-    all=models.ImageField(default=0)
+    science=models.IntegerField(default=0)
+    humanities=models.IntegerField(default=0)
+    business_studies=models.IntegerField(default=0)
+    all=models.IntegerField(default=0)
     session=models.ForeignKey(Session,blank=True,null=True,on_delete=models.SET_NULL)
     student_category=models.ForeignKey(StudentCategory,blank=True,null=True,on_delete=models.SET_NULL)
     group=models.ForeignKey(Group,blank=True,null=True,on_delete=models.SET_NULL)

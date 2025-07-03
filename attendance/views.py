@@ -40,16 +40,29 @@ class GetStudentView(View):
             if student and attendance is None:
                     Attendance.objects.create(name=student.name,class_roll=student.class_roll,student=student,group=student.group,section=student.section,session=student.session,department=student.department)
                     daily_date=DailyAttendance.objects.filter(date=date.today(),session=student.session).first()
+                    print(daily_date)
                     if daily_date:
                         if student.group.title_en== "Science":
-                            daily_date.science+=1
+                            print("Sciemve")
+                            daily_date.science += 1
                         if student.group.title_en== "Humanities":
                             daily_date.humanities+=1
                         if student.group.title_en== "Business Studies":
                             daily_date.business_studies+=1
+                        daily_date.all += 1
+                        daily_date.save()
                     else:
-                        pass
-                        # DailyAttendance.objects.create(date=date.today(),science=0,humanities=0,business_studies=0,all=0)
+                        science=0
+                        humanities=0
+                        business_studies=0
+                        if student.group.title_en== "Science":
+                            print("Sciemve")
+                            science = 1
+                        if student.group.title_en== "Humanities":
+                            humanities=1
+                        if student.group.title_en== "Business Studies":
+                            business_studies=1
+                        DailyAttendance.objects.create(date=date.today(),science=science,humanities=humanities,business_studies=business_studies,all=1,session=student.session)
         student=list(students.values())
            
         return JsonResponse({'status': 'success','meaasge':'Account created Successfully','student':student,'group':group,'session':session},safe=False)
