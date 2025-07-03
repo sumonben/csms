@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'certificate',
     'rangefilter',
     'payment',
-    'result'
+    'result',
+    'attendance'
 ]
 
 MIDDLEWARE = [

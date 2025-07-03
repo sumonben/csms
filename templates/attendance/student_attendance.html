@@ -1,0 +1,242 @@
+
+{% extends 'basepage/ictparkbd_layout_admission.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    .main_body{
+        width:100%;
+        height:100%;
+        color:red;
+    }
+    option{
+      color:#035a4c;
+      font-weight:bold;
+      font-size:17px;
+    }
+    option:hover:after{
+      background-color:#035a4c;
+      font-weight:bold;
+    }
+    @media(max-width:767px){
+        .main_body{
+            width:100%;
+            height:700px;
+            color:red;
+            background-color:green;
+        }   
+    }
+</style>
+ <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  
+  <script type="text/javascript" src="{% url 'jsi18n' %}" > </script>
+  <script type="text/javascript" src="{% static 'admin/js/jquery.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
+  <script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
+  <script type="text/javascript" src="{% static 'admin/js/SelectBox.js' %}"></script>
+  <script type="text/javascript" src="{% static 'admin/js/SelectFilter2.js' %}"></script>
+  <script src="https://www.nothi.gov.bd/assets/global/plugins/jquery.min.js" type="text/javascript"></script> 
+<div class="services">
+  
+  <div data-v-6f04a53f="" class="memberRegistration py-5" >
+    <div class="container-wrapper">
+                           <input type="text" name="roll" class="form-control form-control-sm" required="" id="id_roll" oninput="myFunctionTeacher(this.id);"> 
+      <div class="row justify-content-md-center">
+        <div class="col col-lg-10">
+          <div class="card login-body shadow-lg rounded-10 py-5">
+            <table width="100%" border="1" cellspacing="0" cellpadding="10">
+              <thead><th colspan="5" style="height: 40px; background-color: #035a4c; color: #fff;padding: 15px;font-size:20px;text-align:center;"> Studen ID Card Form   <span class="fa fa-certificate"></span>
+</th></thead>
+              {% if notfound %}
+              <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 40px; background-color:rgb(168, 8, 8); color: #fff;padding: 20px;"> Student not found!! Re=Enter Right Information or Contact  control room</th></thead>
+              {% endif %}
+              {% if message %}
+              <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 40px; background-color:rgb(168, 8, 8); color: #fff;padding: 15px;"> {{message}} </th></thead>
+              {% endif %}
+              <tbody>
+              </tbody>
+            </table>
+                <div class="card-body">
+
+                <span class="bubbleNew"><img src="{%static 'images/ictpark_monogram.png'%}" class="rounded-circle" style="width: 200px;height: 200px;" /></span>
+
+                <span class="shape"><img align="center" src="{% static 'images\9999.jpg' %}"><img align="center" style="height:60%;margin-top:10%;rotate: -50deg;" src="{% static 'images\gmrwc_logo.png' %}"></span> 
+                {%if email %}
+            
+            <div class="alert alert-danger" role="alert">
+              <strong>{{email}}</strong> 
+            </div>
+            
+            {% endif %}
+            {%if phone %}
+            
+            <div class="alert alert-danger" role="alert">
+              <strong>{{phone}}</strong> 
+            </div>
+            
+            {% endif %} 
+            
+            {%if password %}
+            
+            <div class="alert alert-danger" role="alert">
+              <strong>{{password}}</strong> 
+            </div>
+            
+            {% endif %}
+            
+            {%if success %}
+            
+            <div class="alert alert-success" role="alert">
+              <strong>{{success}}</strong> 
+            </div>
+            
+            {% endif %}
+            
+            <form autocomplete="off" id="form" class="form-row px-3" method="post" action="{% url 'get_student' %}" target="_blank">
+               {% csrf_token %}
+                           
+                        
+{% comment %} 
+                <div class="col-sm-4 form-group" style="margin:auto;">
+                              <div class="row">
+                                <div class="col-sm-4" >
+                                  <label for="" class="col-form-label-sm m-0" style="font-size:20px;">Roll</label> 
+                                  <div class="loginBox">
+                                   
+                                  </div> <!--  --> 
+                                </div>
+                                
+                                 
+                              </div>
+               </div>
+ {% endcomment %}
+
+
+              
+              
+             
+              
+            </form>
+
+
+
+
+             
+                            <div class="col-sm-12 form-group" style="margin:auto;">
+                              <div class="row">
+                                 <div class="col-sm-6" >
+                                <img id="image" src="{% static 'images/logo.png' %}" width="300">
+                                <table>
+                                  <thead>
+                                    <th>Name:</th>
+                                     <th id="name"></th>
+                                  </thead>
+                                  <tr>
+                                    <td>Roll:</td>
+                                    <td id="roll"></td>
+                                  </tr>
+                                   <tr>
+                                    <td>Group:</td>
+                                    <td id="group"></td>
+                                  </tr> 
+
+                                  <tr>
+                                    <td>Section:</td>
+                                    <td id="section"></td>
+                                  </tr> 
+                                  <tr>
+                                    <td>Session</td>
+                                    <td id="session"></td>
+                                  </tr>
+                                </table>
+                                </div>
+                                <div class="col-sm-6" style="text-align:center" >
+                                   <caption>Todays Attendance Details</caption>
+                                  <table align="center">
+                                   
+                                  <thead>
+                                    <th>Science:</th>
+                                     <th>Humanities</th>
+                                     <th>Business Studies</th>
+                                  </thead>
+                                  <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                  </tr>
+                                  
+                                </table>
+                                </div>
+                                
+                                 
+                              </div>
+                            </div>
+
+
+
+
+
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTAINER -->
+   
+ 
+  <script>
+    function myFunctionTeacher(id){
+      var csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+
+      var roll=document.getElementById(id).value;
+      if (roll.length==6){
+          var $j = jQuery.noConflict();
+        $.ajax({
+        type: 'POST',
+        url: "{% url 'get_student'%}",  // Adjust the URL as per your project structure
+        data: {id:id,'value':roll},
+        headers: {
+               'X-CSRFToken': csrfToken
+           },
+       
+        success: function (response) {
+          
+            if (response.status === 'success') {
+
+                
+               document.getElementById("image").src="/static/images/hsc-2024-25/"+response.student[0].class_roll+".jpg";
+              document.getElementById("name").innerText=response.student[0].name;
+              document.getElementById("roll").innerText=response.student[0].class_roll;
+              document.getElementById("group").innerText=response.group;
+              document.getElementById("section").innerText=response.student[0].section;
+              document.getElementById("session").innerText=response.session;
+  
+            } else {
+             ///alert("Success message not found");
+                    
+                }
+                
+        },
+        error: function (xhr, status, error) {
+           
+            var err = eval("(" + xhr.responseText + ")");
+            alert(err.Message);
+        }
+    });
+      }
+      
+      
+    } 
+    </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+ 
+{% endblock  %}
+
+
+
