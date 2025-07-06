@@ -103,7 +103,7 @@ class UnionAdmin(ImportExportMixin,admin.ModelAdmin):
     
 
 @admin.register(Group)
-class GroupAdmin(admin.ModelAdmin):
+class GroupAdmin(ImportExportMixin,admin.ModelAdmin):
     list_display=[  'id','serial','title_en',]
     list_filter=[  'title_en',]
     list_display_links = ['serial','title_en',]

@@ -30,6 +30,15 @@
     margin: auto;
 }
 
+.flex-container-back {
+    display: flex;
+    flex-direction:row-reverse;
+    flex-wrap: wrap;
+    gap: 30px;
+    width:100%;
+    margin: auto;
+}
+
 .flex-item {
     box-sizing: border-box;
     background-color: #ffffff;
@@ -55,7 +64,14 @@
     text-align:center;
 
 }
+ .flex-container-back{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px 1px;
+    margin: auto;
+    text-align:center;
 
+}
 .flex-item {
     background-color: #ffffff;
     border-radius: 0px;
@@ -78,12 +94,12 @@
 <body>
 <table align="center">
     <tr>
-        <td align="center" style="text-align:center">
-<div class="flex-container">
+        <td align="center" >
+<div class="flex-container" >
     
     {% for student in students %}
     
-        <div class="flex-item" style="margin-right:1px">
+        <div class="flex-item" style="text-align:center;margin-left:33px;margin-top:1px;">
         <table align="center" cellspacing="0" style="background-color:pink;width:200px;height:275px;font-weight:bold;font-family:arial;margin-right:1px" >
             <tr style="background-color:#DC143C;text-align:center;color:white;font-weight:bold;font-family:arial-black;font-size:12px;padding-top:10px;padding-bottom:5px;">
                 <td colspan="2" style="padding-top:7px;padding-bottom:5px;">
@@ -111,7 +127,7 @@
         
         
             <tr>
-                <th colspan="2" style="text-align:center;color:#000;font-size:12px;background-color:#e67e97">
+                <th id="name{{student.id}}" colspan="2" style="text-align:center;color:#000;font-size:12px;background-color:#e67e97">
                     {{student.name}}
                 </th>
             </tr>
@@ -171,6 +187,7 @@ gmrwc
         </div>
         
     <script>
+       
     JsBarcode("#barcode{{student.class_roll}}", "{{student.class_roll}}", {
       format: "CODE128",
       lineColor: "#0aa",
@@ -179,17 +196,21 @@ gmrwc
       height:20,
       displayValue: false
     });
+    var h=document.getElementById("name{{student.id}}").offsetHeight;
+    if(h>16){
+        document.getElementById("name{{student.id}}").style="font-size:11px;background-color:#e67e97";
+    }
   </script>
         {% endfor %}
 </div>
 
 <div class="pagebreak"></div>  
 
-<div class="flex-container">
+<div class="flex-container-back">
     {% for student in students %}
     
-        <div class="flex-item">
-        <table align="center" cellspacing="0" style="width:200px;height:270px;font-weight:bold;margin-right:7px;" >
+    <div class="flex-item" style="text-align:center;margin-left:-2px;margin-right:36px;margin-top:2px;">
+        <table align="center" cellspacing="0" style="background-color:pink;width:200px;height:275px;font-weight:bold;font-family:arial;margin-right:1px" >
              <tr>
                 <td colspan="2" style="text-align:center;color:#000;height:60px;">
                         IF FOUND PLEASE RETURN TO 
@@ -234,7 +255,7 @@ gmrwc
                     Session: {{student.session}}
                 </td>
                 <td>
-                    Blood Group: {{student.blood_group}}
+                    Blood Group: A+
                 </td>
             </tr>
             
@@ -266,6 +287,7 @@ gmrwc
       height:20,
       displayValue: false
     });
+    
   </script>
         {% endfor %}
 </div>

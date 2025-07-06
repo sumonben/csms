@@ -12,5 +12,7 @@ class StudentAdmin(ImportExportMixin,admin.ModelAdmin):
 @admin.register(DailyAttendance)
 class DailyAttendanceAdmin(ImportExportMixin,admin.ModelAdmin):
     search_fields=['date',]
-    list_display=[ 'date','science','humanities','business_studies','all']
-    list_display_links = ['date',]
+    list_display=[ 'date','science','humanities','business_studies','all','session']
+    list_display_links = ['date','session']
+    list_filter=['date','session',]
+

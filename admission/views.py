@@ -225,10 +225,10 @@ def admissionFormSubmit(request):
                         subject.save()
 
         print(subject_form.errors)
-
+        purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
         cradentials = {'store_id': 'israb672a4e32dfea5',
             'store_pass': 'israb672a4e32dfea5@ssl', 'issandbox': True} 
-            
+          
         sslcommez = SSLCOMMERZ(cradentials)
         body = {}
         body['student'] = request.POST.get('name')
@@ -254,7 +254,7 @@ def admissionFormSubmit(request):
         body['value_a'] = student_form.class_roll
         body['value_b'] = student_form.name
         body['value_c'] = student_form.phone
-        body['value_d'] = 1          
+        body['value_d'] = purpose.id         
         response = sslcommez.createSession(body)
         print(response["sessionkey"])   
 
@@ -330,8 +330,7 @@ class IDCardView(View):
         student2=Student.objects.filter(class_roll=request.POST.get('roll_to').strip()).last()
         students=None
         if student1 and student2:
-            students=Student.objects.filter(id__range=(student1.id,student2.id))
-        print(students)
+            students=Student.objects.filter(id__range=(student1.id,student2.id),session=session,group=group)
         if students is None:
             form=SearchIDCardForm()
             context['notfound']="Student Not Found, Please complete admission proccess!"

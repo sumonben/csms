@@ -191,7 +191,7 @@
                                     
                                     <div class="loginBox">
                                       <select class='form-control form-control-sm' id="purpose" name="purpose">
-                                        <option value="1">
+                                        <option value="{{payment_purpose.id}}">
                                           {{ payment_purpose.title_en }}
                                         </option>
                                       </select>
@@ -861,7 +861,6 @@
       var $j = jQuery.noConflict();
 
       url="{% url 'get_district'%}";
-      alert(url);
       
         $.ajax({
         type: 'GET',
@@ -872,7 +871,6 @@
            },
        
         success: function (response) {
-          alert(response.district);
             //document.getElementById("student_form").reset();
             if (response.status === 'success') {
               if(id=='id_form-0-division'){
