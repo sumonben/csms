@@ -12,11 +12,11 @@ from smart_selects.db_fields import ChainedForeignKey
 from datetime import datetime
 import os
 
-
 UserModel=get_user_model()
+
 def rename_image(instance, filename):
         ext = filename.split('.')[-1]
-        filename = str(instance.class_roll)+'.'+ext
+        filename = instance.class_roll+'.'+ext
         year=str(datetime.now().year)
         return os.path.join('media/student/'+year, filename)
 # Create your models here.
@@ -39,7 +39,7 @@ class StudentCategory(models.Model):
     class Meta:
         ordering = ['serial']
     def __str__(self):
-        return self.title
+        return self.title_en
     
 class Department(models.Model):
     serial=models.IntegerField(default=10)
@@ -77,7 +77,7 @@ class Session(models.Model):
     title_en=models.CharField(max_length=100,unique=True,blank=True,null=True)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['serial']
     def __str__(self):
         return self.title_en
     
@@ -90,7 +90,7 @@ class Class(models.Model):
     class Meta:
         ordering = ['serial']
     def __str__(self):
-        return self.title
+        return self.title_en
     
 
   
@@ -123,6 +123,7 @@ class TestSubject(models.Model):
     group=models.ManyToManyField(Group, blank=True,)
     department=models.ManyToManyField(Department, blank=True,)
     type=models.CharField(max_length=25,blank=True,null=True)
+    is_practical=models.BooleanField(default=False)
     is_available=models.BooleanField(default=True)
 
 
@@ -200,7 +201,7 @@ class GuardianInfo(models.Model):
 class Adress(models.Model):
     serial=models.IntegerField(default=10)
     village_or_house=models.CharField(max_length=50,blank=True,null=True)
-    house_or_street_no=models.CharField(max_length=25,blank=True,null=True)
+    house_or_street_no=models.CharField(max_length=25,blank=True,null=True,verbose_name="Ward or Street No")
     post_office=models.CharField(max_length=25,blank=True,null=True)
     division=models.ForeignKey(Division,blank=True,null=True,on_delete=models.SET_NULL)
     district=models.ForeignKey(District,blank=True,null=True,on_delete=models.SET_NULL)
@@ -242,7 +243,7 @@ class Student(models.Model):
     present_adress=models.ForeignKey(Adress,null=True, blank=True,related_name="present_adress",on_delete=models.SET_NULL)
     permanent_adress=models.ForeignKey(Adress,null=True, blank=True,related_name="permanent_adress",on_delete=models.SET_NULL)
     image=models.ImageField(upload_to=rename_image,blank=True,null=True) 
-    signature=models.ImageField(upload_to='media/student/%Y',blank=True,null=True)
+    signature=models.ImageField(upload_to='media/',blank=True,null=True)
     user=models.OneToOneField(UserModel,blank=True,null=True,on_delete=models.CASCADE)
     is_active=models.BooleanField(default=False)
     fourth_subject=models.ForeignKey(Subject,blank=True,null=True,on_delete=models.SET_NULL)
@@ -257,15 +258,20 @@ class Student(models.Model):
     user_link.short_description = "User"
     
     def __str__(self):
-        if self.phone:
-            return self.name +':'+ self.phone
-        else:
-            return self.name +':'+ self.class_roll
-
-    
+       
+        if self.phone and self.name :
+                return self.name +':'+ self.phone
+        return self.name +':'+ self.class_roll    
+        
     def __unicode__(self):
         return self.name_bangla
     def delete(self, *args, **kwargs):
+        if self.permanent_adress:
+            adress=Adress.objects.filter(id=self.permanent_adress.id).last()
+            adress.delete()
+        if self.present_adress:
+            adress=Adress.objects.filter(id=self.present_adress.id).last()
+            adress.delete()
         if bool(self.image) == True :
             os.remove(self.image.path)
         super(Student, self).delete(*args, **kwargs)
@@ -289,7 +295,7 @@ class SscEquvalent(models.Model):
     class Meta:
         ordering = ['serial']
     def __str__(self):
-        if self.student:
+        if self.student and self.student.phone:
             return self.student.name+': '+self.student.phone
         return '1'
     
@@ -305,7 +311,7 @@ class SubjectChoice(models.Model):
     class Meta:
         ordering = ['serial']
     def __str__(self):
-        if self.student is not None:
+        if self.student is not None and self.student.phone:
             return self.student.name+': '+self.student.phone
         return '1'
   
@@ -322,8 +328,8 @@ class Choice(models.Model):
     subject6=models.ForeignKey(Subject,related_name='subject6',blank=True,null=True,on_delete=models.SET_NULL)
     fourth_subject=models.ForeignKey(Subject,blank=True,null=True,on_delete=models.SET_NULL)
     class Meta:
-        ordering = ['id']
+        ordering = ['class_roll']
     def __str__(self):
-        if self.class_roll is not None:
-            return self.class_roll+': '+self.name
+        if self.class_roll is not None and self.name:
+            return self.class_roll+': '+ self.name
         return self.class_roll

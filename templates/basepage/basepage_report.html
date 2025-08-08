@@ -1,0 +1,312 @@
+{% load static  %}
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
+    <title>{{student.class_roll}}_result_gmrwc</title>
+    <link rel="icon" href="{% static 'images/gmrwc_logo.png'%}" type="image/x-icon">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta name="publisher" content="Govt. Mojibor rahman Women's Collge">
+    <meta name="copyright" content="Govt. Mojibor rahman Women's Collge">
+    <meta name="author" content="Design/Developed by: Tarique Sumon :: Govt. Mojibor rahman Women's Collge">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Govt. Mojibor rahman Women's Collge">
+    <meta name="keywords" content="gmrwc, college, women's, mohila college,Bogura, Govt. Mojibor rahman Women's Collge, Mojibor rahman Women's Collge, Mojibor rahman Collge, Admission, HSC, NU, National University, bcs advertisement, Admit Card, Applicant's Copy">
+    <link href="{% static 'css/admission/bootstrap.min.css'%}" rel="stylesheet">
+    <link href="{% static 'css/admission/style.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/admission/admission.css'%}" rel="stylesheet" type="text/css">
+    <!--<script src="../Scripts/swfobject_modified.js" type="text/javascript"></script>
+    <script src="../SpryAssets/SpryValidationTextField.js" type="text/javascript"></script> 
+    <script src="../SpryAssets/SpryValidationPassword.js" type="text/javascript"></script>-->
+    
+    <link href="{% static 'css/admission/SpryValidationTextField.css'%}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/admission/SpryValidationPassword.css'%}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/widgets.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/register/toaster.min.css' %}">
+
+    
+    <script type="text/javascript" src="{% static 'admin/js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
+    <script type="text/javascript" src="{% static 'admin/js/SelectBox.js' %}"></script>
+    <script type="text/javascript" src="{% static 'admin/js/SelectFilter2.js' %}"></script>
+
+    
+    <style>
+      @font-face {
+        font-family: "kalpurush";
+        src: url("//file-rajshahi.portal.gov.bd/media/central/themes/theme-default/fonts/Kalpurush.eot");
+        src: url("//file-rajshahi.portal.gov.bd/media/central/themes/theme-default/fonts/Kalpurush.woff") format("woff"),
+          url("//file-rajshahi.portal.gov.bd/media/central/themes/theme-default/fonts/Kalpurush.ttf") format("truetype"),
+          url("//file-rajshahi.portal.gov.bd/media/central/themes/theme-default/fonts/Kalpurush.svg#Kalpurush") format("svg"),
+          url("//file-rajshahi.portal.gov.bd/media/central/themes/theme-default/fonts/Kalpurush.eot?#iefix") format("embedded-opentype");
+        font-weight: normal;
+        font-style: normal;
+      }
+        body {
+            font-family: kalpurush;
+            margin-left: 0px;
+            margin-top: 20px;
+            margin-right: 0px;
+            margin-bottom: 20px;
+            background-color: #989ea2;
+            background-position: left top;
+            background-repeat: repeat-x;
+            background-image: url("{% static 'images/main_bg.png'%}");
+        }
+        button#print, button#next-btn, button#submit-btn {
+          font-size: 17px;
+          font-weight: bold;
+          position: relative;
+          width: 150px;
+          height: 50px;
+          background: #2d5986;
+          margin-left: 50%;
+          margin-top: 20px;
+          overflow: hidden;
+          z-index: 1;
+          cursor: pointer;
+          transition: color .3s;
+          text-align: center;
+          color: #fff;
+          border: 0;
+          -webkit-border-bottom-right-radius: 5px;
+          -webkit-border-bottom-left-radius: 5px;
+          -moz-border-radius-bottomright: 5px;
+          -moz-border-radius-bottomleft: 5px;
+          border-bottom-right-radius: 5px;
+          border-bottom-left-radius: 5px;
+        }
+        button#print:after, button#next-btn:after, button#submit-btn:after {
+          position: absolute;
+          top: 90%;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: #05812a;
+          content: "";
+          z-index: -2;
+          transition: transform .3s;
+        }
+        button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover::after {
+          transform: translateY(-80%);
+          transition: transform .3s;
+        }
+        .main-right {
+            background-image: url("{% static 'images/main_06.png'%}");
+        }
+        .main-left {
+            background-image: url("{% static 'images/main_04.png'%}");
+
+        }
+        .main-button {
+            background-image: url("{% static 'images/main_08.png'%}");
+
+        }
+        .main-top{
+            background-image: url("{% static 'images/main_02.png'%}");
+
+        } 
+        
+      
+      
+        #toast-container {
+          opacity: 1;
+          visibility: hidden;
+          
+        }
+        #toast-container.toast-top-center{
+          animation: fadeInAnimation ease 8s;
+          animation-iteration-count: 1;
+          animation-fill-mode: forwards;
+        }
+        #toast-container:hover{
+        animation-play-state: paused; 
+        }
+        @keyframes fadeInAnimation {
+          0% {
+              opacity: 1;
+          }
+        
+          50% {
+              opacity: 1;
+          }
+          100% {
+              opacity: 0;
+              visibility: hidden;
+          }
+        }
+          
+       @media(max-width: 786px){
+          .container{
+            width: 100%;
+            padding: 0px;
+          }
+
+       } 
+       @media(max-width: 991px){
+        fieldset{
+          width: auto;
+          margin-left: 20px;
+        }
+          .box_container{
+            width: 100%;
+            padding: 0px;
+            margin: 2px;
+          }
+          #qbox-container{
+            width: 100%;
+            padding: 0px;
+          }
+          #steps-container{
+            width: 100%;
+            padding: 0px;
+          }
+
+       }
+       table#grade th, table#grade td {
+        border:1px solid rgb(253, 253, 253);
+        
+        padding:0.1em;
+        -webkit-print-color-adjust: exact; 
+
+        } 
+
+       
+    </style>
+    </head>
+    
+    <body>
+        
+
+        <table id="main_table" border="0" cellpadding="5" cellspacing="0" class="cyan11">
+            <tbody>
+        </tbody></table>
+    <table   width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
+      <tbody><tr>
+        <td>
+          <table width="1000" border="0" cellspacing="0" cellpadding="0">
+            <tbody><tr>
+              <td width="19"><img id="img1" src="{% static 'images/main_01.png'%}" width="19" height="22"></td>
+              <td width="961" class="main-top">&nbsp;</td>
+              <td width="20"><img id="img3" src="{% static 'images/main_03.png'%}" width="20" height="22"></td>
+            </tr>
+            <tr>
+              <td class="main-left">&nbsp;</td>
+              <td style="padding:1.3em;" bgcolor="#003300"><table width="961" border="0" cellpadding="0" cellspacing="0" class="gap01">
+                <tbody>
+                  <tr>
+                  <td align="left" valign="top" bgcolor="#009999" class="bdr-body"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tbody>
+                      <tr>
+                      {% comment %} <td width="12%" height="140" align="right" valign="middle"><img src="{% static 'images/gmrwc_logo.png'%}" width="90" height="90"></td> {% endcomment %}
+                      <td width="100%" height="140" align="center" valign="middle">
+                                              
+                        <span class="GrayBlue14b" style="color:#fff;font-family: kalpurush;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</span><br>
+                      <span class="GrayBlue20bold" style="color:#fff;font-size:38px;font-family: kalpurush;">সরকারি মজিবর রহমান  ভান্ডারী মহিলা কলেজ<br>
+                         বগুড়া সদর, বগুড়া</span>
+                      </td>
+
+                      {% comment %} <td width="15%" height="140" align="left" valign="middle"><span class="XamName" style="color:#fff;font-family: kalpurush;"><b>{{exam}} </b><sup></sup> <br></span><br>
+               <span class="XamName" style="color:#fff">Result Card</span><br>
+               <span class="black10bold"></span></td> {% endcomment %}
+                      </tr>
+                  </tbody></table>
+                
+                
+                </td>
+                </tr>
+                <tr>
+                  <td align="left" valign="top">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td align="left" valign="top">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="bdr-toplink"><tbody><tr><td bgcolor="#025A8A">
+                    <table border="0" cellpadding="5" cellspacing="0" class="cyan11">
+                    <tbody>
+                  </tbody>
+                  </table>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+              </td>
+              </tr>
+
+                <tr>
+                  <td align="left" valign="top">&nbsp;</td>
+                </tr>
+               
+                <tr>
+                  <td  id="main_body" bgcolor="#C9DAED" class="bdr-body" valign="top" >
+                    <table id="middle_head"  width="100%"  align="center" > 
+                      <tr>
+                        <td rowspan="3">
+                        </td> 
+                        <td align="center">                   
+                      <span class="GrayBlue20bold" style="color:#76576;font-size:38px;font-family: kalpurush;">
+                        {{exam.title}}
+                        </span>
+                      </td>
+                          <td rowspan="3">
+                            
+                          </td>
+                        </tr>
+                          <tr>
+                            <td  align="center" valign="middle"><img src="{% static 'images/gmrwc_logo.png'%}" width="100" height="100" ><br>
+                                <span class="GrayBlue20bold" style="color:#76576;font-size:30px;line-height:1.8;font-family: kalpurush;">পরীক্ষার ফলাফলের রিপোর্ট</span>
+                            </td>
+                            </tr>
+                           
+                    </table>
+    <!-- CONTAINER -->
+    {% block content %}
+    
+    {% endblock %}
+  </td>
+</tr>
+<tr>
+  <td align="left" valign="top">&nbsp;</td>
+</tr>
+<tr>
+  <td align="left" valign="top" bgcolor="#B3CBE6" class="bdr-body"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tbody><tr>
+       <td width="0%" height="50" align="center" valign="middle" class="black10">&nbsp;</td>
+      <td width="49%" height="50" align="left" valign="middle">
+      <table width="100%" border="0" cellpadding="5" cellspacing="0" class="black10">
+        <tbody><tr>
+          <td width="85%" align="left" valign="middle">Helpline: office (10:00am - 04:00pm)</td>
+        </tr>
+        <tr>
+          <td align="left" valign="middle">©2025, Govt. Mojibor Rahman Bhandari Women's College, All Rights Reserved.<br>Developed by Tarique Sumon(Lecturer ICT) </td>
+        </tr>
+      </tbody></table></td>
+      <td width="40%" height="50" align="left" valign="middle"><table width="100%" border="0" cellpadding="5" cellspacing="0" class="black10">
+        <tbody><tr>
+          <td width="85%" align="right" valign="middle">&nbsp;</td>
+        </tr>
+        <tr>
+          <td align="right" valign="middle">powered by</td>
+        </tr>
+      </tbody></table></td>
+      <td width="10%" height="50" align="center" valign="middle"><img src="{% static 'images/gmrwc_logo.png'%}"  height="44" alt=""></td>
+      </tr>
+      
+  </tbody></table></td>
+</tr>
+</tbody></table></td>
+<td class="main-right">&nbsp;</td>
+</tr>
+<tr>
+<td><img id="img7" src="{% static 'images/main_07.png'%}" width="19" height="19"></td>
+<td class="main-button">&nbsp;</td>
+<td><img id="img9" src="{% static 'images/main_09.png'%}" width="20" height="19"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+    
+    </body></html>

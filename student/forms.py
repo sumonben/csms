@@ -15,6 +15,7 @@ def year_choices():
 
 CHOICES = [
         ('Female', 'Female'),
+        ('Male', 'Male'),
 
     ]    
 BOARD_CHOICE=[
@@ -74,12 +75,12 @@ class StudentForm(forms.ModelForm):
         exclude=['std_id','class_roll','exam_roll','registration','passing_year','student_category','department','section','class_year','cgpa','guardian_info','present_adress','permanent_adress','user','is_active','fourth_subject','signature']
         #department=forms.ModelChoiceField(label="",queryset=Department.objects.all(),empty_label="Placeholder",)
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Name in English','onkeypress' : "myFunction(this.id)",'value':'sumon'}),
-            'name_bangla': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'নাম লিখুন(বাংলায়)','onkeypress' : "myFunction(this.id)",'value':'sumon'}),
-            'email': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Email','onkeypress' : "myFunction(this.id)",'value':'sumo@gmail.com'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  '11 digits ','onkeypress' : "myFunction(this.id)",'value':'01712534564'}),
+            'name': forms.TextInput(attrs={'class': 'form-control form-control-sm',  'placeholder':  'Name in English','onkeypress' : "myFunction(this.id)",}),
+            'name_bangla': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'নাম লিখুন(বাংলায়)','onkeypress' : "myFunction(this.id)",}),
+            'email': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Email','onkeypress' : "myFunction(this.id)",}),
+            'phone': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  '11 digits ','onkeypress' : "myFunction(this.id)",}),
             'date_of_birth': forms.DateInput(format=('%d-%m-%Y'),attrs={'class': 'form-control form-control-sm', 'placeholder': 'Select a date','type': 'date'}),
-            'group': forms.Select(choices=Group.objects.all()[0:2],attrs={'class': 'form-control form-control-sm', 'style': 'margin-bottom:3px;','onchange' : "studentGroup(this.id)"}),
+            'group': forms.Select(attrs={'class': 'form-control form-control-sm', 'style': 'margin-bottom:3px;','onchange' : "studentGroup(this.id)"}),
             'birth_registration': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Birth registration Number'}),
             'nationality': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'nationality'}),
             'blood_group': forms.Select(choices=BlOOD_CHOICE,attrs={'class': 'form-control form-control-sm', 'placeholder':  'Your blood group'}),
@@ -162,8 +163,8 @@ class SubjectChoiceForm(forms.ModelForm):
  
             if group.title_en=="Humanities":
                 self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3,8]), widget=FilteredSelectMultiple('Comulsory Subject',True, attrs={'class':'form-control form-control-sm',}))
-                self.fields['optional_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(group=group, type='Optional'), widget=FilteredSelectMultiple('Optional Subject',False, attrs={'class':'form-control form-control-sm',}))
-                self.fields['fourth_subject']=forms.ModelChoiceField(queryset=Subject.objects.filter(group=group, type='Optional'), widget=forms.Select( attrs={'class':'form-control form-control-sm',}))
+                self.fields['optional_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(type='Optional')|Q(type='Fourth'), group=group ), widget=FilteredSelectMultiple('Optional Subject',False, attrs={'class':'form-control form-control-sm',}))
+                self.fields['fourth_subject']=forms.ModelChoiceField(queryset=Subject.objects.filter(Q(type='Optional')|Q(type='Fourth'), group=group), widget=forms.Select( attrs={'class':'form-control form-control-sm',}))
             if group.title_en=="Business Studies":
                 self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3,13,14,16]), widget=FilteredSelectMultiple('Comulsory Subject',True, attrs={'class':'form-control form-control-sm',}))
                 self.fields['fourth_subject']=forms.ModelChoiceField(queryset=Subject.objects.filter(serial__in=[9,]),initial=Subject.objects.filter(serial__in=[ 9,]), widget=forms.Select( attrs={'class':'form-control form-control-sm',}))
@@ -171,20 +172,19 @@ class SubjectChoiceForm(forms.ModelForm):
                 #self.fields['compulsory_subject'].initial=Subject.objects.filter(serial__in=[ 1, 2,3])
                 #self.fields['compulsory_subject'].widget = FilteredSelectMultiple('Subject',False, attrs={'class':'form-control form-control-sm'})
 
-            
 AdressFormSet = modelformset_factory(
     Adress, fields=("village_or_house","house_or_street_no", "post_office","upazilla","district","division"), extra=2,
     widgets = {
             'village_or_house': forms.TextInput(attrs={'class': 'form-control form-control-sm','label':'Village/house','required':True}),
             'house_or_street_no': forms.TextInput(attrs={'class': 'form-control form-control-sm','label':'Village/house','required':True}),
             'post_office': forms.TextInput(attrs={'class': 'form-control form-control-sm','required':True}),
-            'upazilla': forms.Select(choices=None,attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.','required':True}),
-            'district': forms.Select(choices=None,attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.','required':True}),
+            'upazilla': forms.Select(choices=Upazilla.objects.all(),attrs={'class': 'form-control form-control-sm','label':'Street No.','required':True}),
+            'district': forms.Select(choices=District.objects.all(),attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.','required':True}),
             'division': forms.Select(choices=Division.objects.all(),attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.','required':True}),
 
 }
 )
-
+        
 class AdressForm(forms.ModelForm):
     division= forms.ModelChoiceField(queryset=None,widget=forms.Select(attrs={'class':'form-control form-control-sm'})),
     district=forms.ModelChoiceField(queryset=None,widget=forms.Select(attrs={'class':'form-control form-control-sm'})),

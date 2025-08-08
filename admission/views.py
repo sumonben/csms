@@ -5,13 +5,14 @@ from student.models import Group,Student,Session,SubjectChoice,SscEquvalent,Stud
 from django.contrib.auth import get_user_model
 from sslcommerz_lib import SSLCOMMERZ
 from payment import sslcommerz 
-from .forms import AdmissionLoginForm,SearchAdmissionForm,SearchIDCardForm
-from student.forms import AdressFormSet
+from .forms import AdmissionLoginForm,SearchAdmissionForm,SelectAdmissionForm,SearchIDCardForm
 from .models import StudentAdmission
+from student.forms import AdressFormSet
 from payment.models import PaymentPurpose
 from django.views.generic import View, TemplateView, DetailView
 from django.views.generic.edit import FormView
 from django.template.loader import render_to_string
+from payment.sslcommerz import sslcommerz_payment_gateway_admission
 import random
 import string
 
@@ -29,13 +30,13 @@ board={
 # Create your views here.
 def admissionLogin(request ):
     form = AdmissionLoginForm()
+    
     return render(request, 'admission/admission_login.html',{'form':form})
 # Create your views here.
 # Create your views here.
 
 def admissionForm(request):
     if request.POST.get('username') and request.POST.get('password') :
-        
         str=request.POST.get('username')
         str1=request.POST.get('password')
         str=str[6:9]
@@ -54,8 +55,8 @@ def admissionForm(request):
                 #student=StudentAdmission.objects.filter(ssc_roll=request.POST.get('password'),board=board[str[-3:]],status='Not Admitted').first()
                 payment_purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
                 group=Group.objects.filter(title_en=student.group).first()
-                print('Student: ',student.group)
                 if group:
+                    select_admission=SelectAdmissionForm()
                     form = StudentForm(instance=student)
                     subject_form = SubjectChoiceForm(group=group)
                     adress_formset = AdressFormSet(queryset=Adress.objects.none())
@@ -65,9 +66,8 @@ def admissionForm(request):
                     guardian_form=GuardianForm()
                     context={'payment_purpose':payment_purpose,'group':group,'form':form,'subject_form':subject_form,'adress_form':adress_form,'ssc_equivalent_form':ssc_equivalent_form,'guardian_form':guardian_form,'present_adress_form':present_adress_form}
                     context['adress_formset']=adress_formset
-                    return render(request, 'admission/admission.html',context)
-                    
-
+                    return render(request, 'admission/admission.html',context)      
+    
                 else:
                     subject_form = None
                     return redirect('admission_login')
@@ -96,7 +96,6 @@ def admissionFormSubmit(request):
         group=None
         print("got it")
         student_form=None
-        print(request.POST.get('name'))
         email=request.POST.get('email')
         username=request.POST.get('phone')
         last_name='student'
@@ -115,12 +114,11 @@ def admissionFormSubmit(request):
             print('5',email,username)
             return JsonResponse({'context': context},safe=False)
         
-
+        tran_purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
         form = StudentForm(request.POST, request.FILES)
         ssc_equivalent_form = SscEquvalentForm(request.POST)
         guardin_form = GuardianForm(request.POST)
         formset = AdressFormSet(data=request.POST)
-
         adress_form = AdressForm(request.POST)
         
 
@@ -130,14 +128,12 @@ def admissionFormSubmit(request):
             
             group=Group.objects.filter(title_en=request.POST.get('admission_group')).first()
             student_form.group=group
-            session=Session.objects.first()
-            student=Student.objects.filter(is_active=True).last()
             student_form.class_roll=generate_student_id()
-
+            session=Session.objects.first()
             # std_count=Student.objects.filter(group=group,session=session).count()
             # print(session)
             # session_string=session.title_en
-            # str1=session_string[-5:-3]
+            # str1=session_string[-2:]
             # roll=int(str1)*10000
             # print(roll)
             # if group.title_en in 'Science':
@@ -181,7 +177,6 @@ def admissionFormSubmit(request):
                     else:
                         student_form.present_adress=adress
 
-
             # if adress_form.is_valid:
             #     adress=adress_form.save()
             #     student_form.permanent_adress=adress
@@ -192,7 +187,7 @@ def admissionFormSubmit(request):
             student_form.student_category=student_category
             student_form.save()
 
-            print('6. Student form',email,username,student)
+            print('6. Student form',email,username)
         print(form.errors)
         print(group)
         subject_form = SubjectChoiceForm(request.POST,group=group)
@@ -224,43 +219,45 @@ def admissionFormSubmit(request):
                     if subject.student:
                         subject.save()
 
-        print(subject_form.errors)
-        purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
-        cradentials = {'store_id': 'israb672a4e32dfea5',
-            'store_pass': 'israb672a4e32dfea5@ssl', 'issandbox': True} 
-          
-        sslcommez = SSLCOMMERZ(cradentials)
-        body = {}
-        body['student'] = request.POST.get('name')
-        body['total_amount'] = 3500
-        body['currency'] = "BDT"
-        body['tran_id'] = sslcommerz.generator_trangection_id()
-        body['success_url'] = 'http://localhost:8000/payment/success/'
-        body['fail_url'] = 'https://localhost:8000/payment/failed/'
-        body['cancel_url'] = 'https://localhost:8000/payment/canceled'
-        body['emi_option'] = 0
-        body['cus_name'] = request.POST.get('name')
-        body['cus_email'] = 'request.data["email"]'
-        body['cus_phone'] = request.POST.get('phone')
-        body['cus_add1'] = 'request.data["address"]'
-        body['cus_city'] = 'request.data["address"]'
-        body['cus_country'] = 'Bangladesh'
-        body['shipping_method'] = "NO"
-        body['multi_card_name'] = ""
-        body['num_of_item'] = 1
-        body['product_name'] = "Test"
-        body['product_category'] = "Test Category"
-        body['product_profile'] = "general"
-        body['value_a'] = student_form.class_roll
-        body['value_b'] = student_form.name
-        body['value_c'] = student_form.phone
-        body['value_d'] = purpose.id         
-        response = sslcommez.createSession(body)
-        print(response["sessionkey"])   
-
-
+        return redirect(sslcommerz_payment_gateway_admission(request, student_form,tran_purpose))
+        # cradentials = {'store_id': 'israb672a4e32dfea5',
+        #     'store_pass': 'israb672a4e32dfea5@ssl', 'issandbox': True} 
+        # cradentials = {'store_id': 'gmrwcedubdlive',
+        #     'store_pass': '677CD7B61AB5A81511', 'issandbox': False}    
+        # sslcommez = SSLCOMMERZ(cradentials)
+        # body = {}
+        # body['student'] = request.POST.get('name')
+        # body['total_amount'] = 10
+        # body['currency'] = "BDT"
+        # body['tran_id'] = sslcommerz.generator_trangection_id()
+        # body['ipn_url'] = 'https://student.gmrwc.edu.bd/payment/ipn/'
+        # body['fail_url'] = 'https://student.gmrwc.edu.bd/payment/failed/'
+        # body['cancel_url'] = 'https://student.gmrwc.edu.bd/payment/canceled/'
+        # body['success_url'] = 'https://student.gmrwc.edu.bd/payment/success/'
+        # body['emi_option'] = 0
+        # body['cus_name'] = request.POST.get('name')
+        # body['cus_email'] = 'request.data["email"]'
+        # body['cus_phone'] = request.POST.get('phone')
+        # body['cus_add1'] = 'request.data["address"]'
+        # body['cus_city'] = 'request.data["address"]'
+        # body['cus_country'] = 'Bangladesh'
+        # body['shipping_method'] = "NO"
+        # body['multi_card_name'] = ""
+        # body['num_of_item'] = 1
+        # body['product_name'] = "Test"
+        # body['product_category'] = "Test Category"
+        # body['product_profile'] = "general"
+        # body['value_a'] = student_form.class_roll
+        # body['value_b'] = student_form.name
+        # body['value_c'] = student_form.phone
+        # body['value_d'] = 1          
+        # response = sslcommez.createSession(body)
       
-        return redirect('https://sandbox.sslcommerz.com/gwprocess/v4/gw.php?Q=pay&SESSIONKEY=' + response["sessionkey"])
+
+
+        # #return redirect["GatewayPageURL"]
+
+        # return redirect('https://sandbox.sslcommerz.com/gwprocess/v4/gw.php?Q=pay&SESSIONKEY=' + response["sessionkey"])
 
 def formDownload(request):
         phone=request.POST.get('student_id')
@@ -275,19 +272,25 @@ def formDownload(request):
         return render(request, 'admission/admission_dummy.html',{'student':student,'ssc_equivalent':ssc_equivalent,'subject_choice':subject_choice})
 
 def SubprocessesView(request):
-        print(request.GET.get('id'),request.GET.get('value'))
-        if request.GET.get('id')=='id_form-0-division' or request.GET.get('id')=='id_form-1-division':
-            division=Division.objects.filter(id=request.GET.get('value')).first()
+        if request.POST.get('id') == 'id_form-0-division':
+            division=Division.objects.filter(id=request.POST.get('value')).first()
             district=District.objects.filter(division=division)
             district=list(district.values())
-            print(district)
-        if request.GET.get('id')=='id_form-0-district' or request.GET.get('id')=='id_form-1-district' :
-            division=District.objects.filter(id=request.GET.get('value')).first()
-            print(division)
-            district=Upazilla.objects.filter(district=division)
+        if request.POST.get('id') == 'id_form-1-division':
+            division=Division.objects.filter(id=request.POST.get('value')).first()
+            district=District.objects.filter(division=division)
             district=list(district.values())
-            print(district)
-        return JsonResponse({'status': 'success','meaasge':'Account created Successfully','district':district},safe=False)
+
+        if request.POST.get('id') == 'id_form-0-district':
+            division=District.objects.filter(id=request.POST.get('value')).first()
+            upazilla=Upazilla.objects.filter(district=division)
+            district=list(upazilla.values())
+        if request.POST.get('id') == 'id_form-1-district':
+            division=District.objects.filter(id=request.POST.get('value')).first()
+            upazilla=Upazilla.objects.filter(district=division)
+            district=list(upazilla.values())
+
+        return JsonResponse({'status':'success','meaasge':'Account created Successfully','district':district},safe=False)
 
 class SearchAdmissionView(View):
     template_name = 'admission/search_admission_form.html'
@@ -310,7 +313,7 @@ class SearchAdmissionView(View):
         subject_choice=SubjectChoice.objects.filter(student=student).first()
         ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
         return render(request, 'admission/admission_dummy.html',{'student':student,'ssc_equivalent':ssc_equivalent,'subject_choice':subject_choice})
-
+        
 class IDCardView(View):
     template_name = 'admission/get_id_card.html'
     
@@ -342,3 +345,4 @@ class IDCardView(View):
 
 
         return render(request, 'admission/student_id_card.html',context)
+

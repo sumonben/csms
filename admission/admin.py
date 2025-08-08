@@ -8,3 +8,4 @@ class StudentAdmissionAdmin(ImportExportMixin,admin.ModelAdmin):
     list_display_links = ['ssc_roll','name',]
     list_filter=['board','passing_year','quota','group',]
     search_fields=['ssc_roll','name']
+

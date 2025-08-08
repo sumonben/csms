@@ -21,6 +21,14 @@ class SearchAdmissionForm(forms.ModelForm):
     class Meta:
         model = PaymentPurpose
         fields = []
+class SelectAdmissionForm(forms.ModelForm):
+    
+    purpose= forms.ModelChoiceField(required=True,queryset=PaymentPurpose.objects.filter(is_active=True,payment_type=1),initial=PaymentPurpose.objects.filter(is_active=True,payment_type=1).last(),widget=forms.Select(attrs={'class': 'form-control form-control-sm','required':'true'}))
+
+    class Meta:
+        model = PaymentPurpose
+        fields = []
+
 class SearchIDCardForm(forms.ModelForm):
     roll_from= forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm',}))
     roll_to= forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm',}))

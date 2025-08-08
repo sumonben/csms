@@ -1,6 +1,6 @@
 from django.db import models
-from student.models import Subject,Group,TestSubject
-
+from student.models import Subject,Group,TestSubject,Session
+from payment.models import Transaction, PaymentPurpose
 # Create your models here.
 class Exam(models.Model):
     serial=models.IntegerField(default=0)
@@ -8,9 +8,11 @@ class Exam(models.Model):
     title_en=models.CharField(max_length=150,blank=True,null=True)
     type=models.CharField(max_length=150,blank=True,null=True)
     is_practical_applicable=models.BooleanField(default=False)
+    tran_purpose=models.ForeignKey(PaymentPurpose,blank=True,null=True,on_delete=models.SET_NULL)    
+    session=models.ForeignKey(Session,blank=True,null=True,on_delete=models.SET_NULL)    
     minimum_threshold=models.IntegerField(blank=True,null=True)
     is_active=models.BooleanField(default=False)
-
+    
     
     class Meta:
         ordering = ['serial']
@@ -62,9 +64,8 @@ class Marks(models.Model):
         if self.subject:
             group=Group.objects.filter(id=3).first()
             subj=Subject.objects.filter(name_en=self.subject.name_en).first()
-
             if group in subj.group.all():
-                if self.CQ:
+                if self.CQ is not None:
                     total=total+self.CQ
                     if self.CQ<17:
                         self.grade="F"
@@ -73,26 +74,31 @@ class Marks(models.Model):
                     self.grade="Absent"
                     self.cgpa=None
                     
-                if self.MCQ:
+                if self.MCQ is not None:
                     total=total+self.MCQ
                     if self.MCQ<8:
                         self.cgpa=0
                         self.grade="F"
                 else:
-                    self.grade="Absent"
-                    self.cgpa=None
+                    if self.exam.type != '3':
+                        self.grade="Absent"
+                        self.cgpa=None
                 
-                if self.exam.is_practical_applicable:
-                    print("practical")
-                    total=total+self.practical
-                    if self.practical<8:
-                        self.cgpa=0
-                        self.grade="F"
+                if self.exam.is_practical_applicable :
+                    if self.practical is not None:
+                        total=total+self.practical
+                        if self.practical<8:
+                            self.cgpa=0
+                            self.grade="F"
+                    else:
+                        if self.exam.type != '3':
+                            self.grade="Absent"
+                            self.cgpa=None
                 else:
                     total=round(total*(100/75), 2)
             else:
                 if self.subject.id==2:
-                    if self.CQ:
+                    if self.CQ is not None:
                         total=total+self.CQ
                         if self.CQ<33:
                             self.grade="F"
@@ -101,7 +107,7 @@ class Marks(models.Model):
                         self.grade="Absent"
                         self.cgpa=None
                 else:
-                    if self.CQ:
+                    if self.CQ is not None:
                         total=total+self.CQ
                         if self.CQ<23:
                             self.grade="F"
@@ -111,15 +117,15 @@ class Marks(models.Model):
                         self.cgpa=None
                     
 
-                    if self.MCQ:
+                    if self.MCQ is not None:
                         total=total+self.MCQ
                         if self.MCQ<10:
                             self.cgpa=0
                             self.grade="F"
                     else:
-                        self.grade="Absent"
-                        self.cgpa=None
-                    
+                        if self.exam.type != '3':
+                            self.grade="Absent"
+                            self.cgpa=None                
                         
 
 
@@ -218,7 +224,7 @@ class TestMarks(models.Model):
                         self.cgpa=None
                         self.cgpa_1st=None
                         
-                    if self.MCQ1:
+                    if self.MCQ1 is not None:
                         total=total+self.MCQ1
                         total1=total1+self.MCQ1
                         if self.MCQ1<8:
@@ -650,4 +656,30 @@ class Result(models.Model):
         else:
             self.absent_or_fail_at=self.absent_at
         super(Result, self).save(*args, **kwargs)
-
+        
+class SubjectWiseMarksSummery(models.Model):
+    serial=models.IntegerField(default=0)
+    subject=models.ForeignKey(Subject,blank=True,null=True,on_delete=models.SET_NULL)
+    session=models.ForeignKey(Session,blank=True,null=True,on_delete=models.SET_NULL)    
+    exam=models.ForeignKey(Exam,blank=True,null=True,on_delete=models.SET_NULL)
+    all_participant=models.IntegerField(blank=True,null=True)
+    all_pass=models.IntegerField(blank=True,null=True)
+    all_fail=models.IntegerField(blank=True,null=True)
+    all_absent=models.IntegerField(blank=True,null=True)
+    percentage_pass=models.IntegerField(blank=True,null=True)
+    percentage_fail=models.IntegerField(blank=True,null=True)
+    percentage_absent=models.IntegerField(blank=True,null=True)
+    A_plus=models.IntegerField(blank=True,null=True)
+    A=models.IntegerField(blank=True,null=True)
+    A_minus=models.IntegerField(blank=True,null=True)
+    B=models.CharField(max_length=150,blank=True,null=True)
+    C=models.CharField(max_length=150,blank=True,null=True)
+    D=models.CharField(max_length=15,blank=True,null=True)
+    
+     
+    
+    
+    class Meta:
+        ordering = ['serial']
+    def __str__(self):
+        return self.subject.name_en

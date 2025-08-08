@@ -166,20 +166,16 @@
                 <li class="nav-item nav-item dropdown"><a href="" class="{% if request.resolver_match.url_name in 'home' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}" aria-expanded="false" aria-current="page">Get receipt</a>
                     
                 </li>
-                
+
                 <li class="nav-item nav-item dropdown"><a href="{% url 'admission_login' %}" class="{% if request.resolver_match.url_name in 'admission_login' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}" aria-expanded="false" aria-current="page">Admission</a>
                     
                 </li>
-                
                 {% if request.user.is_superuser %}
-                                
                 <li class="nav-item nav-item dropdown"><a href="{% url 'get_student_id_card' %}" class="{% if request.resolver_match.url_name in 'get_student_id_card' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}" aria-expanded="false" aria-current="page">Student IDCard</a>
                     
                 </li>
                     
                 {% endif %}
-                    
-
                
                
                 

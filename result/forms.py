@@ -3,6 +3,7 @@ import datetime
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from .models import Exam
+from student.models import Session
 
 class SeachResultForm(forms.ModelForm):
     roll= forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','onchange' : 'myFunction(this.id)',}))
@@ -21,9 +22,25 @@ class SeachResultForm(forms.ModelForm):
         else:
             self.fields['exam']=forms.ModelChoiceField(required=True,queryset=Exam.objects.filter(is_active=True),widget=forms.Select(attrs={'class': 'form-control form-control-sm',}))
                        
+class SummeryResultForm(forms.ModelForm):
+    exam= forms.ModelChoiceField(required=True,queryset=Exam.objects.all(),widget=forms.Select(attrs={'class': 'form-control form-control-sm',}))
+    session= forms.ModelChoiceField(required=True,queryset=Session.objects.all(),widget=forms.Select(attrs={'class': 'form-control form-control-sm',}))
 
+    class Meta:
+        model = Exam
+        fields = []
+
+class SubjectWiseMarksForm(forms.ModelForm):
+    exam= forms.ModelChoiceField(required=True,queryset=Exam.objects.all(),widget=forms.Select(attrs={'class': 'form-control form-control-sm',}))
+    session= forms.ModelChoiceField(required=True,queryset=Session.objects.all(),widget=forms.Select(attrs={'class': 'form-control form-control-sm',}))
+
+    class Meta:
+        model = Exam
+        fields = []  
+        
 class CreateResultForm(forms.ModelForm):
     exam= forms.ModelChoiceField(required=True,queryset=Exam.objects.all(),widget=forms.Select(attrs={'class': 'form-control form-control-sm',}))
+    session= forms.ModelChoiceField(required=True,queryset=Session.objects.all(),widget=forms.Select(attrs={'class': 'form-control form-control-sm',}))
 
     class Meta:
         model = Exam

@@ -1,14 +1,40 @@
+import csv
 from django.contrib import admin
 from django.contrib import admin
 from django.http import HttpResponse
 from import_export.admin import ExportActionMixin,ImportExportMixin
-from .models import Student,Subject,StudentCategory,Class,Session,Group,Division,District,Upazilla,Union,GuardianInfo,Adress,SubjectChoice,SscEquvalent,Choice,TestSubject,Department
+from .models import Student,Subject,StudentCategory,Class,Session,Group,Department,Division,District,Upazilla,Union,GuardianInfo,Adress,SubjectChoice,SscEquvalent,Choice,TestSubject
 from import_export.admin import ExportActionMixin,ImportExportMixin
 from import_export.widgets import ManyToManyWidget,ForeignKeyWidget
 from import_export import resources,fields
 from django.forms import Field
-import csv
 # Register your models here.
+class SubjectResource(resources.ModelResource):
+    class Meta:
+        model = Subject
+        fields = ('name_en', 'name')
+
+class SubjectChoiceResource(resources.ModelResource):
+    
+    compulsory_subject = fields.Field(
+        column_name="Compulsory Subject",
+        attribute='compulsory_subject',
+        widget=ManyToManyWidget(Subject, field='name_en',separator='|')
+    )
+    class Meta:
+        model = SubjectChoice
+        fields = ('serial', 'compulsory_subject')
+
+
+class StudentResource(resources.ModelResource):
+    
+    group = fields.Field(
+        column_name="Group",
+        attribute='group',
+        widget=ForeignKeyWidget(Group, field='title_en')
+    )
+    class Meta:
+        model = Student
         
 
 
@@ -45,7 +71,7 @@ class StudentAdmin(ImportExportMixin,admin.ModelAdmin):
             writer.writerow(row)
         return response
 
-    export_as_csv.short_description = "Export Selected"
+    export_as_csv.short_description = "Export Selected student as csv file"
 
 @admin.register(Session)
 class StudentSessionAdmin(ImportExportMixin,admin.ModelAdmin):
@@ -66,19 +92,20 @@ class SscEquvalentAdmin(ExportActionMixin,admin.ModelAdmin):
 class SubjectChoiceAdmin(ImportExportMixin,admin.ModelAdmin):
         list_display=['id','serial','student']
         filter_horizontal = ['compulsory_subject','optional_subject']
+        search_fields=['class_roll']
 
 
 @admin.register(Adress)
 class AdressAdmin(ExportActionMixin,admin.ModelAdmin):
-    pass
+    list_display=['id','village_or_house','house_or_street_no',]
 
 
 @admin.register(StudentCategory)
 class StudentCategoryAdmin(ExportActionMixin,admin.ModelAdmin):
-    list_display=[ 'serial','title','title_en']
+    list_display=[ 'id','serial','title','title_en']
     list_display_links = ['serial','title']
     save_as = True
-    
+
 
 @admin.register(Division)
 class DivisionAdmin(ImportExportMixin,admin.ModelAdmin):
@@ -87,33 +114,39 @@ class DivisionAdmin(ImportExportMixin,admin.ModelAdmin):
 @admin.register(District)
 class DistrictAdmin(ImportExportMixin,admin.ModelAdmin):
     list_display=[ 'id','name','name_en','division','link']
-    list_display_links = ['name','name_en']
+    list_display_links = ['id','name','name_en']
     list_filter=['division']
 
 @admin.register(Upazilla)
 class UpazillaAdmin(ImportExportMixin,admin.ModelAdmin):
     list_display=[ 'id','name','name_en','district','link']
-    list_display_links = ['name','name_en']
+    list_display_links = ['id','name','name_en']
     list_filter=['district']
 
 @admin.register(Union)
 class UnionAdmin(ImportExportMixin,admin.ModelAdmin):
-    list_display=[ 'name','name_en','upazilla','link']
-    list_display_links = ['name','name_en']
+    list_display=[ 'id','name','name_en','upazilla','link']
+    list_display_links = ['id','name','name_en']
     
 
 @admin.register(Group)
-class GroupAdmin(ImportExportMixin,admin.ModelAdmin):
+class GroupAdmin(admin.ModelAdmin):
     list_display=[  'id','serial','title_en',]
     list_filter=[  'title_en',]
     list_display_links = ['serial','title_en',]
-
+    
 @admin.register(Department)
-class DepartmentAdmin(ImportExportMixin,admin.ModelAdmin):
-    list_display=[  'id','serial','name','name_en']
-    list_filter=[  'name_en',]
-    list_display_links = ['id','serial','name','name_en']
+class UserAdmin(ImportExportMixin,admin.ModelAdmin):
+    list_display=[  'serial','name','code','professor', 'associate_professor', 'assistant_professor','lecturer','about']
+    list_filter=[  'name','code',]
+    list_display_links = ['serial','name','code']
 
+    fieldsets = ((None,{'fields': ('serial','name','name_en','code','about','about_en')}),
+        ("পদসংখ্যাঃ", {
+           'fields': ('professor', 'associate_professor', 'assistant_professor','lecturer')
+        }),
+        
+    )
 @admin.register(TestSubject)
 class TestSubjectAdmin(ImportExportMixin,admin.ModelAdmin):
     list_display=[  'id','serial','name','code',]
@@ -124,6 +157,7 @@ class TestSubjectAdmin(ImportExportMixin,admin.ModelAdmin):
 class SubjectAdmin(ImportExportMixin,admin.ModelAdmin):
     list_display=[  'id','serial','name','code',]
     list_filter=[  'name','code',]
+    filter_horizontal = ['group',]
     list_display_links = ['id','serial','name','code']
 
 

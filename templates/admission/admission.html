@@ -5,15 +5,13 @@
   {% load static %}
   
   
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-  
+
   <script type="text/javascript" src="{% url 'jsi18n' %}" > </script>
   <script type="text/javascript" src="{% static 'admin/js/jquery.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
   <script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
   <script type="text/javascript" src="{% static 'admin/js/SelectBox.js' %}"></script>
   <script type="text/javascript" src="{% static 'admin/js/SelectFilter2.js' %}"></script>
-  <script src="https://www.nothi.gov.bd/assets/global/plugins/jquery.min.js" type="text/javascript"></script> 
       <style>
           body {
               margin-left: 0px;
@@ -168,7 +166,7 @@
                     {% endif %}
                     
                
-                    <form  id="form" class="form-row px-3" method="post" action="{% url 'admission_form_submit' %}" enctype="multipart/form-data" target="_blank">
+                    <form  id="form" class="form-row px-3" method="post" action="{% url 'admission_form_submit' %}" enctype="multipart/form-data">
                       {% csrf_token %}
                       {{form.media}}
                       <div id="qbox-container">
@@ -191,7 +189,7 @@
                                     
                                     <div class="loginBox">
                                       <select class='form-control form-control-sm' id="purpose" name="purpose">
-                                        <option value="{{payment_purpose.id}}">
+                                        <option value="{{ payment_purpose.id }}">
                                           {{ payment_purpose.title_en }}
                                         </option>
                                       </select>
@@ -220,10 +218,11 @@
   
                         </div>
                       </div>
-                      <div class="col-sm-12 form-group">
+                    
+                  <div class="col-sm-12 form-group">
                         
-                        <div class="row">
-                          <table width="100%" border="1" cellspacing="0" cellpadding="10">
+                    <div class="row">
+                       <table width="100%" border="1" cellspacing="0" cellpadding="10">
                             <thead><th colspan="5" style="height: 30px; background-color: #035a4c; color: #fff;text-shadow: 10px 10px 10px rgb(73, 25, 11);padding: 15px;font-size:23px;text-align:center;">         Permanent Address                        
                               
                             <tbody>
@@ -298,11 +297,9 @@
 
                
               {% endif %}
-
-                      
-                    </div>
-                  </div>
                   
+                </div>
+              </div>
                 </div>
                       <div class="step d-none">
                         <table width="100%" border="1" cellspacing="0" cellpadding="10">
@@ -853,27 +850,32 @@
   });
   
   </script>
+
   <script>
     function myFunctionTeacher(id){
       var csrfToken = $('[name="csrfmiddlewaretoken"]').val();
-
+      
       var division=document.getElementById(id).value;
+      //alert(id);
+      //alert(division);
       var $j = jQuery.noConflict();
-
+    
       url="{% url 'get_district'%}";
+      //alert(url);
       
         $.ajax({
-        type: 'GET',
+        type: 'POST',
         url: "{% url 'get_district'%}",  // Adjust the URL as per your project structure
-        data: {id:id,'value':division},
+        data: {"id":id, "value":division},
         headers: {
                'X-CSRFToken': csrfToken
            },
        
         success: function (response) {
-            //document.getElementById("student_form").reset();
+         
+             //document.getElementById("student_form").reset();
             if (response.status === 'success') {
-              if(id=='id_form-0-division'){
+              if(id === 'id_form-0-division'){
               $("#id_form-0-district option").remove();
               $("#id_form-0-district").append('<option '+'value="0">'+ '-----------' +'</option>');
                     for (var i = response.district.length - 1; i >= 0; i--) {
@@ -906,8 +908,6 @@
                               }
   
               }
-  
-  
             } else {
              ///alert("Success message not found");
                     
@@ -916,8 +916,8 @@
         },
         error: function (xhr, status, error) {
            
-            var err = eval("(" + xhr.responseText + ")");
-            alert(err.Message);
+            // var err = eval("(" + xhr.responseText + ")");
+            // alert(err.Message);
         }
     });
   
@@ -925,8 +925,8 @@
     } 
     </script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-  
-  <script>
+
+      <script>
     
       $(document).ready(function () {
               

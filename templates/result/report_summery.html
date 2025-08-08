@@ -1,0 +1,480 @@
+{% extends 'basepage/basepage_report.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    .main_body{
+        width:100%;
+        height:100%;
+        color:red;
+    }
+    @media(max-width:767px){
+        .main_body{
+            width:100%;
+            height:700px;
+            color:red;
+            background-color:green;
+        }   
+    }
+</style>
+
+
+  <link rel="icon" href="{% static 'images/gmrwc_logo.png'%}" type="image/x-icon">
+
+  
+  
+<style>
+body{
+    font-weight: normal;
+    font-style:normal;
+        
+      
+}
+#first_table{
+    width:80%;
+    height:100%
+}
+    .row{
+        margin-left:15%;
+    }
+  button#print, button#next-btn, button#submit-btn {
+  font-size: 17px;
+  font-weight: bold;
+  position: relative;
+  width: 300px;
+  height: 50px;
+  background: #DC3545;
+  margin-left: 50%;
+  margin-top: 20px;
+  overflow: hidden;
+  z-index: 1;
+  cursor: pointer;
+  transition: color .3s;
+  text-align: center;
+  color: #fff;
+  border: 0;
+  -webkit-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+button#print:after, button#next-btn:after, button#submit-btn:after {
+  result: absolute;
+  top: 90%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #05812a;
+  content: "";
+  z-index: -2;
+  transition: transform .3s;
+}
+button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover::after {
+  transform: translateY(-80%);
+  transition: transform .3s;
+}
+
+
+
+@media print and (min-width: 480px) {
+     body{
+    margin-top:-5px;
+    font-weight: normal;
+    font-style:normal;
+        
+      
+}
+    #first_table{
+        width:100%;
+    }
+    #column{
+      width:100%;
+    }
+    #main_table{
+      padding:5em;
+      -webkit-print-color-adjust: exact; 
+  
+    }
+    #img1,#img3,#img7,#img9{
+      display:none;
+    }
+    .main-left{
+      display:none;
+     }
+     .main-right{
+      display:none;
+     }
+    
+  .main-button {
+    display:none;
+
+  }
+  .main-top{
+    display:none;
+
+  } 
+
+    
+    table.result{
+      width:90%;
+      font-family: kalpurush;
+    }
+      {% comment %} table.result th, table.result td {
+        
+            border:1px solid #b9b1b1;
+            background-color: #999999;
+            padding:0.2em;
+            -webkit-print-color-adjust: exact; 
+    
+            } {% endcomment %}
+      table th, table td {
+        
+              padding:0.5em;
+              -webkit-print-color-adjust: exact; 
+      
+          }
+
+            #submit-btn {
+              display: none !important;;
+            }
+  }
+    
+    
+
+
+#heading {
+    color: #000080 !important;;
+  }
+
+
+
+#column{
+  width:95%;
+  margin-left:2%;
+}
+@media (max-width:767px){
+  #column{
+    width:100%;
+    margin-left:0%;
+  }
+  
+  #google_translate_element{
+    display:none;
+  }
+  
+}
+
+
+
+{% if result.grade == 'F' or result.grade == 'Absent' or result.grade == 'AbsentAll' %}
+#main_body{
+    font-family: kalpurush;
+  background-color:rgb(231, 152, 152);
+  width:90%;
+    background-image:url('/static/images/logo_opacity.png');
+    background-repeat: no-repeat;
+    background-position: center;
+   
+  
+
+}
+
+
+table.result th, table.result td {
+    font-family: kalpurush;
+            border:1px solid rgb(253, 251, 251);
+            padding:0.2em;
+            font-weight:550;
+            -webkit-print-color-adjust: exact; 
+    
+            }
+    {%else%}
+    
+    
+            #main_body{
+                font-family: kalpurush;
+              background-color:rgb(207, 241, 218);
+              width:90%;
+              background-image:url('/static/images/logo_opacity.png');
+              background-repeat: no-repeat;
+              background-position: center;
+   
+            }
+             table.result th, table.result td {
+                 font-family: kalpurush;
+              border:1px solid rgb(253, 253, 253);
+              font-weight:550;
+              padding:0.2em;
+              -webkit-print-color-adjust: exact; 
+      
+              } 
+  
+
+{% endif %}
+table.result{
+  width:95%;
+}
+goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07Ob *, .VIpgJd-ZVi9od-vH1Gmf *, .VIpgJd-ZVi9od-l9xktf *{
+  display:none;
+}
+</style>
+
+<div class="box_container" style="width: 100%; margin: 0px;">
+  <div style="margin: auto;width: 100%;">
+    
+     
+                          
+      <table class="result" width="80%" border="2" align="center" style="border:5px">
+        
+        <tbody>
+            
+          <tr>
+              <td colspan="2" align="left" valign="middle">&nbsp;মোট শিক্ষার্থীঃ</td>
+              <td colspan="3" align="left" valign="middle" class="black12" style="font-size:20px">{{ all_examinee_all.count}}</td>
+              
+          </tr>
+          <tr>
+              <td colspan="2" align="left" valign="middle">&nbsp;পরীক্ষায় অংশগ্রহণকারী শিক্ষার্থীঃ </td>
+              <td colspan="1" align="left" valign="middle" class="black12" style="font-size:20px">{{all_examinee.count}}</td>
+              <td colspan="1" align="left" valign="middle">&nbsp;অনুপস্থিত শিক্ষার্থীঃ </td>
+              <td colspan="1" align="left" valign="middle" style="font-size:20px" >{{all_examinee_absent_all}}</td>
+              
+          </tr>
+          <tr>
+              
+              <td colspan="2" align="left" valign="middle">&nbsp;সব বিষয়ে পাশঃ  </td>
+              <td colspan="1" width="20%" align="left" valign="middle" class="black12" style="font-size:20px">{{all_subject_pass.count}}</td>
+               <td colspan="1" align="left" valign="middle">&nbsp;৪ বিষয়ে পাশঃ(অপশনাল ব্যতিত) </td>
+            <td colspan="1" align="left" valign="middle" class="black12" style="font-size:20px">{{pass_at_4_without_4th.count}}</td>
+              
+          </tr>
+          <tr>
+           
+             <td colspan="2" align="left" valign="middle">&nbsp;৩ বিষয়ে পাশঃ(অপশনাল ব্যতিত) </td>
+          <td colspan="1" align="left" valign="middle" class="black12" style="font-size:20px">{{pass_at_3_without_4th.count}}</td>
+            <td colspan="1" align="left" valign="middle">&nbsp;পাশের হারঃ </td>
+        <td colspan="1" align="left" valign="middle" class="black12" style="font-size:20px">{{rate_of_pass}}</td>
+            
+        </tr>
+       
+      <tr>
+      
+        
+    </tr>
+    <tr>
+      <td colspan="5" align="center" valign="middle">&nbsp;<span class="GrayBlue20bold" style="color:#76576;font-size:25px;line-height:1.8;font-family: kalpurush;">বিভাগ অনুযায়ী রিপোর্ট</span> </td>
+      
+      
+  </tr>
+    <tr>
+      <td colspan="2" width="25%"align="center" valign="middle" class="black12" style="font-size:20px;font-weight:bold;">&nbsp;বিষয় বর্ণনা </td>
+      <td colspan="1" width="25%" align="center" valign="middle" class="black12" style="font-size:20px;font-weight:bold;">বিজ্ঞান</td>
+      <td colspan="1" width="25%" align="center" valign="middle" class="black12" style="font-size:20px;font-weight:bold;">মানবিক  </td>
+      <td colspan="1" width="25%" align="center" valign="middle" class="black12" style="font-size:20px;font-weight:bold;">ব্যবসা শিক্ষা</td>
+      
+  </tr>
+  <tr>
+    <td colspan="2" width="40%"align="right" valign="middle">&nbsp;মোট শিক্ষার্থীঃ </td>
+    <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px">{{science_examinee_all.count}}</td>
+    <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px">{{humanities_examinee_all.count}}  </td>
+    <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px"> {{business_examinee_all.count}}</td>
+    
+</tr>
+<tr>
+  <td colspan="2" width="40%"align="right" valign="middle">&nbsp;পরীক্ষায় অংশগ্রহণকারী শিক্ষার্থীঃ </td>
+  <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px">{{science_examinee.count}}</td>
+    <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px">{{humanities_examinee.count}}  </td>
+    <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px"> {{business_examinee.count}}</td>
+  
+</tr>
+<tr>
+  <td colspan="2" width="40%"align="right" valign="middle">&nbsp;অনুপস্থিত শিক্ষার্থীঃ</td>
+  <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px">{{science_examinee_absent_all}}</td>
+    <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px">{{humanities_examinee_absent_all}}  </td>
+    <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px"> {{business_examinee_absent_all}}</td>
+  
+</tr>
+
+<tr>
+  <td colspan="2" width="40%"align="right" valign="middle">&nbsp;সব বিষয়ে পাশঃ </td>
+  <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px">{{science_all_subject_pass.count}}</td>
+    <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px">{{humanities_all_subject_pass.count}}  </td>
+    <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px"> {{business_all_subject_pass.count}}</td>
+  
+</tr>
+      
+<tr>
+  <td colspan="2" width="40%"align="right" valign="middle">&nbsp; ৪ বিষয়ে পাশঃ(অপশনাল ব্যতিত) </td>
+  <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px">{{science_pass_at_4_without_4th.count}}</td>
+  <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px">{{humanities_pass_at_4_without_4th.count}}  </td>
+  <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px"> {{business_pass_at_4_without_4th.count}}</td>
+  
+</tr>
+<tr>
+  <td colspan="2" width="40%"align="right" valign="middle">&nbsp;৩ বিষয়ে পাশঃ(অপশনাল ব্যতিত) </td>
+  <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px">{{science_pass_at_3_without_4th.count}}</td>
+    <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px">{{humanities_pass_at_3_without_4th.count}}  </td>
+    <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px"> {{business_pass_at_3_without_4th.count}}</td>
+  
+</tr>
+<tr>
+  <td colspan="2" width="40%"align="right" valign="middle">&nbsp; পাশের হারঃ </td>
+  <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px">{{science_rate_of_pass}}</td>
+    <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px">{{humanities_rate_of_pass}}  </td>
+    <td colspan="1" width="20%" align="center" valign="middle" class="black12" style="font-size:20px"> {{business_rate_of_pass}}</td>
+  
+</tr>
+      
+        
+     
+
+      </tbody></table>
+    
+    
+    
+
+                          
+    
+                          
+      
+    
+          
+
+ 
+    <div style="float:right;margin:2%"><img  height="80px" src="{% static 'images/principal_signature.png' %}" alt="" ><br><h4>Principal</h4></div>
+    <button id="submit-btn" class="btn-default" onclick="window.print()" >Download or Print</button>
+
+  </div>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
+</script>
+
+          
+              <script>
+                  function goTuoPrint(){
+                      window.print();
+                   /*   var divToPrint = document.getElementById('column');
+              var htmlToPrint = '' +
+                  '<style type="text/css">' +
+                      '.column {'+
+                  'background:url({% static "images/gmrwc_logo.png" %}) no-repeat;' +
+                      '}'+
+                  'table th, table td {' +
+                  'border:1px solid #000;' +
+                  'padding:0.5em;' +
+                  '}' +
+                  '@media print{'+
+            '.graph-image{display:inline;}'+
+          '}'+
+                  '</style>';
+              htmlToPrint += divToPrint.outerHTML;
+              newWin = window.open("");
+              newWin.document.write(htmlToPrint);
+              newWin.print();
+              newWin.close();
+                     // document.getElementById("print").style.display="none";
+                     // window.print();*/
+                  }
+          
+                function goToPrint() {
+                  var disp_setting="toolbar=yes,location=no,";
+                disp_setting+="directories=yes,menubar=yes,";
+                disp_setting+="scrollbars=yes,width=650, height=600, left=100, top=25";
+                   var content_vlue = document.getElementById('column').innerHTML;
+                   var docprint=window.open();
+                   docprint.document.open();
+                   docprint.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"');
+                   docprint.document.write('"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
+                   docprint.document.write('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">');
+                   docprint.document.write('<head><title>HSC-{{student.session}}-{{student.group}}-{{student.class_roll}} </title>');
+                   docprint.document.write('<style type="text/css">body{ margin:0px;');
+                   docprint.document.write('font-family:verdana,Arial;color:#000;');
+                   docprint.document.write('font-family:Verdana, Geneva, sans-serif; font-size:16px;}');
+                   docprint.document.write('a{color:#000;text-decoration:none;} ');
+                   docprint.document.write('.graph-image img{display:inline;result:fixed;align-items: center;}');
+                   docprint.document.write('.table_ssc{border:2px solid #eeeff0; background-color: #eeeff0;padding:0.1em;}');
+          
+                   docprint.document.write('table th, table td {border:2px solid #eeeff0; background-color: #eeeff0;padding:0.1em;}</style>');
+                   docprint.document.write('</head><body onLoad="self.print()"><center>');
+                   docprint.document.write(content_vlue);
+                   docprint.document.write('</center></body></html>');
+                   docprint.document.close();
+                }
+          
+              </script>
+              <div class="graph-image graph-7">
+    </div>
+     
+
+
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        window.onload = (event) => {
+
+        var numbers = {
+            0: '০',
+            1: '১',
+            2: '২',
+            3: '৩',
+            4: '৪',
+            5: '৫',
+            6: '৬',
+            7: '৭',
+            8: '৮',
+            9: '৯'
+        };
+        var output = '';
+        function replaceNumbers(input) {
+            var output = [];
+            for (var i = 0; i < input.length; ++i) {
+              if (numbers.hasOwnProperty(input[i])) {
+                output.push(numbers[input[i]]);
+              } else {
+                output.push(input[i]);
+              }
+            }
+            return output.join('');
+          }
+        input =document.getElementById("serial").textContent.toString();
+        document.getElementById('serial').textContent = replaceNumbers(input);
+        input =document.getElementById("para1").textContent.toString();
+        document.getElementById('para1').textContent = replaceNumbers(input);
+        input =document.getElementById("para2").textContent.toString();
+        document.getElementById('para2').textContent = replaceNumbers(input);
+        input =document.getElementById("para3").textContent.toString();
+        document.getElementById('para3').textContent = replaceNumbers(input);
+        input =document.getElementById("para4").textContent.toString();
+        document.getElementById('para4').textContent = replaceNumbers(input);
+        input =document.getElementById("para5").textContent.toString();
+        document.getElementById('para5').textContent = replaceNumbers(input);
+        input =document.getElementById("date").textContent.toString();
+        document.getElementById('date').textContent = replaceNumbers(input);
+        
+        }
+
+        function goToPrint(){
+            document.getElementById("submit-btn").style.display="none";
+            document.getElementById("google_translate_element").style.display="none";
+
+            
+            window.print();
+            document.getElementById("submit-btn").style.display="block";
+
+        }
+    </script>
+    
+    {% endblock  %}
+
+
+
+
+
+
+

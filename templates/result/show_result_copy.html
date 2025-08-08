@@ -250,7 +250,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
           <tr>
             <td colspan="2" align="left" valign="middle">&nbsp;CGPA(<small>With additional subject</small>): </td>
             <td colspan="1" align="center" valign="middle" class="black12">{{result.cgpa}}</td>
-            {% if result.cgpa_witout_4th %}
+            {% if result.cgpa_without_4th %}
             <td colspan="1" align="left" valign="middle" class="black12"> CGPA (Without additional subject):</td>
             <td colspan="1" align="center" valign="middle" class="black12"> {{result.cgpa_without_4th}}</td>
             {% else %}
@@ -260,7 +260,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
         </tr>
         <tr>
           <td colspan="2" align="left" valign="middle">&nbsp;Grade: </td>
-          <td colspan="1" align="center" valign="middle" class="black12">{{grade}}</td>
+          <td colspan="1" align="center" valign="middle" class="black12">{{result.grade}}</td>
           {% if result.grade in 'A+' or result.grade in 'A' or result.grade in 'A-' or result.grade in 'B' or result.grade in 'C' or result.grade in 'D'   %}
           <td colspan="1" align="left" valign="middle">&nbsp;Position: </td>
           <td colspan="1" align="center" valign="middle" class="black12">{{result.position}}</td>
@@ -287,7 +287,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
         </thead>
         <tr>
           <th rowspan="2">Subject Name</th>
-          <th colspan="3" style="text-align:center;" >Obtained Marks</th>
+          <th colspan="4" style="text-align:center;" >Obtained Marks</th>
           <th rowspan="2">Highest Marks</th>
           <th rowspan="2">GP</th>
           <th rowspan="2">Grade</th>
@@ -297,6 +297,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
         <tr>
           <th>MCQ</th>
           <th >CQ</th>
+          <th >Practical</th>
           <th >total</th>
           
         </tr>
@@ -317,11 +318,20 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
               <td width="20%"  align="left" valign="middle"> {{rslt.subject.name_en}} </td>
               <td width="10%"  align="center" valign="middle"> {% if rslt.MCQ %}{{rslt.MCQ}} {% endif %}</td>
               <td width="10%" align="center" valign="middle">{% if rslt.CQ %} {{rslt.CQ}}{% endif %} </td>
-
+              {% if exam.is_practical_applicable %}
+               <td width="10%" align="center" valign="middle">{% if rslt.practical %} {{rslt.practical}} {% else %} - {% endif %} </td>
               {% if rslt.subject.id == 3 or rslt.subject.id == 4 or rslt.subject.id == 5 or rslt.subject.id == 6 or rslt.subject.id == 7 %}
-              <td width="10%" align="center" valign="middle">{% if rslt.total %} {{rslt.total}}(Calculated){% endif %} </td>
+              <td width="10%" align="center" valign="middle">{% if rslt.total %} {{rslt.total}} {% endif %} </td>
               {% else %}
               <td width="10%" align="center" valign="middle">{% if rslt.total %} {{rslt.total}} {% endif %}</td>
+              {% endif %}
+              {% else %}
+               <td width="10%" align="center" valign="middle">{% if rslt.practical %} {{rslt.practical}} {% else %} - {% endif %} </td>
+              {% if rslt.subject.id == 3 or rslt.subject.id == 4 or rslt.subject.id == 5 or rslt.subject.id == 6 or rslt.subject.id == 7 %}
+              <td width="10%" align="center" valign="middle">{% if rslt.total %} {{rslt.total}}(Calculated) {% endif %} </td>
+              {% else %}
+              <td width="10%" align="center" valign="middle">{% if rslt.total %} {{rslt.total}} {% endif %}</td>
+              {% endif %}
               {% endif %}
               <td width="15%" align="center" valign="middle">{% if rslt.highest_mark.highest_mark %} {{rslt.highest_mark.highest_mark}} {% endif %}</td>
               <td width="10%" align="center" valign="middle">{% if rslt.cgpa %} {{rslt.cgpa}} {% endif %}</td>
@@ -350,6 +360,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
                 <td width="15%"  align="left" valign="middle"> {{rslt.subject.name_en}}</td>
                 <td width="15%"  align="center" valign="middle">{% if rslt.MCQ %} {{rslt.MCQ}} {% endif %}</td>
                 <td width="15%" align="center" valign="middle">{% if rslt.CQ %} {{rslt.CQ}} {% endif %}</td>
+                <td width="15%" align="center" valign="middle">{% if rslt.practical %} {{rslt.practical}} {% else %} - {% endif %}</td>
                 <td width="15%" align="center" valign="middle">{% if rslt.total %} {{rslt.total}} {% endif %} </td>
                 <td width="15%" align="center" valign="middle">{% if rslt.highest_mark.highest_mark %} {{rslt.highest_mark.highest_mark}} {% endif %}</td>
                 <td width="10%" align="center" valign="middle">{% if rslt.cgpa %} {{rslt.cgpa}} {% endif %}</td>
@@ -364,7 +375,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
 
           </tr>
           <tr>
-            <td colspan="7" cellpadding="3" align="right"> CGPA (without additional subject): </td>
+            <td colspan="8" cellpadding="3" align="right"> CGPA (without additional subject): </td>
             <td align="center" > {{result.cgpa_without_4th}}</td>
           </tr>
           

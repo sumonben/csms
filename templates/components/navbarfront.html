@@ -140,8 +140,6 @@
                     </a></li>
                 <li class="nav-item"><a href="/digitalshop" class="nav-link"><b>Contact</b></a>
                 </li>
-                <li class="nav-item"><a href="{% url 'attendance' %}" class="nav-link"><b>Attendance</b></a>
-                </li>
             </ul>
         </div>
   <div class="main-header">
@@ -201,8 +199,19 @@
                                 <ul>
                                                                         </ul>
                     </div>
+                     <div class="col-lg-6 pr-0">
+                        <h4 class="menu-head"><a href="{% url 'option_subject_wise_marks' %}" class="">Subject Wise marks</a></h4>
+                                <ul>
+                                                                        </ul>
+                    </div>
+                    
                     <div class="col-lg-6 pr-0">
                         <h4 class="menu-head"><a href="{% url 'option_highest_marks' %}" class="">Create Highest marks</a></h4>
+                                <ul>
+                                                                        </ul>
+                    </div>
+                     <div class="col-lg-6 pr-0">
+                        <h4 class="menu-head"><a href="{% url 'get_result_summery' %}" class=""> Result Summery</a></h4>
                                 <ul>
                                                                         </ul>
                     </div>

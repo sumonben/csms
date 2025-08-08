@@ -1,5 +1,5 @@
 from django.db import models
-from student.models import Group, Session,Department,StudentCategory
+from student.models import Group, Session,Department, StudentCategory
 # Create your models here.
 class PaymentType(models.Model):
     serial=models.IntegerField(default=10)
@@ -11,7 +11,7 @@ class PaymentType(models.Model):
         verbose_name = "Payment Type"
         verbose_name_plural = "Payment Type"
     def __str__(self):
-        return str(self.id)+": "+self.title 
+        return str(self.id)+": "+self.title_en 
 
 class PaymentPurpose(models.Model):
     serial=models.IntegerField(default=10)
@@ -34,7 +34,7 @@ class PaymentPurpose(models.Model):
         verbose_name = "Payment Purpose"
         verbose_name_plural = "Payment Purpose"
     def __str__(self):
-        return self.title 
+        return self.title_en 
 
 
 class Transaction(models.Model):
@@ -73,7 +73,7 @@ class Transaction(models.Model):
 
     def __str__(self):
         return self.tran_id
-
+        
 class PaymentConsession(models.Model):
 
     class_roll = models.CharField(max_length=150)
@@ -96,11 +96,13 @@ class PaymentConsession(models.Model):
     def __str__(self):
         return str(self.class_roll)+": "+self.name 
 
+        
 class PaymentGateway(models.Model):
-
+    gateway_name = models.CharField(max_length=500, blank=True, null=True)
     store_id = models.CharField(max_length=500, blank=True, null=True)
     store_pass = models.CharField(max_length=500, blank=True, null=True)
-    
+    is_sandbox = models.BooleanField( default=False)
+    is_active=models.BooleanField(default=False)
     class Meta:
         verbose_name = "Payment Gateway"
         verbose_name_plural = "Payment Gateway"

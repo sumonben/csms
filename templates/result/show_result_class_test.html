@@ -287,7 +287,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
 
 
               <td width="40%"  align="left" valign="middle"> {{rslt.subject.name_en}} </td>
-              <td width="30%" align="center" valign="middle">{% if rslt.CQ %} {{rslt.CQ}}{% endif %} </td>
+              <td width="30%" align="center" valign="middle">{% if rslt.CQ is None %} Absent {% else %} {{rslt.CQ}}{% endif %} </td>
 
              
               <td width="30%" align="center" valign="middle">{% if rslt.highest_mark.highest_mark %} {{rslt.highest_mark.highest_mark}} {% endif %}</td>
@@ -312,7 +312,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
 
                 <td width="40%"  align="left" valign="middle"> {{rslt.subject.name_en}}(4th Subject) </td>
                 
-                <td width="30%" align="center" valign="middle">{% if rslt.CQ %} {{rslt.CQ}} {% endif %}</td>
+                <td width="30%" align="center" valign="middle">{% if rslt.CQ is None %} Absent {% else %} {{rslt.CQ}} {% endif %}</td>
                 <td width="30%" align="center" valign="middle">{% if rslt.highest_mark.highest_mark %} {{rslt.highest_mark.highest_mark}} {% endif %}</td>
                 
 
@@ -349,7 +349,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
         </tbody>
     </table>  
           
-
+ <button id="submit-btn" class="btn-default" onclick="window.print()" >Download or Print</button>
  
     <div style="float:right;margin:2%"><img  height="80px" src="{% static 'images/principal_signature.png' %}" alt="" ><br><h4>Principal</h4></div>
 

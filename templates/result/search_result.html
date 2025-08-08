@@ -29,7 +29,7 @@
 <div class="services">
     <div  class="container-wrapper" >
 
-  <div><h2 style="text-align: center;color: #035a4c ;text-shadow: 2px 2px 2px rgb(65, 7, 7);"><u> INSERT ROLL AND SELECT RESULT </u></h2></div>
+  
   
   <div data-v-6f04a53f="" class="memberRegistration py-5">
     <div class="container-wrapper">
@@ -37,11 +37,29 @@
         <div class="col col-lg-10">
           <div class="card login-body shadow-lg rounded-10 py-5">
             <table width="100%" border="1" cellspacing="0" cellpadding="10">
-              <thead><th colspan="5" style="height: 40px; background-color: #035a4c; color: #fff;padding: 15px;font-size:20px;text-align:center;"> RESULT SHOW DOWNLOAD FORM </th></thead>
+              <thead><th colspan="5" style="height: 40px; background-color: #035a4c; color: #fff;padding: 15px;font-size:20px;text-align:center; text-transform: uppercase;"> 
+              
+                    {% if create_result_form %}
+                    Create Result
+                    {% elif create_position_form%}
+                    Create Position
+                    {% elif delete_result_form %}
+                    Delete Result
+                    {% elif highest_marks_form %}
+                    Create Highest Marks
+                    {% elif summery_result_form %}
+                    Get result Summery
+                    {% else %}
+                    Insert roll and exam to find result
+                
+                    {% endif %}  
+                   
+                </th>
+             </thead>
               {% if notfound %}
               <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 40px; background-color:rgb(168, 8, 8); color: #fff;padding: 20px;"> Result Not found!<br>re-Enter right information or Contact exam control room</th></thead>
               {% endif %}
-              {% if message %}
+              {% if messages %}
               {% for message in messages %}
               <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 40px; background-color:rgb(168, 8, 8); color: #fff;padding: 15px;"> {{message}} </th></thead>
               {% endfor %}
@@ -53,7 +71,7 @@
 
                 <span class="bubbleNew"><img src="{%static 'images/ictpark_monogram.png'%}" class="rounded-circle" style="width: 200px;height: 200px;" /></span>
 
-                <span class="shape"><img align="center" src="{% static 'images\ictparkbd_logo.jpg' %}"><img align="center" style="height:60%;margin-top:10%;rotate: -50deg;" src="{% static 'images\tilokpur_logo.png' %}"></span> 
+                <span class="shape"><img align="center" src="{% static 'images\gmrwc_logo.jpg' %}"><img align="center" style="height:60%;margin-top:10%;rotate: -50deg;" src="{% static 'images\tilokpur_logo.png' %}"></span> 
                 {%if email %}
             
             <div class="alert alert-danger" role="alert">
@@ -85,8 +103,102 @@
             
             {% endif %}
             
-            <form autocomplete="off" id="form" class="form-row px-3" method="post" action="">
+            <form autocomplete="off" id="form" class="form-row px-3" method="post" action="{% if create_result_form %}{% url 'create_result' %}{% elif create_position_form %}{% url 'create_position' %}{% elif delete_result_form %}{% url 'delete_result' %}{% elif highest_marks_form %}{% url 'highest_marks'%}{% elif summery_result_form %}{% url 'summery_result'%}{% elif subject_wise_marks_form %}{% url 'subject_wise_marks'%}{% else %}{% url 'search_result' %}{% endif %}" target="_blank">
                {% csrf_token %}
+               {% if create_result_form %}
+               {% for form1 in create_result_form %}
+               <div class="col-sm-8 form-group" style="margin:auto;">
+                <div class="row">
+                  <div class="col-sm-10" >
+                    <label for="" class="col-form-label-sm m-0" style="font-size:20px;">{{form1.label}}</label> 
+                    <div class="loginBox">
+                              {{form1}}     
+                              <span class="fa fa-universal-access"></span>
+                     
+                    </div> <!--  --> <div class="invalid-feedback"></div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+               {% elif create_position_form %}
+               {% for form1 in create_position_form %}
+               <div class="col-sm-8 form-group" style="margin:auto;">
+                <div class="row">
+                  <div class="col-sm-10" >
+                    <label for="" class="col-form-label-sm m-0" style="font-size:20px;">{{form1.label}}</label> 
+                    <div class="loginBox">
+                              {{form1}}     
+                              <span class="fa fa-universal-access"></span>
+                     
+                    </div> <!--  --> <div class="invalid-feedback"></div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+               {% elif delete_result_form %}
+               {% for form1 in delete_result_form %}
+               <div class="col-sm-8 form-group" style="margin:auto;">
+                <div class="row">
+                  <div class="col-sm-10" >
+                    <label for="" class="col-form-label-sm m-0" style="font-size:20px;">{{form1.label}}</label> 
+                    <div class="loginBox">
+                              {{form1}}     
+                              <span class="fa fa-universal-access"></span>
+                     
+                    </div> <!--  --> <div class="invalid-feedback"></div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+                  
+               {% elif highest_marks_form %}
+               {% for form1 in highest_marks_form %}
+               <div class="col-sm-8 form-group" style="margin:auto;">
+                <div class="row">
+                  <div class="col-sm-10" >
+                    <label for="" class="col-form-label-sm m-0" style="font-size:20px;">{{form1.label}}</label> 
+                    <div class="loginBox">
+                              {{form1}}     
+                              <span class="fa fa-universal-access"></span>
+                     
+                    </div> <!--  --> <div class="invalid-feedback"></div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% elif summery_result_form %}
+               {% for form1 in summery_result_form %}
+               <div class="col-sm-8 form-group" style="margin:auto;">
+                <div class="row">
+                  <div class="col-sm-10" >
+                    <label for="" class="col-form-label-sm m-0" style="font-size:20px;">{{form1.label}}</label> 
+                    <div class="loginBox">
+                              {{form1}}     
+                              <span class="fa fa-universal-access"></span>
+                     
+                    </div> <!--  --> <div class="invalid-feedback"></div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% elif subject_wise_marks_form %}
+               {% for form1 in subject_wise_marks_form %}
+               <div class="col-sm-8 form-group" style="margin:auto;">
+                <div class="row">
+                  <div class="col-sm-10" >
+                    <label for="" class="col-form-label-sm m-0" style="font-size:20px;">{{form1.label}}</label> 
+                    <div class="loginBox">
+                              {{form1}}     
+                              <span class="fa fa-universal-access"></span>
+                     
+                    </div> <!--  --> <div class="invalid-feedback"></div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+               {% else %}
+                  
+              
                             <div class="col-sm-8 form-group" style="margin:auto;">
                               <div class="row">
                                 <div class="col-sm-10" >
@@ -113,13 +225,13 @@
                             </div>
                           </div>
 
-                
+                          {% endif %}
               
               
              
               <div class="col-sm-9 form-group">
                 <p class="text-right">
-                  <button type="submit" class="btn btn-danger text-white"><span>সাবমিট</span></button>
+                  <button type="submit" class="btn btn-danger text-white"><span>Submit</span></button>
                 </p>
               </div>
             </form>

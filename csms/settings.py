@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-_if5--z-=1(wp5d@s3ncum=3u+(er^7924e)z7jl$uyz!f6(gs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['student.gmrbwc.edu.bd','www.student.gmrbwc.edu.bd']
 
 JQUERY_URL = True
 # Application definition
@@ -91,15 +91,14 @@ WSGI_APPLICATION = 'csms.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'csms',
-        'USER': 'root',
-        'PASSWORD':'',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'default-character-set' : 'utf8'
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'student',
+        'USER' : 'postgres',
+        'PASSWORD' : 'Sumon@747934',
+        'HOST' : 'localhost',
+        'PORT': '5432',
     },
-    'default1': {
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }

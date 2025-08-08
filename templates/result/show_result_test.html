@@ -241,10 +241,10 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
           </tr>
           <tr>
             <td colspan="2" align="left" valign="middle">&nbsp;CGPA(With 4th subject): </td>
-            <td colspan="1" align="center" valign="middle" class="black12">{{cgpa}}</td>
-            {% if cgpa_witout_4th %}
+            <td colspan="1" align="center" valign="middle" class="black12">{{result.cgpa}}</td>
+            {% if result.cgpa_without_4th is not None %}
             <td colspan="1" align="left" valign="middle" class="black12"> CGPA (Without 4th subject):</td>
-            <td colspan="1" align="center" valign="middle" class="black12"> {{cgpa_witout_4th}}</td>
+            <td colspan="1" align="center" valign="middle" class="black12"> {{ result.cgpa_without_4th }}</td>
             {% else %}
             <td colspan="1" align="left" valign="middle" class="black12"> CGPA (Without 4th subject):</td>
             <td colspan="1" align="center" valign="middle" class="black12"> Not Applicable</td>
@@ -252,8 +252,8 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
         </tr>
         <tr>
           <td colspan="2" align="left" valign="middle">&nbsp;Grade: </td>
-          <td colspan="1" align="center" valign="middle" class="black12">{{grade}}</td>
-          {% if grade in 'A+' or grade in 'A' or grade in 'A-' or grade in 'B' or grade in 'C' or grade in 'D' or grade in 'F'   %}
+          <td colspan="1" align="center" valign="middle" class="black12">{{result.grade}}</td>
+          {% if result.grade in 'A+' or result.grade in 'A' or result.grade in 'A-' or result.grade in 'B' or result.grade in 'C' or result.grade in 'D' or result.grade in 'F'   %}
           <td colspan="1" align="left" valign="middle">&nbsp;Position: </td>
           <td colspan="1" align="center" valign="middle" class="black12">{{result.position}}</td>
           {% else %}
@@ -344,7 +344,14 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
                 <td width="10%"  align="center" valign="middle"> {% if rslt.MCQ2 %} {{rslt.MCQ2}} {% else %}-{% endif %} </td>
                 <td width="10%" align="center" valign="middle"> {{rslt.CQ2}} </td>              
                 <td width="10%" align="center" valign="middle"> {% if rslt.practical2 %} {{rslt.practical2}} {% else %}-{% endif %} </td>
-  
+                {% if rslt.subject.id == 3 or rslt.subject.id == 4 or rslt.subject.id == 5 or rslt.subject.id == 6 or rslt.subject.id == 7 %}
+                  <td width="10%" align="center" valign="middle"> {{rslt.total}} </td>
+                  {% else %}
+                  <td width="10%" align="center" valign="middle"> {{rslt.total}} </td>
+                  {% endif %}
+                <td width="15%" align="center" valign="middle"> {{rslt.highest_mark.highest_mark}} </td>
+                <td width="10%" align="center" valign="middle"> {{rslt.cgpa}} </td>
+                <td width="10%" align="center" valign="middle"> {{rslt.grade}} </td>
 
 
 
@@ -382,6 +389,7 @@ goog-te-combo, .VIpgJd-ZVi9od-ORHb *, .VIpgJd-ZVi9od-SmfZ *, .VIpgJd-ZVi9od-xl07
         </tbody>
     </table>  
           
+    <button id="submit-btn" class="btn-default" onclick="window.print()" >Download or Print</button>
 
  
     <div style="float:right;margin:2%"><img  height="80px" src="{% static 'images/principal_signature.png' %}" alt="" ><br><h4>Principal</h4></div>
