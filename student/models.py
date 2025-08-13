@@ -11,6 +11,8 @@ from import_export.resources import ModelResource
 from smart_selects.db_fields import ChainedForeignKey
 from datetime import datetime
 import os
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 UserModel=get_user_model()
 
@@ -19,7 +21,7 @@ def rename_image(instance, filename):
         filename = instance.class_roll+'.'+ext
         year=str(datetime.now().year)
         return os.path.join('media/student/'+year, filename)
-# Create your models here.
+
 class Group(models.Model):
     serial=models.IntegerField(default=10)
     title=models.CharField(max_length=100,unique=True)
@@ -272,11 +274,12 @@ class Student(models.Model):
         if self.present_adress:
             adress=Adress.objects.filter(id=self.present_adress.id).last()
             adress.delete()
-        if bool(self.image) == True :
-            os.remove(self.image.path)
+        if self.image:
+                if os.path.isfile(self.image.path):
+                    os.remove(self.image.path)
         super(Student, self).delete(*args, **kwargs)
     
-    
+
     
     
 class SscEquvalent(models.Model):

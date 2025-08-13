@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render,redirect
 from student.forms import StudentForm,AdressForm,PresentAdressForm,SscEquvalentForm,SubjectChoiceForm,GuardianForm
 from student.models import Group,Student,Session,SubjectChoice,SscEquvalent,StudentCategory,Division,District,Upazilla,Union,Adress
@@ -15,6 +15,7 @@ from django.template.loader import render_to_string
 from payment.sslcommerz import sslcommerz_payment_gateway_admission
 import random
 import string
+from django.contrib import messages 
 
 
 def generate_student_id( size=8, chars=string.digits):
@@ -30,7 +31,6 @@ board={
 # Create your views here.
 def admissionLogin(request ):
     form = AdmissionLoginForm()
-    
     return render(request, 'admission/admission_login.html',{'form':form})
 # Create your views here.
 # Create your views here.
@@ -44,6 +44,7 @@ def admissionForm(request):
             try:
                 str=board[str]
             except():
+                messages.success(request, "Your creadential doesn't match!!")
                 return redirect('admission_login')
 
 
@@ -54,7 +55,7 @@ def admissionForm(request):
                 context={}
                 #student=StudentAdmission.objects.filter(ssc_roll=request.POST.get('password'),board=board[str[-3:]],status='Not Admitted').first()
                 payment_purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
-                group=Group.objects.filter(title_en=student.group).first()
+                group=Group.objects.filter(title_en=student.admission_group).first()
                 if group:
                     select_admission=SelectAdmissionForm()
                     form = StudentForm(instance=student)
@@ -62,7 +63,7 @@ def admissionForm(request):
                     adress_formset = AdressFormSet(queryset=Adress.objects.none())
                     adress_form = AdressForm()
                     present_adress_form = AdressForm()
-                    ssc_equivalent_form=SscEquvalentForm()
+                    ssc_equivalent_form=SscEquvalentForm(instance=student)
                     guardian_form=GuardianForm()
                     context={'payment_purpose':payment_purpose,'group':group,'form':form,'subject_form':subject_form,'adress_form':adress_form,'ssc_equivalent_form':ssc_equivalent_form,'guardian_form':guardian_form,'present_adress_form':present_adress_form}
                     context['adress_formset']=adress_formset
@@ -70,12 +71,14 @@ def admissionForm(request):
     
                 else:
                     subject_form = None
+                    messages.success(request, "Your creadential doesn't match!!")
                     return redirect('admission_login')
             except():
                 print("Exception")
+                messages.success(request, "Your creadential doesn't match!!")
                 return redirect('admission_login')
 
-            
+    messages.success(request, "Your creadential doesn't match!!")       
     return redirect('admission_login')
 
 
@@ -88,11 +91,13 @@ def admissionFormSubmit(request):
     context ={}
 
     data = {}
-    #student=StudentAdmission.objects.filter(ssc_roll=request.POST.get('password'),board=board[str[-3:]],status='Not Admitted').first()
     flag1=0
     flag2=0
     flag3=0
     if request.method=='POST':
+        # return HttpResponse(request.POST.get('ssc_board'))
+        # student=StudentAdmission.objects.filter(ssc_roll=request.POST.get('ssc_exam_roll'),board=request.POST.get('ssc_board'),status='Not Admitted').first()
+        # return HttpResponse(student)
         group=None
         print("got it")
         student_form=None
@@ -187,9 +192,9 @@ def admissionFormSubmit(request):
             student_form.student_category=student_category
             student_form.save()
 
-            print('6. Student form',email,username)
-        print(form.errors)
-        print(group)
+            # print('6. Student form',email,username)
+        # print(form.errors)
+        # print(group)
         subject_form = SubjectChoiceForm(request.POST,group=group)
 
 

@@ -11,8 +11,7 @@ MARITAL_CHOICES = [('Unmarried', 'Unmarried'),('Married', 'Married'),('Divorced'
 BlOOD_CHOICE=[('AB+', 'AB+'),('A+', 'A+'),('B+', 'B+'),('O+', 'O+'),('AB-', 'AB-'),('A-', 'A-'),('B-', 'B-'),('O-', 'O-'),]
         
 def year_choices():
-    return [(r,r) for r in range(2009, datetime.date.today().year+1)]
-
+    return [(r,r) for r in range(datetime.date.today().year-1, datetime.date.today().year+1)]
 CHOICES = [
         ('Female', 'Female'),
         ('Male', 'Male'),
@@ -64,7 +63,7 @@ MOTHER_PROFESSION_CHOICE = [
         ]
         
 class StudentForm(forms.ModelForm):
-    session=forms.ModelChoiceField(queryset=Session.objects.all(),initial=Session.objects.first(),widget=forms.Select(attrs={'class': 'form-control form-control-sm','onchange' : 'myFunction(this.id)',}))
+    session=forms.ModelChoiceField(queryset=Session.objects.filter(id=Session.objects.first().id),initial=Session.objects.first(),widget=forms.Select(attrs={'class': 'form-control form-control-sm','onchange' : 'myFunction(this.id)',}))
 
 
     class Meta:
@@ -78,7 +77,7 @@ class StudentForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control form-control-sm',  'placeholder':  'Name in English','onkeypress' : "myFunction(this.id)",}),
             'name_bangla': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'নাম লিখুন(বাংলায়)','onkeypress' : "myFunction(this.id)",}),
             'email': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Email','onkeypress' : "myFunction(this.id)",}),
-            'phone': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  '11 digits ','onkeypress' : "myFunction(this.id)",}),
+            'phone': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  '11 digits ','required':True,'onkeypress' : "myFunction(this.id)",}),
             'date_of_birth': forms.DateInput(format=('%d-%m-%Y'),attrs={'class': 'form-control form-control-sm', 'placeholder': 'Select a date','type': 'date'}),
             'group': forms.Select(attrs={'class': 'form-control form-control-sm', 'style': 'margin-bottom:3px;','onchange' : "studentGroup(this.id)"}),
             'birth_registration': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Birth registration Number'}),
@@ -96,6 +95,7 @@ class StudentForm(forms.ModelForm):
             super(StudentForm, self).__init__(*args, **kwargs)
             if student:
                  self.fields['name']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.name}))
+                 self.fields['group']=forms.ModelChoiceField(queryset=Group.objects.filter(title_en=student.admission_group),initial=student.admission_group,widget=forms.Select(attrs={'class': 'form-control form-control-sm','value':student.admission_group}))
 
 
         
@@ -244,8 +244,7 @@ class PresentAdressForm(forms.ModelForm):
 class SscEquvalentForm(forms.ModelForm):
     
     # group=forms.ModelChoiceField(label="",queryset=Group.objects.all().values_list('id', 'title_en'),widget=forms.Select(attrs={'class':'form-control form-control-sm'}),empty_label="Placeholder",)
-    # session=forms.ModelChoiceField(label="",queryset=Session.objects.all().values_list('id', 'title_en'),widget=forms.Select(attrs={'class':'form-control form-control-sm'}),empty_label="Placeholder",)
-    ssc_passing_year= forms.ChoiceField(choices=year_choices,widget=forms.Select(attrs={'class':'form-control form-control-sm'}))
+    #ssc_session=forms.ModelChoiceField(queryset=Session.objects.all()[1:3],initial=None,widget=forms.Select(attrs={'class': 'form-control form-control-sm'}))
 
     class Meta:
         model = SscEquvalent
@@ -255,11 +254,17 @@ class SscEquvalentForm(forms.ModelForm):
         
         widgets = {
             'ssc_or_equvalent': forms.Select(choices=DEGREE_CHOICE,attrs={'class': 'form-control form-control-sm','onkeypress' : "myFunction(this.id);"}),
-            'ssc_board': forms.Select(choices=BOARD_CHOICE,attrs={'class': 'form-control form-control-sm','onkeypress' : "myFunction(this.id)"}),
-            'ssc_group': forms.Select(attrs={'class': 'form-control form-control-sm','onkeypress' : "myFunction(this.id);",'required':'true'}),
-            'ssc_session': forms.Select(attrs={'class': 'form-control form-control-sm','onkeypress' : "myFunction(this.id);",'required':'true'}),
-            'ssc_exam_roll': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'SSC/Equivalent Roll'}),
             'ssc_regitration_no': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'SSC/Equivalent Registration'}),
             'ssc_cgpa_with_4th': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'CGPA with 4th Subject'}),
             'ssc_cgpa_without_4th': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'CGPA without 4th Subject'}),
             }
+    def __init__(self, *args, **kwargs):
+            student = kwargs.pop('instance', None)
+            super(SscEquvalentForm, self).__init__(*args, **kwargs)
+            if student:
+                 self.fields['ssc_exam_roll']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.ssc_roll}))
+                 self.fields['ssc_group']=forms.ModelChoiceField(queryset=Group.objects.filter(title_en=student.group),initial=Group.objects.filter(title_en=student.group).first(),widget=forms.Select(attrs={'class': 'form-control form-control-sm'}))
+                 self.fields['ssc_board']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.board}))
+                 self.fields['ssc_passing_year']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.passing_year}))
+                 self.fields['ssc_session']=forms.ModelChoiceField(queryset=Session.objects.all()[1:3],initial=None,widget=forms.Select(attrs={'class': 'form-control form-control-sm'}))
+

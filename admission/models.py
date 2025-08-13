@@ -14,6 +14,7 @@ class StudentAdmission(models.Model):
     passing_year=models.CharField( max_length=25, blank=True,null=True)
     board=models.CharField(max_length=25,blank=True,null=True)
     group=models.CharField(max_length=25,blank=True,null=True)
+    admission_group=models.CharField(max_length=25,blank=True,null=True)
     quota=models.CharField(max_length=25,blank=True,null=True)
     status=models.CharField(max_length=100,default="Not Admitted")
 
