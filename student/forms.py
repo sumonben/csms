@@ -71,6 +71,9 @@ class StudentForm(forms.ModelForm):
         BlOOD_CHOICE=[('AB+', 'AB+'),('A+', 'A+'),('B+', 'B+'),('O+', 'O+'),('AB-', 'AB-'),('A-', 'A-'),('B-', 'B-'),('O-', 'O-'),]
         model = Student
         fields = "__all__"
+        labels = {
+        "image":  "Choose  Image Size 300*300(Passport size) ",
+        }
         exclude=['std_id','class_roll','exam_roll','registration','passing_year','student_category','department','section','class_year','cgpa','guardian_info','present_adress','permanent_adress','user','is_active','fourth_subject','signature']
         #department=forms.ModelChoiceField(label="",queryset=Department.objects.all(),empty_label="Placeholder",)
         widgets = {
@@ -95,7 +98,7 @@ class StudentForm(forms.ModelForm):
             super(StudentForm, self).__init__(*args, **kwargs)
             if student:
                  self.fields['name']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.name}))
-                 self.fields['group']=forms.ModelChoiceField(queryset=Group.objects.filter(title_en=student.admission_group),initial=student.admission_group,widget=forms.Select(attrs={'class': 'form-control form-control-sm','value':student.admission_group}))
+                 self.fields['group']=forms.ModelChoiceField(label='Admission Group', queryset=Group.objects.filter(title_en=student.admission_group),initial=student.admission_group,widget=forms.Select(attrs={'class': 'form-control form-control-sm','value':student.admission_group}))
 
 
         
@@ -159,11 +162,12 @@ class SubjectChoiceForm(forms.ModelForm):
         if group:
             if group.title_en=="Science":
                 self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3,4,5,]), widget=FilteredSelectMultiple('Comulsory Subject',True, attrs={'class':'form-control form-control-sm',}))
-                self.fields['optional_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(group=group, type='Fourth'), widget=FilteredSelectMultiple('Optional Subject',False, attrs={'class':'form-control form-control-sm',}))
- 
+                self.fields['optional_subject']=forms.ModelMultipleChoiceField(label='Choose 1 as Main Subject', queryset=Subject.objects.filter(group=group, type='Fourth'), widget=FilteredSelectMultiple('Optional Subject',False, attrs={'class':'form-control form-control-sm',}))
+                self.fields['fourth_subject']=forms.ModelChoiceField(queryset=Subject.objects.filter(group=group, type='Fourth'),initial=Subject.objects.filter(serial__in=[ 7,]), widget=forms.Select( attrs={'class':'form-control form-control-sm',}))
+
             if group.title_en=="Humanities":
                 self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3,8]), widget=FilteredSelectMultiple('Comulsory Subject',True, attrs={'class':'form-control form-control-sm',}))
-                self.fields['optional_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(type='Optional')|Q(type='Fourth'), group=group ), widget=FilteredSelectMultiple('Optional Subject',False, attrs={'class':'form-control form-control-sm',}))
+                self.fields['optional_subject']=forms.ModelMultipleChoiceField(label='Choose any 2 as Optional Subject',queryset=Subject.objects.filter(Q(type='Optional')|Q(type='Fourth'), group=group ), widget=FilteredSelectMultiple('Optional Subject',False, attrs={'class':'form-control form-control-sm',}))
                 self.fields['fourth_subject']=forms.ModelChoiceField(queryset=Subject.objects.filter(Q(type='Optional')|Q(type='Fourth'), group=group), widget=forms.Select( attrs={'class':'form-control form-control-sm',}))
             if group.title_en=="Business Studies":
                 self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3,13,14,16]), widget=FilteredSelectMultiple('Comulsory Subject',True, attrs={'class':'form-control form-control-sm',}))

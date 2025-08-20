@@ -15,7 +15,7 @@ from django.template.loader import render_to_string
 from payment.sslcommerz import sslcommerz_payment_gateway_admission
 import random
 import string
-from django.contrib import messages 
+from django.contrib import messages
 
 
 def generate_student_id( size=8, chars=string.digits):
@@ -25,8 +25,18 @@ UserModel=get_user_model()
 board={
     'DHA':'Dhaka',
     'RAJ':'Rajshahi',
-    'CHA':'Chattogram',
     'DIN':'Dinajpur',
+    'MAD':'Madrasah',    
+    'BTE':'BTEB',
+    'TEC':'Technical',
+    'CHA':'Chattogram',
+    'JAS':'Jashore',
+    'JES':'Jessore',
+    'MYM':'Mymensingh',
+    'CUM':'Cumilla',
+    'BAR':'Barishal',
+    'SYL':'Sylhet',
+
 }
 # Create your views here.
 def admissionLogin(request ):
@@ -36,26 +46,35 @@ def admissionLogin(request ):
 # Create your views here.
 
 def admissionForm(request):
+    
     if request.POST.get('username') and request.POST.get('password') :
         str=request.POST.get('username')
         str1=request.POST.get('password')
         str=str[6:9]
+        #return HttpResponse(str1)
         if str in board:
             try:
                 str=board[str]
+
             except():
-                messages.success(request, "Your creadential doesn't match!!")
+                messages.error(request, 'Credentials not Matched!!')
                 return redirect('admission_login')
 
 
         str2=request.POST.get('purpose')
-        student=StudentAdmission.objects.filter(ssc_roll=str1,board=str,status="Not Admitted").last()
+        student=StudentAdmission.objects.filter(ssc_roll=str1,board=str).last()
+        
         if student:
+            if student.status == "Admitted":
+                messages.error(request, 'Your Admssion already done, you can download admission form!')
+                return redirect('admission_login')
             try:
+
                 context={}
                 #student=StudentAdmission.objects.filter(ssc_roll=request.POST.get('password'),board=board[str[-3:]],status='Not Admitted').first()
                 payment_purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
                 group=Group.objects.filter(title_en=student.admission_group).first()
+                # return HttpResponse(group)
                 if group:
                     select_admission=SelectAdmissionForm()
                     form = StudentForm(instance=student)
@@ -71,14 +90,14 @@ def admissionForm(request):
     
                 else:
                     subject_form = None
-                    messages.success(request, "Your creadential doesn't match!!")
+                    messages.error(request, 'Group not found!!')
                     return redirect('admission_login')
             except():
-                print("Exception")
-                messages.success(request, "Your creadential doesn't match!!")
+                #print("Exception")
+                messages.error(request, 'Form creation failed, Try again!!')
                 return redirect('admission_login')
 
-    messages.success(request, "Your creadential doesn't match!!")       
+    messages.error(request, 'Creadential not matched!!')
     return redirect('admission_login')
 
 
@@ -105,11 +124,13 @@ def admissionFormSubmit(request):
         username=request.POST.get('phone')
         last_name='student'
         password='Student@'+request.POST.get('phone')
+        student=Student.objects.filter(name=request.POST.get('name'),phone=request.POST.get('phone')).first()
+        ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
         if UserModel.objects.filter(email=email).exists() is True:
             email='Email already exist in user system!! '
             context['email']=email
             print('1',email,username)
-            
+           
         if UserModel.objects.filter(username=username).exists() is True:
             phone='Phone number already exist in user system!! '
             context['phone']=phone
@@ -120,6 +141,16 @@ def admissionFormSubmit(request):
             return JsonResponse({'context': context},safe=False)
         
         tran_purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
+        student=Student.objects.filter(name=request.POST.get('name'),phone=request.POST.get('phone')).last()
+        ssc_equivalent=SscEquvalent.objects.filter(student=student).last()
+        if student and ssc_equivalent:
+            student_admission=StudentAdmission.objects.filter(ssc_roll=ssc_equivalent.ssc_exam_roll,name=student.name).first()
+            if  student_admission.status== "Not Admitted":
+                return redirect(sslcommerz_payment_gateway_admission(request, student,tran_purpose))
+            else:
+                messages.error(request, 'Your Admission already done, you can download receipt!')
+                return redirect('admission_login')
+
         form = StudentForm(request.POST, request.FILES)
         ssc_equivalent_form = SscEquvalentForm(request.POST)
         guardin_form = GuardianForm(request.POST)
@@ -266,8 +297,6 @@ def admissionFormSubmit(request):
 
 def formDownload(request):
         phone=request.POST.get('student_id')
-        print("sumon",phone)
-
         student=Student.objects.filter(phone=phone).first()
         subject_choice=SubjectChoice.objects.filter(student=student).first()
         

@@ -1,6 +1,5 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from student.models import Student , Choice
 from .forms import SearchPaymentForm,SearchPaymentReceiptForm
 from django.shortcuts import render, redirect
 from django.http import HttpResponse 
@@ -10,7 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse,HttpResponseNotFound
 from .models import Transaction,PaymentPurpose,PaymentType, PaymentConsession,PaymentGateway
-from student.models import Student,GuardianInfo,SscEquvalent,SubjectChoice,Session
+from student.models import Student,GuardianInfo,SscEquvalent,SubjectChoice,Session,Choice
+from admission.models import StudentAdmission
 from .sslcommerz import sslcommerz_payment_gateway
 from sslcommerz_lib import SSLCOMMERZ 
 from django.contrib.auth import get_user_model
@@ -121,7 +121,18 @@ class CheckoutSuccessView(View):
         if tran_purpose.payment_type.id == 1:
                 
                 subject_choice=SubjectChoice.objects.filter(student=student).first()
+                choice=Choice.objects.filter(class_roll=student.class_roll).first()
+                if choice is None:
+                    subjects=set()
+                    for subject in subject_choice.compulsory_subject.all():
+                            subjects.add(subject)
+                    for subject in subject_choice.optional_subject.all():
+                            subjects.add(subject)
+                    subjects=list(subjects)
+                    choice=Choice.objects.create(class_roll=student.class_roll, name=student.name, subject1=subjects[0], subject2=subjects[1], subject3=subjects[2], subject4=subjects[3], subject5=subjects[4], subject6=subjects[5], fourth_subject=subject_choice.fourth_subject)  
+        
                 ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
+                
                 # password="Student@"+data['value_c']
                 # user = get_user_model.objects.create_user(username=data['value_c'],
                 #                  email=data['value_c'],last_name="Student",
@@ -161,6 +172,7 @@ class CheckoutIPNView(View):
                 student.std_id=student.class_roll
                 subject_choice=SubjectChoice.objects.filter(student=student).first()
                 ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
+                student_admission=StudentAdmission.objects.filter(ssc_roll=ssc_equivalent.ssc_exam_roll,board=ssc_equivalent.ssc_board).last()
                 session=Session.objects.first()
                 std_count=Student.objects.filter(group=student.group,session=student.session,is_active=True).count()
                 session_string=session.title_en
@@ -206,6 +218,8 @@ class CheckoutIPNView(View):
                 new_path = os.path.join(settings.MEDIA_ROOT, 'media/student/'+year, filename)
                 if old_path:
                     os.rename(old_path, new_path)
+                student_admission.status="Admitted"
+                student_admission.save()
         if data['status'] == 'VALID':
             post_body['val_id'] = data['val_id']
             response = sslcommez.validationTransactionOrder(post_body['val_id'])

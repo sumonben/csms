@@ -1020,7 +1020,6 @@
                 var subjectCount=0;
                 var compulsory_options;
                 var options;
-                var history_count=0;
                 compulsory_options=document.getElementById('id_compulsory_subject_to').getElementsByTagName('option');
                 subjectCount=compulsory_options.length;
                 document.getElementById('id_compulsory_subject_to').disabled='';
@@ -1028,6 +1027,8 @@
                 options=document.getElementById('id_optional_subject_to').getElementsByTagName('option');
                 var selected_4rth = document.getElementById('id_fourth_subject');
                 var flag_submit=0;
+                var history_count=0;
+
                 //alert(selected_4rth.value);
                 for(i=0;i<options.length ;i++){
                   subjectCount++;
@@ -1039,11 +1040,13 @@
                   if(options[i].value==15 || options[i].value==16 ){
                     history_count+=1; 
                   }
-                  if(selected_4rth.value==15 || selected_4rth.value==16){
-                    history_count+=1; 
-                  }
+                  
+
                 options[i].selected = 'selected';
                }
+               if(selected_4rth.value==15 || selected_4rth.value==16){
+                    history_count+=1; 
+                  }
                 if(subjectCount<6 || flag_submit==1){
                  var alert_box=document.getElementById("alert");
                     alert_box.style.display = "block";
