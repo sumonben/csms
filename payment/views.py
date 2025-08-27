@@ -64,44 +64,10 @@ class CheckoutSuccessView(View):
         #tran_type=PaymentType.objects.filter(id=data['value_d']).first()
         tran_purpose=PaymentPurpose.objects.filter(id=data['value_d']).last()
         student=Student.objects.filter(Q(class_roll=data['value_a']) | Q(std_id=data['value_a'])).first()
+        # return HttpResponse(student)
         context['tran_purpose']=tran_purpose
         
         transaction=None
-        # try:
-        #     transaction=Transaction.objects.create(
-        #                     class_roll=data['value_a'],
-        #                     name = data['value_b'],
-        #                     group=student.group,
-        #                     session=student.session,
-        #                     department=student.department,
-        #                     phone=data['value_c'],
-        #                     email=data['value_c'],
-        #                     tran_id=data['tran_id'],
-        #                     tran_purpose=tran_purpose,
-        #                     val_id=data['val_id'],
-        #                     amount=data['amount'],
-        #                     card_type=data['card_type'],
-        #                     card_no=data['card_no'],
-        #                     store_amount=data['store_amount'],
-        #                     bank_tran_id=data['bank_tran_id'],
-        #                     status=data['status'],
-        #                     tran_date=data['tran_date'],
-        #                     currency=data['currency'],
-        #                     card_issuer=data['card_issuer'],
-        #                     card_brand=data['card_brand'],
-        #                     card_issuer_country=data['card_issuer_country'],
-        #                     card_issuer_country_code=data['card_issuer_country_code'],
-        #                     verify_sign=data['verify_sign'],
-        #                     verify_sign_sha2=data['verify_sign_sha2'],
-        #                     currency_rate=data['currency_rate'],
-        #                     risk_title=data['risk_title'],
-        #                     risk_level=data['risk_level'],
-            
-        #                 )
-        # except:
-        #     messages.success(request,'Something Went Wrong')
-        #     context['messages']=messages
-        #     print('IPN Hit Exeption in Success: ',data)
 
         if tran_purpose.payment_type.id == 2:
                 #print("data['value_d']:",tran_purpose.payment_type)
@@ -121,6 +87,11 @@ class CheckoutSuccessView(View):
         if tran_purpose.payment_type.id == 1:
                 
                 subject_choice=SubjectChoice.objects.filter(student=student).first()
+                subject_choices=[]
+                for subject in subject_choice.compulsory_subject.all():
+                    subject_choices.append(subject)
+                for subject in subject_choice.optional_subject.all():
+                    subject_choices.append(subject)
                 choice=Choice.objects.filter(class_roll=student.class_roll).first()
                 if choice is None:
                     subjects=set()
@@ -147,6 +118,7 @@ class CheckoutSuccessView(View):
                 context['student']=student
                 context['ssc_equivalent']=ssc_equivalent
                 context['subject_choice']=subject_choice
+                context['subject_choices']=subject_choices
                 return render(request,'admission/admission_form.html',context)
         return render(request,self.template_name,context)
 

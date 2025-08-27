@@ -250,9 +250,8 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
   
           </thead>
           <tbody>
-            
             <tr>
-                {% for subject in subject_choice.compulsory_subject.all|slice:"0:2" %}
+                {% for subject in subject_choices|slice:"0:2" %}
 
 
                 <td width="40%"  align="left" valign="middle"> {{subject.name_en}} </td>
@@ -261,7 +260,7 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
                 {% endfor %}
             </tr>
             <tr>
-                {% for subject in subject_choice.compulsory_subject.all|slice:"2:4" %}
+                {% for subject in subject_choices|slice:"2:4" %}
 
 
                 <td  align="left" valign="middle"> {{subject.name_en}} </td>
@@ -271,22 +270,14 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
             </tr>
             
             <tr>
-                {% for subject in subject_choice.compulsory_subject.all|slice:"4:" %}
+                {% for subject in subject_choices|slice:"4:6" %}
 
 
                 <td  align="left" valign="middle"> {{subject.name_en}} </td>
                 <td  align="left" valign="middle"> {{subject.code}} </td>
 
                 {% endfor %}
-                {% if subject_choice.optional_subject %}
-                {% for subject in subject_choice.optional_subject.all %}
-
-
-                <td  align="left" valign="middle"> {{subject.name_en}} </td>
-                <td  align="left" valign="middle"> {{subject.code}} </td>
-
-                {% endfor %}
-                {% endif %}
+                
             </tr>
             <tr>
 
@@ -298,19 +289,20 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
             
             
             
-            
         </tbody>
     </table>
+    
       </fieldset>
-        <table width="100%" border="0" style="margin-top: 20%;" valign="bottom">
+        <table width="100%" border="0" style="margin-top: 10px;" valign="bottom">
           
             <tbody>
               
-              <tr>
-                  <td  align="left" valign="middle"> student Signature</td>
-                  <td  align="left" valign="middle" class="black12">Guardian Signature</td>
-                  <td  align="left" valign="middle">Office Signature</td>
-                  <td  align="left" valign="middle" class="black12"> Principal Signature</td>
+             <tr>
+                  <td  align="left" valign="bottom" style="vertical-align: bottom;"> student Signature</td>
+                  <td  align="left" valign="middle"><div style="text-align:center">
+          <img id='barcode' src="https://api.qrserver.com/v1/create-qr-code/?data={{student.class_roll}}:{{student.name}}:{{student.session}}:{{transaction.tran_id}}:{{transaction.created_at}}&amp;size=200x200" width="120px" height="120px" alt="" title="{{student.class_roll}}:{{student.name}}" width="50" height="50" />
+      </div></td>
+                  <td  align="right" valign="bottom" class="black12" style="vertical-align: bottom;"> <img src="{% static 'images/principal_signature.png'%}" width="150px"><br>Principal Signature</td>
                   
               </tr>
               
@@ -394,5 +386,15 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
       }
 
     </script>
-    
+    <script>
+   
+
+    $( document ).ready(function() {
+        const d = new Date();
+        var nric = '{{student.class_roll}}:{{student.name}}:{{student.session}}:'+d;
+        alert(nric)
+        var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + nric + '&amp;size=200x200';
+        $('#barcode').attr('src', url);
+      });
+</script>
 {% endblock %}

@@ -53,7 +53,7 @@ class StudentAdmin(ImportExportMixin,admin.ModelAdmin):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)
         writer = csv.writer(response)
-        header = field_names + ['Subject1','Subject2','Subject3','Subject4','Subject5','Subject6','Optional Subject',]
+        header = field_names + ['Subject1','Subject2','Subject3','Subject4','Subject5','Subject6','Fourth Subject',]
         writer.writerow(header)
         for obj in queryset:
             row = [getattr(obj, field) for field in field_names]

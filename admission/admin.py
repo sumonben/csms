@@ -6,6 +6,6 @@ from import_export.admin import ImportExportMixin
 class StudentAdmissionAdmin(ImportExportMixin,admin.ModelAdmin):
     list_display=[ 'id','name','student_details','ssc_roll','admission_group','board','passing_year','quota','group','status']
     list_display_links = ['ssc_roll','name',]
-    list_filter=['board','passing_year','quota','group',]
+    list_filter=['board','passing_year','quota','group','status']
     search_fields=['ssc_roll','name']
 

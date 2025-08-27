@@ -306,8 +306,8 @@ class SscEquvalent(models.Model):
 class SubjectChoice(models.Model):
     serial=models.IntegerField(default=10)
     student=models.ForeignKey(Student,blank=True,null=True,on_delete=models.CASCADE)
-    compulsory_subject=models.ManyToManyField(Subject,related_name='compulsory_subject',blank=True,)
-    optional_subject=models.ManyToManyField(Subject,related_name='optional_subject',blank=True,)
+    compulsory_subject=models.ManyToManyField(Subject,related_name='compulsory_subject',blank=True,null=True)
+    optional_subject=models.ManyToManyField(Subject,related_name='optional_subject',blank=True,null=True)
     fourth_subject=models.ForeignKey(Subject,blank=True,null=True,on_delete=models.SET_NULL)
 
     

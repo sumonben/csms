@@ -1,0 +1,501 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Libre Barcode 39' rel='stylesheet'>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+
+<style>
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 200px;
+  height:300px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.container {
+  padding: 2px 16px;
+}
+.rounded-border {
+  border-radius: 20px 20px 20px 20px;
+  background-position: left top;
+  background-repeat: repeat;
+  padding: 2px; 
+  width: 100px;
+  margin:auto;
+}
+   .flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    width:100%;
+    margin: auto;
+    margin-left:-20px;
+}
+
+.flex-container-back {
+    display: flex;
+    flex-direction:row-reverse;
+    flex-wrap: wrap;
+    width:100%;
+    margin: auto;
+}
+
+.flex-item {
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media print and (min-width: 480px) {
+    body{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    }
+    .pagebreak { page-break-before: always; }
+    .flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left:-3px;
+    text-align:center;
+
+}
+ .flex-container-back{
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    text-align:center;
+
+}
+.flex-item {
+    background-color: #ffffff;
+    border-radius: 0px;
+    text-align: center;
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+    table{
+    
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+        }
+            #submit-btn {
+              display: none !important;;
+            }
+  }
+</style>
+</head>
+<body>
+<table align="center">
+    <tr>
+        <td align="center" >
+<div class="flex-container" >
+    
+    {% for student in students %}
+    
+        <div class="flex-item" style="text-align:center;margin-top:1px;">
+         {% if student.group.title_en == 'Science' %} 
+        <table align="center" cellspacing="0" style="background-color:#fff;width:218px;height:280px;font-weight:bold;font-family:arial;margin-right:1px" >
+           
+            <tr style="background-color:#DC143C;text-align:center;color:white;font-family:verdana;font-weight:bold;font-size:11px;padding-top:10px;padding-bottom:5px;">
+                <td colspan="2" style="padding-top:7px;padding-bottom:5px;">
+                    GOVT. MOJIBOR RAHMAN BHANDARI WOMEN'S COLLEGE
+                </td>
+            </tr>
+                <tr>
+                <td colspan="2" style="background-color:blue;font-size:11.5px;text-align:center;color:#fff">
+                        <div class="rounded-border" style="background-color:#DC143C;"> Student ID Card </div>
+                </td>
+            </tr>
+            <tr>
+                
+                <td align="center">
+                <img   src="{% static 'images/gmrwc_logo.png' %}" alt="Avatar" style="width:50px">
+                <p style="line-height:0.004em;margin-top:4px;font-size:9px;">www.gmrwc.edu.bd</p>
+
+        </td>
+            <td align="center">
+                <img id="image{{student.class_roll}}" src="" alt="Avatar" style="width:90px">
+
+        </td>
+        </tr>
+        
+        
+        
+            <tr>
+                <th id="name{{student.id}}" colspan="2" style="text-align:center;font-family:arial;color:#000;font-size:12px;background-color:#e67e97">
+                    {{student.name}}
+                </th>
+            </tr>
+            <tr style="text-align:center;background-color:#e39bad;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                    Class:11-12, Group: {{student.group}}
+                </td>
+               
+            </tr>
+            <tr style="text-align:center;background-color:#deb6bf;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                Roll: {{student.class_roll}},  Section: {{student.section}}
+                </td>
+               
+            </tr>
+            <tr style="text-align:center;background-color:#e9e6e6;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                    Session: {{student.session}}, Blood Group: {{student.blood_group}}
+                </td>
+               
+            </tr>
+            <tr style="text-align:center;background-color:#e7bfbf;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                    Father: Md. Hasinur Rahman Hasu
+                </td>
+                
+            </tr>
+            <tr style="text-align:center;background-color:#e8aeae;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                    Guardian's Mobile No. : 01712539569
+                </td>
+                
+            </tr>
+            <tr valign="bottom" align="right" bgcolor="#fff">
+                <td style="font-size:8px;">
+                    Expiry Date: 30-06-2027
+                </td>
+                <td style="font-size:8px;text-align:center;">
+                    <img src="{% static 'images/principal_signature.png' %}" width="60px" height="20px"><br>
+                    Principal Signature
+                </td>
+            </tr>
+            <tr>
+                <td  colspan="2" align="center" >
+
+        <svg id="barcode{{student.class_roll}}" ></svg>
+                </td>
+            
+            </tr>
+            <tr>
+                <td  colspan="2" align="center" bgcolor="#DC143C" width="5px"  style="color:#DC143C;font-size:4px;">
+gmrwc        
+                </td>
+            
+            </tr>
+        </table>
+        {% elif student.group.title_en == "Humanities" %}
+
+        <table align="center" cellspacing="0" style="background-color:#fff;width:218px;height:280px;font-weight:bold;font-family:arial;margin-right:1px" >
+           
+            <tr style="background-color:blue;text-align:center;color:white;font-family:verdana;font-weight:bold;font-size:11px;padding-top:10px;padding-bottom:5px;">
+                <td colspan="2" style="padding-top:7px;padding-bottom:5px;">
+                    GOVT. MOJIBOR RAHMAN BHANDARI WOMEN'S COLLEGE
+                </td>
+            </tr>
+                <tr>
+                <td colspan="2" style="background-color:#620992;font-size:11px;text-align:center;color:#fff">
+                        Student ID Card
+                </td>
+            </tr>
+            <tr>
+                
+                <td align="center">
+                <img   src="{% static 'images/gmrwc_logo.png' %}" alt="Avatar" style="width:50px">
+                <p style="line-height:0.004em;margin-top:4px;font-size:9px;">www.gmrwc.edu.bd</p>
+
+        </td>
+            <td align="center">
+                <img id="image{{student.class_roll}}" src="" alt="Avatar" style="width:85px">
+
+        </td>
+        </tr>
+        
+        
+        
+            <tr>
+                <th id="name{{student.id}}" colspan="2" style="text-align:center;color:#000;font-size:12px;background-color:#17a3bb">
+                    {{student.name}}
+                </th>
+            </tr>
+            <tr style="text-align:center;background-color:#50bfd3;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                    Class:11-12, Group: {{student.group}}
+                </td>
+               
+            </tr>
+            <tr style="text-align:center;background-color:#8bd5e2;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                Roll: {{student.class_roll}},  Section: {{student.section}}
+                </td>
+               
+            </tr>
+            <tr style="text-align:center;background-color:#bde3ea;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                    Session: {{student.session}}, Blood Group: {{student.blood_group}}
+                </td>
+               
+            </tr>
+            <tr style="text-align:center;background-color:#cdeef4;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                    Father: Md. Hasinur Rahman Hasu
+                </td>
+                
+            </tr>
+            <tr style="text-align:center;background-color:#cdeef4;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                    Guardian's Mobile No. : 01712539569
+                </td>
+                
+            </tr>
+            <tr valign="bottom" align="center" bgcolor="#fff">
+                <td style="font-size:8px;">
+                    Expiry Date: 30-06-2027
+                </td>
+                <td style="font-size:8px;text-align:right;">
+                    <img src="{% static 'images/principal_signature.png' %}" width="60px" height="20px"><br>
+                    Principal Signature
+                </td>
+            </tr>
+            <tr>
+                <td  colspan="2" align="center" >
+
+        <svg id="barcode{{student.class_roll}}" ></svg>
+                </td>
+            
+            </tr>
+            <tr>
+                <td  colspan="2" align="center" bgcolor="blue" width="5px"  style="color:blue;font-size:4px;">
+gmrwc        
+                </td>
+            
+            </tr>
+        </table>
+
+
+
+       
+        {% else %}
+
+                
+        <table align="center" cellspacing="0" style="background-color:#fff;width:218px;height:280px;font-weight:bold;font-family:arial;margin-right:1px" >
+           
+            <tr style="background-color:#e6b605;text-align:center;color:#000;font-family:verdana;font-weight:bold;font-size:11px;padding-top:10px;padding-bottom:5px;">
+                <td colspan="2" style="padding-top:7px;padding-bottom:5px;">
+                    GOVT. MOJIBOR RAHMAN BHANDARI WOMEN'S COLLEGE
+                </td>
+            </tr>
+                <tr>
+                <td colspan="2" style="background-color:blue;font-size:11px;text-align:center;color:#fff">
+                        Student ID Card
+                </td>
+            </tr>
+            <tr>
+                
+                <td align="center">
+                <img   src="{% static 'images/gmrwc_logo.png' %}" alt="Avatar" style="width:50px">
+                <p style="line-height:0.004em;margin-top:4px;font-size:9px;">www.gmrwc.edu.bd</p>
+
+        </td>
+            <td align="center">
+                <img id="image{{student.class_roll}}" src="" alt="Avatar" style="width:85px">
+
+        </td>
+        </tr>
+        
+        
+        
+            <tr>
+                <th id="name{{student.id}}" colspan="2" style="text-align:center;color:#000;font-size:12px;background-color:#d18d5e;font-weight: normal;">
+                    {{student.name}}
+                </th>
+            </tr>
+            <tr style="text-align:center;background-color:#e2b494;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                    Class:11-12, Group: {{student.group}}
+                </td>
+               
+            </tr>
+            <tr style="text-align:center;background-color:#ecc9b1;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                Roll: {{student.class_roll}},  Section: {{student.section}}
+                </td>
+               
+            </tr>
+            <tr style="text-align:center;background-color:#f1dbcc;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                    Session: {{student.session}}, Blood Group: {{student.blood_group}}
+                </td>
+               
+            </tr>
+            <tr style="text-align:center;background-color:#f6e7dd;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                    Father: Md. Hasinur Rahman Hasu
+                </td>
+                
+            </tr>
+            <tr style="text-align:center;background-color:#f7efea;font-size:10px;font-weight: normal;">
+                <td colspan="2">
+                    Guardian's Mobile No. : 01712539569
+                </td>
+                
+            </tr>
+            <tr valign="bottom" align="center" bgcolor="#fff">
+                <td style="font-size:8px;">
+                    Expiry Date: 30-06-2027
+                </td>
+                <td style="font-size:8px;text-align:right">
+                    <img src="{% static 'images/principal_signature.png' %}" width="60px" height="20px"><br>
+                    Principal Signature
+                </td>
+            </tr>
+            <tr>
+                <td  colspan="2" align="center" >
+
+        <svg id="barcode{{student.class_roll}}" ></svg>
+                </td>
+            
+            </tr>
+            <tr>
+                <td  colspan="2" align="center" bgcolor="#e6b605" width="5px"  style="color:#e6b605;font-size:4px;">
+gmrwc        
+                </td>
+            
+            </tr>
+        </table>
+        {% endif %}
+        </div>
+        
+    <script>
+       
+    JsBarcode("#barcode{{student.class_roll}}", "{{student.class_roll}}", {
+      format: "CODE128",
+      lineColor: "#0aa",
+      textMargin: 0,
+      width:1.8,
+      height:26,
+      displayValue: false
+    });
+    document.getElementById("image{{student.class_roll}}").src = ('/static/images/hsc-2024-25/{{ student.class_roll }}.jpg').replace(/&amp;/g, "&");
+    
+    var h=document.getElementById("name{{student.id}}").offsetHeight;
+    if(h>16){
+        document.getElementById("name{{student.id}}").style="font-size:11px;background-color:#e67e97";
+    }
+  </script>
+        {% endfor %}
+</div>
+
+<div class="pagebreak"></div>  
+
+<div class="flex-container-back">
+    {% for student in students %}
+    
+    <div class="flex-item" style="text-align:center;margin-top:2px;">
+        <table align="center" cellspacing="0" style="background-color:rgb(255, 255, 255);width:218px;height:275px;font-weight:bold;font-family:arial;margin-right:1px" >
+             <tr>
+                <td colspan="2" style="text-align:center;color:#000;font-weight:normal;height:50px;padding-left:10px;padding-right:10px;padding-top:4px;">
+                        IF FOUND PLEASE RETURN TO 
+                </td>
+            </tr>
+            <tr style="text-align:center;font-weight:normal;font-size:11.5px;padding-top:10px;padding-bottom:5px;">
+                <td colspan="2" style="padding-top:8px;padding-left:11px;padding-right:11px;padding-bottom:8px;">
+                    GOVT. MOJIBOR RAHMAN BHANDARI WOMEN'S COLLEGE<br>
+                    BOGURA SADAR, BAGURA
+                </td>
+            </tr>
+               
+            <tr>
+                
+                <td align="center" colspan="2">
+                <img src="{% static 'images/gmrwc_logo.png' %}" alt="Avatar" style="width:78px">
+                <p style="line-height:0.004em;margin-top:4px;font-size:9px;font-weight:normal;">www.gmrwc.edu.bd</p>
+
+       
+        </tr>
+        
+        
+        
+            <tr>
+                <th colspan="2" style="text-align:center;color:#fff;font-size:12px;">
+                    {{student.name}}
+                </th>
+            </tr>
+            <tr  style="text-align:center;color:#000;font-size:12px;font-weight:normal;">
+                <td colspan="2" >
+                    Office Contact: 01309119250
+                </td>
+                
+            </tr>
+            <tr style="text-align:center;color:#000;font-size:12px;font-weight:normal;">
+               <td colspan="2">
+                    Email: gmrwcollege@gmail.com
+                </td>
+            </tr>
+            <tr style="text-align:center;color:#fff;font-size:12px;font-weight:normal;">
+                <td>
+                    Session: {{student.session}}
+                </td>
+                <td>
+                    Blood Group: A+
+                </td>
+            </tr>
+            
+           
+
+            <tr>
+                <td  colspan="2" align="center" >
+
+            <svg id="barcode{{student.class_roll}}" ></svg>
+                </td>
+            
+            </tr>
+            <tr>
+                 {% if student.group.title_en == "Science" %}
+<td  colspan="2" align="center" bgcolor="#DC143C" width="5px"  style="color:#DC143C;font-size:4px;">
+gmrwc        
+</td>
+                                     {% elif student.group.title_en == "Humanities" %}
+<td  colspan="2" align="center" bgcolor="blue" width="5px"  style="color:blue;font-size:4px;">
+gmrwc        
+                </td>
+                     {% else %}
+<td  colspan="2" align="center" bgcolor="#e6b605" width="5px"  style="color:#e6b605;font-size:4px;">
+gmrwc        
+                </td>                  
+                    {% endif %}
+        
+                
+            
+            </tr>
+        </table>
+        </div>
+        
+    <script>
+    JsBarcode("#barcode{{student.class_roll}}", "{{student.class_roll}}", {
+      format: "CODE128",
+      lineColor: "#0aa",
+      textMargin: 0,
+      width:1.7,
+      height:24,
+      displayValue: false
+    });
+    document.getElementById("image{{student.class_roll}}").src = ('/static/images/hsc-2024-25/{{ student.class_roll }}.jpg').replace(/&amp;/g, "&");
+
+  </script>
+        {% endfor %}
+</div>
+
+  </td>
+  </tr>
+  </table>
+
+
+</body>
+</html> 

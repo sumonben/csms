@@ -21,14 +21,20 @@
 .container {
   padding: 2px 16px;
 }
-
+.rounded-border {
+  border-radius: 20px 20px 20px 20px;
+  background-position: left top;
+  background-repeat: repeat;
+  padding: 2px; 
+  width: 100px;
+  margin:auto;
+}
    .flex-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
     width:100%;
     margin: auto;
-    margin-left:-20px;
+    margin-left:-16px;
 }
 
 .flex-container-back {
@@ -36,7 +42,6 @@
     flex-direction:row-reverse;
     flex-wrap: wrap;
     width:100%;
-    justify-content: space-between;
     margin: auto;
 }
 
@@ -45,7 +50,6 @@
     background-color: #ffffff;
     border-radius: 8px;
     text-align: center;
-    border:3px solid #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -57,19 +61,20 @@
     margin: 0;
     padding: 0;
     }
+    #heading_science{
+        background-color: cmyk(0%, 100%, 100%, 0%);
+    }
     .pagebreak { page-break-before: always; }
     .flex-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
-    margin-left:-15px;
+    margin-left:1px;
     text-align:center;
 
 }
  .flex-container-back{
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
     margin: auto;
     text-align:center;
 
@@ -103,16 +108,16 @@
     
         <div class="flex-item" style="text-align:center;margin-top:1px;">
          {% if student.group.title_en == 'Science' %} 
-        <table align="center" cellspacing="0" style="background-color:#fff;width:218px;height:280px;font-weight:bold;font-family:arial;margin-right:1px" >
+        <table align="center" cellspacing="0" style="background-color:#fff;width:214px;height:280px;font-weight:bold;font-family:arial;margin-right:1px" >
            
-            <tr style="background-color:#DC143C;text-align:center;color:white;font-family:verdana;font-weight:bold;font-size:11px;padding-top:10px;padding-bottom:5px;">
+            <tr id="heading_science" style="background-color:#DC143C;text-align:center;color:white;font-family:verdana;font-weight:bold;font-size:11px;padding-top:10px;padding-bottom:5px;">
                 <td colspan="2" style="padding-top:7px;padding-bottom:5px;">
                     GOVT. MOJIBOR RAHMAN BHANDARI WOMEN'S COLLEGE
                 </td>
             </tr>
                 <tr>
-                <td colspan="2" style="background-color:blue;font-size:11px;text-align:center;color:#fff">
-                        Student ID Card
+                <td colspan="2" style="background-color:blue;font-size:11.5px;text-align:center;color:#fff">
+                        <div class="rounded-border" style="background-color:#DC143C;"> Student ID Card </div>
                 </td>
             </tr>
             <tr>
@@ -123,7 +128,7 @@
 
         </td>
             <td align="center">
-                <img id="image{{student.class_roll}}" src="" alt="Avatar" style="width:85px">
+                <img id="image{{student.class_roll}}" src="" alt="Avatar" style="width:90px">
 
         </td>
         </tr>
@@ -190,7 +195,7 @@ gmrwc
         </table>
         {% elif student.group.title_en == "Humanities" %}
 
-        <table align="center" cellspacing="0" style="background-color:#fff;width:218px;height:280px;font-weight:bold;font-family:arial;margin-right:1px" >
+        <table align="center" cellspacing="0" style="background-color:#fff;width:214px;height:280px;font-weight:bold;font-family:arial;margin-right:1px" >
            
             <tr style="background-color:blue;text-align:center;color:white;font-family:verdana;font-weight:bold;font-size:11px;padding-top:10px;padding-bottom:5px;">
                 <td colspan="2" style="padding-top:7px;padding-bottom:5px;">
@@ -199,7 +204,7 @@ gmrwc
             </tr>
                 <tr>
                 <td colspan="2" style="background-color:#620992;font-size:11px;text-align:center;color:#fff">
-                        Student ID Card
+                        <div class="rounded-border" style="background-color:#DC143C;"> Student ID Card </div>
                 </td>
             </tr>
             <tr>
@@ -282,7 +287,7 @@ gmrwc
         {% else %}
 
                 
-        <table align="center" cellspacing="0" style="background-color:#fff;width:218px;height:280px;font-weight:bold;font-family:arial;margin-right:1px" >
+        <table align="center" cellspacing="0" style="background-color:#fff;width:214px;height:280px;font-weight:bold;font-family:arial;margin-right:1px" >
            
             <tr style="background-color:#e6b605;text-align:center;color:#000;font-family:verdana;font-weight:bold;font-size:11px;padding-top:10px;padding-bottom:5px;">
                 <td colspan="2" style="padding-top:7px;padding-bottom:5px;">
@@ -291,7 +296,7 @@ gmrwc
             </tr>
                 <tr>
                 <td colspan="2" style="background-color:blue;font-size:11px;text-align:center;color:#fff">
-                        Student ID Card
+                        <div class="rounded-border" style="background-color:#DC143C;"> Student ID Card </div>
                 </td>
             </tr>
             <tr>
@@ -376,8 +381,8 @@ gmrwc
       format: "CODE128",
       lineColor: "#0aa",
       textMargin: 0,
-      width:1.7,
-      height:24,
+      width:1.8,
+      height:26,
       displayValue: false
     });
     document.getElementById("image{{student.class_roll}}").src = ('/static/images/hsc-2024-25/{{ student.class_roll }}.jpg').replace(/&amp;/g, "&");
@@ -396,14 +401,14 @@ gmrwc
     {% for student in students %}
     
     <div class="flex-item" style="text-align:center;margin-top:2px;">
-        <table align="center" cellspacing="0" style="background-color:rgb(255, 255, 255);width:218px;height:275px;font-weight:bold;font-family:arial;margin-right:1px" >
+        <table align="center" cellspacing="0" style="background-color:rgb(255, 255, 255);width:214px;height:275px;font-weight:bold;font-family:arial;margin-right:1px" >
              <tr>
                 <td colspan="2" style="text-align:center;color:#000;font-weight:normal;height:50px;padding-left:10px;padding-right:10px;padding-top:4px;">
                         IF FOUND PLEASE RETURN TO 
                 </td>
             </tr>
-            <tr style="text-align:center;font-weight:normal;font-size:11px;padding-top:10px;padding-bottom:5px;">
-                <td colspan="2" style="padding-top:8px;padding-left: 11px;padding-right:11px;padding-bottom:8px;">
+            <tr style="text-align:center;font-weight:normal;font-size:11.5px;padding-top:10px;padding-bottom:5px;">
+                <td colspan="2" style="padding-top:8px;padding-left:11px;padding-right:11px;padding-bottom:8px;">
                     GOVT. MOJIBOR RAHMAN BHANDARI WOMEN'S COLLEGE<br>
                     BOGURA SADAR, BAGURA
                 </td>
@@ -412,7 +417,7 @@ gmrwc
             <tr>
                 
                 <td align="center" colspan="2">
-                <img src="{% static 'images/gmrwc_logo.png' %}" alt="Avatar" style="width:68px">
+                <img src="{% static 'images/gmrwc_logo.png' %}" alt="Avatar" style="width:78px">
                 <p style="line-height:0.004em;margin-top:4px;font-size:9px;font-weight:normal;">www.gmrwc.edu.bd</p>
 
        

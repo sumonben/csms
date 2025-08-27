@@ -89,7 +89,7 @@ class StudentForm(forms.ModelForm):
             'marital_status': forms.Select(choices=MARITAL_CHOICES,attrs={'class': 'form-control form-control-sm',}),
             'religion': forms.Select(choices=RELIGION_CHOICES,attrs={'class': 'form-control form-control-sm',}),
             'gender': forms.Select(choices=CHOICES,attrs={'class': 'form-control form-control-sm',}),
-            'image': forms.FileInput(attrs={'class': 'form-control form-control-sm','required':True}),
+            'image': forms.FileInput(attrs={'class': 'form-control form-control-sm'}),
             
 
       }    
@@ -162,29 +162,33 @@ class SubjectChoiceForm(forms.ModelForm):
         if group:
             if group.title_en=="Science":
                 self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3,4,5,]), widget=FilteredSelectMultiple('Comulsory Subject',True, attrs={'class':'form-control form-control-sm',}))
-                self.fields['optional_subject']=forms.ModelMultipleChoiceField(label='Choose 1 as Main Subject', queryset=Subject.objects.filter(group=group, type='Fourth'), widget=FilteredSelectMultiple('Optional Subject',False, attrs={'class':'form-control form-control-sm',}))
+                self.fields['optional_subject']=forms.ModelMultipleChoiceField(label='Choose 1 as Main Subject', queryset=Subject.objects.filter(group=group, type='Fourth'), widget=FilteredSelectMultiple('Science Optional Subject',False, attrs={'class':'form-control form-control-sm',}))
                 self.fields['fourth_subject']=forms.ModelChoiceField(queryset=Subject.objects.filter(group=group, type='Fourth'),initial=Subject.objects.filter(serial__in=[ 7,]), widget=forms.Select( attrs={'class':'form-control form-control-sm',}))
 
             if group.title_en=="Humanities":
                 self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3,8]), widget=FilteredSelectMultiple('Comulsory Subject',True, attrs={'class':'form-control form-control-sm',}))
-                self.fields['optional_subject']=forms.ModelMultipleChoiceField(label='Choose any 2 as Optional Subject',queryset=Subject.objects.filter(Q(type='Optional')|Q(type='Fourth'), group=group ), widget=FilteredSelectMultiple('Optional Subject',False, attrs={'class':'form-control form-control-sm',}))
+                self.fields['optional_subject']=forms.ModelMultipleChoiceField(label='Choose any 2 as Optional Subject',queryset=Subject.objects.filter(Q(type='Optional')|Q(type='Fourth'), group=group ), widget=FilteredSelectMultiple('Humanities Optional Subject',False, attrs={'class':'form-control form-control-sm',}))
                 self.fields['fourth_subject']=forms.ModelChoiceField(queryset=Subject.objects.filter(Q(type='Optional')|Q(type='Fourth'), group=group), widget=forms.Select( attrs={'class':'form-control form-control-sm',}))
             if group.title_en=="Business Studies":
-                self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3,13,14,16]), widget=FilteredSelectMultiple('Comulsory Subject',True, attrs={'class':'form-control form-control-sm',}))
-                self.fields['fourth_subject']=forms.ModelChoiceField(queryset=Subject.objects.filter(serial__in=[9,]),initial=Subject.objects.filter(serial__in=[ 9,]), widget=forms.Select( attrs={'class':'form-control form-control-sm',}))
-                if 'optional_subject' in self.fields: del self.fields['optional_subject']
+                self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3]), widget=FilteredSelectMultiple('Comulsory Subject',False, attrs={'class':'form-control form-control-sm',}))
+                self.fields['optional_subject']=forms.ModelMultipleChoiceField(label='Choose all 3 as Main Subject', queryset=Subject.objects.filter(group=group), widget=FilteredSelectMultiple('Group Subject',False, attrs={'class':'form-control form-control-sm',}))
+                self.fields['fourth_subject']=forms.ModelChoiceField(queryset=Subject.objects.filter(serial__in=[9,]),initial=None, widget=forms.Select( attrs={'class':'form-control form-control-sm',}))
+                # self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3,13,14,16]), widget=FilteredSelectMultiple('Comulsory Subject',True, attrs={'class':'form-control form-control-sm',}))
+                # self.fields['fourth_subject']=forms.ModelChoiceField(queryset=Subject.objects.filter(serial__in=[9,]),initial=None, widget=forms.Select( attrs={'class':'form-control form-control-sm',}))
+                # if 'optional_subject' in self.fields: 
+                #     del self.fields['optional_subject']
                 #self.fields['compulsory_subject'].initial=Subject.objects.filter(serial__in=[ 1, 2,3])
                 #self.fields['compulsory_subject'].widget = FilteredSelectMultiple('Subject',False, attrs={'class':'form-control form-control-sm'})
 
 AdressFormSet = modelformset_factory(
     Adress, fields=("village_or_house","house_or_street_no", "post_office","upazilla","district","division"), extra=2,
     widgets = {
-            'village_or_house': forms.TextInput(attrs={'class': 'form-control form-control-sm','label':'Village/house','required':True}),
-            'house_or_street_no': forms.TextInput(attrs={'class': 'form-control form-control-sm','label':'Village/house','required':True}),
-            'post_office': forms.TextInput(attrs={'class': 'form-control form-control-sm','required':True}),
-            'upazilla': forms.Select(choices=Upazilla.objects.all(),attrs={'class': 'form-control form-control-sm','label':'Street No.','required':True}),
-            'district': forms.Select(choices=District.objects.all(),attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.','required':True}),
-            'division': forms.Select(choices=Division.objects.all(),attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.','required':True}),
+            'village_or_house': forms.TextInput(attrs={'class': 'form-control form-control-sm','label':'Village/house'}),
+            'house_or_street_no': forms.TextInput(attrs={'class': 'form-control form-control-sm','label':'Village/house'}),
+            'post_office': forms.TextInput(attrs={'class': 'form-control form-control-sm'}),
+            'upazilla': forms.Select(choices=Upazilla.objects.all(),attrs={'class': 'form-control form-control-sm','label':'Street No.'}),
+            'district': forms.Select(choices=District.objects.all(),attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.'}),
+            'division': forms.Select(choices=Division.objects.all(),attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.'}),
 
 }
 )
