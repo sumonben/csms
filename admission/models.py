@@ -1,5 +1,5 @@
 from django.db import models
-from student.models import Student,Subject
+from student.models import Student,Subject,Session,StudentCategory, Department
 from django.urls import reverse
 from django.utils.html import format_html
 from django.template.defaultfilters import escape
@@ -15,6 +15,9 @@ class StudentAdmission(models.Model):
     board=models.CharField(max_length=25,blank=True,null=True)
     group=models.CharField(max_length=25,blank=True,null=True)
     admission_group=models.CharField(max_length=25,blank=True,null=True)
+    admission_session=models.ForeignKey(Session,blank=True,null=True,on_delete=models.SET_NULL)
+    student_category=models.ForeignKey(StudentCategory,blank=True,null=True,on_delete=models.SET_NULL)
+    department=models.ForeignKey(Department, null=True, blank=True, on_delete=models.SET_NULL)
     quota=models.CharField(max_length=25,blank=True,null=True)
     status=models.CharField(max_length=100,default="Not Admitted")
 

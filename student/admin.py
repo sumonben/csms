@@ -163,10 +163,10 @@ class SubjectAdmin(ImportExportMixin,admin.ModelAdmin):
 
 @admin.register(Choice)
 class ChoiceAdmin(ImportExportMixin, admin.ModelAdmin):
-    list_display=[  'id','class_roll','subject1','subject2','subject3','subject4','subject5','subject6','fourth_subject']
+    list_display=[  'id','class_roll','subject1','subject2','subject3','subject4','subject5','subject6','fourth_subject','group','session']
     search_fields=['class_roll']
     list_display_links = ['id','class_roll']
-    list_filter=[ 'subject1','subject2','subject3','subject4','subject5','subject6','fourth_subject']
+    list_filter=[ 'subject1','subject2','subject3','subject4','subject5','subject6','fourth_subject','group','session']
 
    
 

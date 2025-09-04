@@ -92,7 +92,7 @@ class CheckoutSuccessView(View):
                     subject_choices.append(subject)
                 for subject in subject_choice.optional_subject.all():
                     subject_choices.append(subject)
-                choice=Choice.objects.filter(class_roll=student.class_roll).first()
+                choice=Choice.objects.filter(class_roll=student.class_roll).last()
                 if choice is None:
                     subjects=set()
                     for subject in subject_choice.compulsory_subject.all():
@@ -100,7 +100,7 @@ class CheckoutSuccessView(View):
                     for subject in subject_choice.optional_subject.all():
                             subjects.add(subject)
                     subjects=list(subjects)
-                    choice=Choice.objects.create(class_roll=student.class_roll, name=student.name, subject1=subjects[0], subject2=subjects[1], subject3=subjects[2], subject4=subjects[3], subject5=subjects[4], subject6=subjects[5], fourth_subject=subject_choice.fourth_subject)  
+                    choice=Choice.objects.create(class_roll=student.class_roll, name=student.name, subject1=subjects[0], subject2=subjects[1], subject3=subjects[2], subject4=subjects[3], subject5=subjects[4], subject6=subjects[5], fourth_subject=subject_choice.fourth_subject, group=student.group,session=student.session)  
         
                 ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
                 
@@ -140,8 +140,9 @@ class CheckoutIPNView(View):
         tran_purpose=PaymentPurpose.objects.filter(id=data['value_d']).first()
         student=Student.objects.filter(Q(class_roll=data['value_a']) | Q(std_id=data['value_a'])).last()
         # ssc_equivalent=SscEquvalent.objects.filter
-        if tran_purpose.payment_type.id == 1:
-                student.std_id=student.class_roll
+
+        if data['status'] == 'VALID':
+            if tran_purpose.payment_type.id == 1:
                 subject_choice=SubjectChoice.objects.filter(student=student).first()
                 ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
                 student_admission=StudentAdmission.objects.filter(ssc_roll=ssc_equivalent.ssc_exam_roll,board=ssc_equivalent.ssc_board).last()
@@ -192,7 +193,6 @@ class CheckoutIPNView(View):
                     os.rename(old_path, new_path)
                 student_admission.status="Admitted"
                 student_admission.save()
-        if data['status'] == 'VALID':
             post_body['val_id'] = data['val_id']
             response = sslcommez.validationTransactionOrder(post_body['val_id'])
             transaction=Transaction.objects.create(

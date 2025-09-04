@@ -46,7 +46,7 @@
             text-shadow: 4px 4px 4px rgb(65, 7, 7);
             font-size: 14px;
             padding:0px;
-            margin-left:-10px;
+            margin-left:-25px;
             margin-top:-20px;
             text-align:center;
             font-weight:bold;
@@ -129,7 +129,7 @@
     <div class="container-wrapper" >
         <div class="top-header">
             <ul class="nav align-items-center justify-content-end" style="position: relative;">
-                <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"> HSC Admission 2025 </a></li>
+                <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"> HSC Admission {% now "Y" %} </a></li>
             </ul>
         </div>
   <div class="main-header">
@@ -160,9 +160,9 @@
                     
                 </li>
                 
-                <li class="nav-item nav-item dropdown"><a href="{% url 'search_admission_form' %}" aria-haspopup="true" aria-expanded="false" class="{% if request.resolver_match.url_name == 'search_admission_form' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Check Payment</a>
+                <!-- <li class="nav-item nav-item dropdown"><a href="{% url 'search_admission_form' %}" aria-haspopup="true" aria-expanded="false" class="{% if request.resolver_match.url_name == 'search_admission_form' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Check Payment</a>
                     
-                </li>
+                </li> -->
                 <li class="nav-item nav-item dropdown"><a href="" class="{% if request.resolver_match.url_name in 'home' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}" aria-expanded="false" aria-current="page">Get receipt</a>
                     
                 </li>

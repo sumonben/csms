@@ -330,6 +330,10 @@ class Choice(models.Model):
     subject5=models.ForeignKey(Subject,related_name='subject5',blank=True,null=True,on_delete=models.SET_NULL)
     subject6=models.ForeignKey(Subject,related_name='subject6',blank=True,null=True,on_delete=models.SET_NULL)
     fourth_subject=models.ForeignKey(Subject,blank=True,null=True,on_delete=models.SET_NULL)
+    group=models.ForeignKey(Group,blank=True,null=True,on_delete=models.SET_NULL)
+    session=models.ForeignKey(Session,blank=True,null=True,on_delete=models.SET_NULL)
+
+
     class Meta:
         ordering = ['class_roll']
     def __str__(self):

@@ -409,7 +409,7 @@
                                             
                                             <div class="loginBox">
                                               {{field}}
-                                              <span class="fa fa-user"></span>
+                                              <span class="fa-solid fa-book-open"></span>
                                             </div> <!--  --> <div class="invalid-feedback"></div>
                                       </div>
                                     {% endfor %}
@@ -1017,10 +1017,23 @@
       $(document).ready(function () {
               
               $('#submit-btn').on('click', function () {
+                alert_message=document.getElementById("alert_message");
+                alert_message.innerHTML ="";
                 var subjectCount=0;
                 var compulsory_options;
                 var options;
                 var history_count=0;
+                var birth_registration=document.getElementById('id_birth_registration');
+                var father_nid=document.getElementById('id_father_nid');
+                var mother_nid=document.getElementById('id_mother_nid');
+                var ssc_cgpa_with_4th=document.getElementById('id_ssc_cgpa_with_4th');
+                var ssc_cgpa_without_4th=document.getElementById('id_ssc_cgpa_without_4th');
+                
+                birth_registration_length=birth_registration.value.length;
+                father_nid_length=father_nid.value.length;
+                mother_nid_length=mother_nid.value.length;
+                ssc_cgpa_with_4th=ssc_cgpa_with_4th.value;
+                ssc_cgpa_without_4th=ssc_cgpa_without_4th.value;
                 compulsory_options=document.getElementById('id_compulsory_subject_to').getElementsByTagName('option');
                 subjectCount=compulsory_options.length;
                 options=document.getElementById('id_optional_subject_to').getElementsByTagName('option');
@@ -1031,6 +1044,7 @@
                 var selected_4rth = document.getElementById('id_fourth_subject');
                 var flag_submit=0;
                 //alert(selected_4rth.value);
+                
                 if (options){
                 for(i=0;i<options.length ;i++){
                   if(options[i].value==selected_4rth.value){
@@ -1048,25 +1062,54 @@
                if(selected_4rth.value == 15 || selected_4rth.value==16){
                     history_count+=1; 
                   }
-                if(subjectCount <6 || subjectCount >6 || flag_submit==1){
+                if(subjectCount <6 || subjectCount >6 || flag_submit==1 ){
+                  flag_submit=1;
                  var alert_box=document.getElementById("alert");
                     alert_box.style.display = "block";
                     alert_box.style.opacity = "1";
                     alert_message=document.getElementById("alert_message");
-                    alert_message.innerHTML ="যেকোন ৭ টি বিষয় নির্বাচন করতে হবে";
-                  return false;
+                    alert_message.innerHTML +="<br>*যেকোন ৭ টি বিষয় নির্বাচন করতে হবে";
+                  
                 }
                 if(history_count >= 2){
+                  flag_submit=1;
                     var alert_box=document.getElementById("alert");
                     alert_box.style.display = "block";
                     alert_box.style.opacity = "1";
                     alert_message=document.getElementById("alert_message");
-                    alert_message.innerHTML ="ইতিহাস ও ইসসালেমর ইতিহাস একই সাথে পছন্দ দেয়া যাবে না,যেকোন ৭ টি বিষয় নির্বাচন করতে হবে";
+                    alert_message.innerHTML +="<br>*ইতিহাস ও ইসসালেমর ইতিহাস একই সাথে পছন্দ দেয়া যাবে না,যেকোন ৭ টি বিষয় নির্বাচন করতে হবে";
+                }
+                if(birth_registration_length < 13 || birth_registration_length > 17 || father_nid_length < 13 || father_nid_length > 17 || mother_nid_length < 13 || mother_nid_length > 17  ){
+                  flag_submit=1;
+                  var alert_box=document.getElementById("alert");
+                    alert_box.style.display = "block";
+                    alert_box.style.opacity = "1";
+                    alert_message=document.getElementById("alert_message");
+                    alert_message.innerHTML +="<br>*জন্ম নিবন্ধন  ও জাতীয় পরিচয়পত্র ১৩ অথবা ১৭ হতে হবে";
+        
+                }
+                // if(ssc_cgpa_with_4th== null || ssc_cgpa_without_4th== null || ssc_cgpa_with_4th > 5 || ssc_cgpa_without_4th> 5){
+                //   flag_submit=1;  
+                //   var alert_box=document.getElementById("alert");
+                //     alert_box.style.display = "block";
+                //     alert_box.style.opacity = "1";
+                //     alert_message=document.getElementById("alert_message");
+                //     alert_message.innerHTML +="<br>*সিজিপিএ অবশ্যই ৫ বা তার কম হতে হবে";
+                // }
+                if (flag_submit==1){
                   return false;
                 }
-                
+
                 }catch(err){
-  
+                   
+                  var alert_box=document.getElementById("alert");
+                    alert_box.style.display = "block";
+                    alert_box.style.opacity = "1";
+                    alert_message=document.getElementById("alert_message");
+                    alert_message.innerHTML ="<br>* সঠিক ভাবে ফর্ম ";
+          
+                  return false;
+
                 }
               //preloader.classList.add('d-block');
               var frm = $('#form-wrapper')[0];

@@ -293,7 +293,7 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
     </table>
     
       </fieldset>
-        <table width="100%" border="0" style="margin-top: 10px;" valign="bottom">
+        <table id="bottom-table" width="100%" border="0" style="margin-top: 10px;background-color: transparent;" valign="bottom">
           
             <tbody>
               
@@ -373,12 +373,12 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
          docprint.document.write('<style type="text/css">body{ margin:0px;');
          docprint.document.write('font-family:verdana,Arial;color:#000;');
          docprint.document.write('font-family:Verdana, Geneva, sans-serif; font-size:16px;}'); 
-         docprint.document.write('table{-webkit-print-color-adjust: exact;} ');
+         docprint.document.write('table{-webkit-print-color-adjust: exact;color-adjust: exact;} ');
          docprint.document.write('a{color:#000;text-decoration:none;} ');
          docprint.document.write('.graph-image img{display:inline;position:fixed;align-items: center;}');
          docprint.document.write('.table_ssc{border:2px solid #eeeff0; background-color: #eeeff0;padding:0.1em;}');
 
-         docprint.document.write('table th, table td {border:2px solid #eeeff0; background-color: #eeeff0;padding:0.1em;}</style>');
+         docprint.document.write('table th, table td {border:2px solid #eeeff0; background-color: #eeeff0;padding:0.1em;} #bottom-table{ background-color:transparent }</style>');
          docprint.document.write('</head><body onLoad="self.print()"><center>');
          docprint.document.write(content_vlue);
          docprint.document.write('</center></body></html>');

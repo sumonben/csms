@@ -64,11 +64,13 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
         border:1px solid #b9b1b1;
         background-color: #999999;
         padding:0.1em;
-        -webkit-print-color-adjust: exact;
+        -webkit-print-color-adjust: exact; 
         color-adjust: exact;
 
         }
 }
+
+
 
 
 
@@ -375,7 +377,7 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
          docprint.document.write('<style type="text/css">body{ margin:0px;');
          docprint.document.write('font-family:verdana,Arial;color:#000;');
          docprint.document.write('font-family:Verdana, Geneva, sans-serif; font-size:16px;}'); 
-         docprint.document.write('table{-webkit-print-color-adjust: exact;} ');
+         docprint.document.write('table{-webkit-print-color-adjust: exact;color-adjust: exact;} ');
          docprint.document.write('a{color:#000;text-decoration:none;} ');
          docprint.document.write('.graph-image img{display:inline;position:fixed;align-items: center;}');
          docprint.document.write('.table_ssc{border:2px solid #eeeff0; background-color: #eeeff0;padding:0.1em;}');

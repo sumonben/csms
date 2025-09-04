@@ -39,7 +39,7 @@ board={
 
 }
 def admissionLogin(request ):
-    form = AdmissionLoginForm()
+    form = AdmissionLoginForm(instance=request.user)
     return render(request, 'admission/admission_login.html',{'form':form})
 # Create your views here.
 # Create your views here.
@@ -168,6 +168,7 @@ def admissionFormSubmit(request):
             student_form.gender=request.POST.get('gender')
             student_form.group=group
             student_form.class_roll=generate_student_id()
+            student_form.std_id=student_form.class_roll
             session=Session.objects.first()
             # std_count=Student.objects.filter(group=group,session=session).count()
             # print(session)
@@ -334,22 +335,28 @@ class SearchAdmissionView(View):
     
     def get(self, request, *args, **kwargs):
         context={}
-        form=SearchAdmissionForm()
+        form=SearchAdmissionForm(instance=request.user)
         context['form'] = form
         return render(request, self.template_name,context)
 
     def post(self, request, *args, **kwargs):
         context={}
         roll=request.POST.get('roll').strip()
-        student=Student.objects.filter(class_roll=request.POST.get('roll').strip()).last()
+        ssc_equivalent=SscEquvalent.objects.filter(ssc_exam_roll=request.POST.get('roll').strip(),ssc_board=request.POST.get('board').strip()).last()
+        student=Student.objects.filter(class_roll=ssc_equivalent.student.class_roll).last()
         if student is None:
-            form=SearchAdmissionForm()
+            form=SearchAdmissionForm(instance=request.user)
             context['notfound']="Student Not Found, Please complete admission proccess!"
             context['form'] = form
             return render(request, self.template_name,context)
-        subject_choice=SubjectChoice.objects.filter(student=student).first()
-        ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
-        return render(request, 'admission/admission_dummy.html',{'student':student,'ssc_equivalent':ssc_equivalent,'subject_choice':subject_choice})
+        subject_choice=SubjectChoice.objects.filter(student=student).last()
+        subject_choices=[]
+        for subject in subject_choice.compulsory_subject.all():
+            subject_choices.append(subject)
+        for subject in subject_choice.optional_subject.all():
+            subject_choices.append(subject)        
+        ssc_equivalent=SscEquvalent.objects.filter(student=student).last()
+        return render(request, 'admission/admission_dummy.html',{'student':student,'ssc_equivalent':ssc_equivalent,'subject_choice':subject_choice, 'subject_choices':subject_choices})
         
 class IDCardView(View):
     template_name = 'admission/get_id_card.html'
