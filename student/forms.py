@@ -77,19 +77,19 @@ class StudentForm(forms.ModelForm):
         exclude=['std_id','class_roll','exam_roll','registration','passing_year','student_category','department','section','class_year','cgpa','guardian_info','present_adress','permanent_adress','user','is_active','fourth_subject','signature']
         #department=forms.ModelChoiceField(label="",queryset=Department.objects.all(),empty_label="Placeholder",)
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control form-control-sm',  'placeholder':  'Name in English','onkeypress' : "myFunction(this.id)",}),
-            'name_bangla': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'নাম লিখুন(বাংলায়)','onkeypress' : "myFunction(this.id)",}),
-            'email': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Email','onkeypress' : "myFunction(this.id)",}),
+            'name': forms.TextInput(attrs={'class': 'form-control form-control-sm',  'placeholder':  'Name in English','onkeypress' : "myFunction(this.id)",'required':True}),
+            'name_bangla': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'নাম লিখুন(বাংলায়)','onkeypress' : "myFunction(this.id)",'required':True}),
+            'email': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Email','onkeypress' : "myFunction(this.id)"}),
             'phone': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  '11 digits ','required':True,'onkeypress' : "myFunction(this.id)",}),
-            'date_of_birth': forms.DateInput(format=('%d-%m-%Y'),attrs={'class': 'form-control form-control-sm', 'placeholder': 'Select a date','type': 'date'}),
+            'date_of_birth': forms.DateInput(format=('%d-%m-%Y'),attrs={'class': 'form-control form-control-sm', 'placeholder': 'Select a date','type': 'date','required':True}),
             'group': forms.Select(attrs={'class': 'form-control form-control-sm', 'style': 'margin-bottom:3px;','onchange' : "studentGroup(this.id)"}),
-            'birth_registration': forms.TextInput(maxlength=17, attrs={'class': 'form-control form-control-sm', 'placeholder':  'Birth registration Number'}),
-            'nationality': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'nationality'}),
-            'blood_group': forms.Select(choices=BlOOD_CHOICE,attrs={'class': 'form-control form-control-sm', 'placeholder':  'Your blood group'}),
-            'marital_status': forms.Select(choices=MARITAL_CHOICES,attrs={'class': 'form-control form-control-sm',}),
-            'religion': forms.Select(choices=RELIGION_CHOICES,attrs={'class': 'form-control form-control-sm',}),
-            'gender': forms.Select(choices=CHOICES,attrs={'class': 'form-control form-control-sm',}),
-            'image': forms.FileInput(attrs={'class': 'form-control form-control-sm'}),
+            'birth_registration': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Birth registration Number','maxlength': '17','required':True}),
+            'nationality': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'nationality','required':True}),
+            'blood_group': forms.Select(choices=BlOOD_CHOICE,attrs={'class': 'form-control form-control-sm', 'placeholder':  'Your blood group','required':True}),
+            'marital_status': forms.Select(choices=MARITAL_CHOICES,attrs={'class': 'form-control form-control-sm','required':True}),
+            'religion': forms.Select(choices=RELIGION_CHOICES,attrs={'class': 'form-control form-control-sm','required':True}),
+            'gender': forms.Select(choices=CHOICES,attrs={'class': 'form-control form-control-sm','required':True}),
+            'image': forms.FileInput(attrs={'class': 'form-control form-control-sm','required':True}),
             
 
       }    
@@ -115,16 +115,16 @@ class GuardianForm(forms.ModelForm):
 
         
         widgets = {
-            'father_name_en': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Name in English','onkeypress' : "myFunction(this.id)"}),
-            'father_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'নাম লিখুন(বাংলায়)','onkeypress' : "myFunction(this.id)"}),
-            'profession_of_father': forms.Select(choices=FATHER_PROFESSION_CHOICE,attrs={'class': 'form-control form-control-sm', 'placeholder':  'Email','onkeypress' : "myFunction(this.id)"}),
-            'father_nid': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  '11 digits ','onkeypress' : "myFunction(this.id)"}),
-            'mother_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'নাম লিখুন(বাংলায়)','onchange' : "myFunction(this.id)"}),
-            'mother_name_en': forms.TextInput(attrs={'class': 'form-control form-control-sm','placeholder':  'Name in English'}),
+            'father_name_en': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Name in English','required':True}),
+            'father_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'নাম লিখুন(বাংলায়)','required':True}),
+            'profession_of_father': forms.Select(choices=FATHER_PROFESSION_CHOICE,attrs={'class': 'form-control form-control-sm', 'placeholder':  'Profession of father ','required':True}),
+            'father_nid': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  '11 digits ','required':True}),
+            'mother_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'নাম লিখুন(বাংলায়)','required':True}),
+            'mother_name_en': forms.TextInput(attrs={'class': 'form-control form-control-sm','placeholder':  'Name in English','required':True}),
             'profession_of_mother': forms.Select(choices=MOTHER_PROFESSION_CHOICE,attrs={'class': 'form-control form-control-sm', 'style': 'margin-bottom:3px;','required':'true'}),
-            'mother_nid': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Mother NID Number'}),
-            'guardian_phone': forms.TextInput(attrs={'class': 'form-control form-control-sm',  'placeholder':  '11 digits '}),
-            'anual_income': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Anual Family Income'}),
+            'mother_nid': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Mother NID Number','required':True}),
+            'guardian_phone': forms.TextInput(attrs={'class': 'form-control form-control-sm',  'placeholder':  '11 digits ','required':True}),
+            'anual_income': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Anual Family Income','required':True}),
            
 
 
@@ -139,7 +139,7 @@ class SubjectChoiceForm(forms.ModelForm):
     class Meta:
         model = SubjectChoice
         fields = "__all__"
-        exclude=['serial','student']
+        exclude=['serial','student','class_roll']
         widgets={
                         'fourth_subject': forms.Select(attrs={'class': 'form-control form-control-sm','onclick' : "fourthSubject(this.id);",'style':'margin-bottom:20px'}),
 
@@ -183,12 +183,12 @@ class SubjectChoiceForm(forms.ModelForm):
 AdressFormSet = modelformset_factory(
     Adress, fields=("village_or_house","house_or_street_no", "post_office","upazilla","district","division"), extra=2,
     widgets = {
-            'village_or_house': forms.TextInput(attrs={'class': 'form-control form-control-sm','label':'Village/house'}),
-            'house_or_street_no': forms.TextInput(attrs={'class': 'form-control form-control-sm','label':'Village/house'}),
-            'post_office': forms.TextInput(attrs={'class': 'form-control form-control-sm'}),
-            'upazilla': forms.Select(choices=Upazilla.objects.all(),attrs={'class': 'form-control form-control-sm','label':'Street No.'}),
-            'district': forms.Select(choices=District.objects.all(),attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.'}),
-            'division': forms.Select(choices=Division.objects.all(),attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.'}),
+            'village_or_house': forms.TextInput(attrs={'class': 'form-control form-control-sm','label':'Village/house','required':True}),
+            'house_or_street_no': forms.TextInput(attrs={'class': 'form-control form-control-sm','label':'Village/house','required':True}),
+            'post_office': forms.TextInput(attrs={'class': 'form-control form-control-sm','required':True}),
+            'upazilla': forms.Select(choices=Upazilla.objects.all(),attrs={'class': 'form-control form-control-sm','label':'Street No.','required':True}),
+            'district': forms.Select(choices=District.objects.all(),attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.','required':True}),
+            'division': forms.Select(choices=Division.objects.all(),attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);",'label':'Street No.','required':True}),
 
 }
 )
@@ -261,18 +261,18 @@ class SscEquvalentForm(forms.ModelForm):
 
         
         widgets = {
-            'ssc_or_equvalent': forms.Select(choices=DEGREE_CHOICE,attrs={'class': 'form-control form-control-sm','onkeypress' : "myFunction(this.id);"}),
-            'ssc_regitration_no': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'SSC/Equivalent Registration'}),
-            'ssc_cgpa_with_4th': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'CGPA with 4th Subject'}),
-            'ssc_cgpa_without_4th': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'CGPA without 4th Subject'}),
+            'ssc_or_equvalent': forms.Select(choices=DEGREE_CHOICE,attrs={'class': 'form-control form-control-sm','required':True}),
+            'ssc_regitration_no': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'SSC/Equivalent Registration','required':True}),
+            'ssc_cgpa_with_4th': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'CGPA with 4th Subject','required':True}),
+            'ssc_cgpa_without_4th': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'CGPA without 4th Subject','required':True}),
             }
     def __init__(self, *args, **kwargs):
             student = kwargs.pop('instance', None)
             super(SscEquvalentForm, self).__init__(*args, **kwargs)
             if student:
-                 self.fields['ssc_exam_roll']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.ssc_roll}))
-                 self.fields['ssc_group']=forms.ModelChoiceField(queryset=Group.objects.filter(title_en=student.group),initial=Group.objects.filter(title_en=student.group).first(),widget=forms.Select(attrs={'class': 'form-control form-control-sm'}))
-                 self.fields['ssc_board']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.board}))
-                 self.fields['ssc_passing_year']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.passing_year}))
-                 self.fields['ssc_session']=forms.ModelChoiceField(queryset=Session.objects.all()[1:3],initial=None,widget=forms.Select(attrs={'class': 'form-control form-control-sm'}))
+                 self.fields['ssc_exam_roll']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.ssc_roll,'required':True}))
+                 self.fields['ssc_group']=forms.ModelChoiceField(queryset=Group.objects.filter(title_en=student.group),initial=Group.objects.filter(title_en=student.group).first(),widget=forms.Select(attrs={'class': 'form-control form-control-sm','required':True}))
+                 self.fields['ssc_board']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.board,'required':True}))
+                 self.fields['ssc_passing_year']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.passing_year,'required':True}))
+                 self.fields['ssc_session']=forms.ModelChoiceField(queryset=Session.objects.all()[1:3],initial=None,widget=forms.Select(attrs={'class': 'form-control form-control-sm','required':True}))
 

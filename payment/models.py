@@ -24,6 +24,7 @@ class PaymentPurpose(models.Model):
     start_date=models.DateTimeField(blank=True, null=True)
     end_date=models.DateTimeField(blank=True, null=True)
     payment_type=models.ForeignKey(PaymentType,blank=True,null=True,on_delete=models.SET_NULL)
+    sessions=models.ManyToManyField(Session,blank=True,null=True)
     amount=models.IntegerField(default=10)
     amount_science=models.IntegerField(default=10)
     amount_humanities=models.IntegerField(default=10)

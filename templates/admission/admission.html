@@ -1013,7 +1013,9 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
       <script>
-    
+    function isNumeric(value) {
+      return !isNaN(parseFloat(value)) && isFinite(value);
+    }
       $(document).ready(function () {
               
               $('#submit-btn').on('click', function () {
@@ -1026,12 +1028,14 @@
                 var birth_registration=document.getElementById('id_birth_registration');
                 var father_nid=document.getElementById('id_father_nid');
                 var mother_nid=document.getElementById('id_mother_nid');
+                var guardian_phone=document.getElementById('id_guardian_phone');
+                var phone=document.getElementById('id_phone');
                 var ssc_cgpa_with_4th=document.getElementById('id_ssc_cgpa_with_4th');
                 var ssc_cgpa_without_4th=document.getElementById('id_ssc_cgpa_without_4th');
-                
                 birth_registration_length=birth_registration.value.length;
                 father_nid_length=father_nid.value.length;
                 mother_nid_length=mother_nid.value.length;
+                guardian_phone_length=guardian_phone.value.length;
                 ssc_cgpa_with_4th=ssc_cgpa_with_4th.value;
                 ssc_cgpa_without_4th=ssc_cgpa_without_4th.value;
                 compulsory_options=document.getElementById('id_compulsory_subject_to').getElementsByTagName('option');
@@ -1077,25 +1081,36 @@
                     alert_box.style.display = "block";
                     alert_box.style.opacity = "1";
                     alert_message=document.getElementById("alert_message");
-                    alert_message.innerHTML +="<br>*ইতিহাস ও ইসসালেমর ইতিহাস একই সাথে পছন্দ দেয়া যাবে না,যেকোন ৭ টি বিষয় নির্বাচন করতে হবে";
+                    alert_message.innerHTML +="<br>*ইতিহাস ও ইসলামের ইতিহাস একই সাথে পছন্দ দেয়া যাবে না,যেকোন ৭ টি বিষয় নির্বাচন করতে হবে";
                 }
-                if(birth_registration_length < 13 || birth_registration_length > 17 || father_nid_length < 13 || father_nid_length > 17 || mother_nid_length < 13 || mother_nid_length > 17  ){
+                
+                if(birth_registration_length < 10 || birth_registration_length > 17 || father_nid_length < 10 || father_nid_length > 17 || mother_nid_length < 10 || mother_nid_length > 17  ){
                   flag_submit=1;
                   var alert_box=document.getElementById("alert");
                     alert_box.style.display = "block";
                     alert_box.style.opacity = "1";
                     alert_message=document.getElementById("alert_message");
-                    alert_message.innerHTML +="<br>*জন্ম নিবন্ধন  ও জাতীয় পরিচয়পত্র ১৩ অথবা ১৭ হতে হবে";
+                    alert_message.innerHTML +="<br>*জন্ম নিবন্ধন  ও জাতীয় পরিচয়পত্র ১০, ১৩ অথবা ১৭ হতে হবে";
         
                 }
-                // if(ssc_cgpa_with_4th== null || ssc_cgpa_without_4th== null || ssc_cgpa_with_4th > 5 || ssc_cgpa_without_4th> 5){
-                //   flag_submit=1;  
-                //   var alert_box=document.getElementById("alert");
-                //     alert_box.style.display = "block";
-                //     alert_box.style.opacity = "1";
-                //     alert_message=document.getElementById("alert_message");
-                //     alert_message.innerHTML +="<br>*সিজিপিএ অবশ্যই ৫ বা তার কম হতে হবে";
-                // }
+                if(ssc_cgpa_with_4th > 5 || ssc_cgpa_without_4th> 5){
+                  flag_submit=1;  
+                  var alert_box=document.getElementById("alert");
+                    alert_box.style.display = "block";
+                    alert_box.style.opacity = "1";
+                    alert_message=document.getElementById("alert_message");
+                    alert_message.innerHTML +="<br>*সিজিপিএ অবশ্যই ৫ বা তার কম হতে হবে";
+                }
+
+                if(!isNumeric(guardian_phone.value) && !isNumeric(phone.value) && phone.value.length !=11 || guardian_phone.value.length !=11 ){
+                    flag_submit=1;  
+                  var alert_box=document.getElementById("alert");
+                    alert_box.style.display = "block";
+                    alert_box.style.opacity = "1";
+                    alert_message=document.getElementById("alert_message");
+                    alert_message.innerHTML +="<br>* সঠিক মোবাইল/ফোন নং প্রবেশ করুন ";
+   
+                }
                 if (flag_submit==1){
                   return false;
                 }
@@ -1106,7 +1121,7 @@
                     alert_box.style.display = "block";
                     alert_box.style.opacity = "1";
                     alert_message=document.getElementById("alert_message");
-                    alert_message.innerHTML ="<br>* সঠিক ভাবে ফর্ম ";
+                    alert_message.innerHTML ="<br>* সঠিক ভাবে ফর্ম পূরণ করুন ";
           
                   return false;
 

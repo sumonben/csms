@@ -58,7 +58,8 @@ def admissionForm(request):
 
 
         str2=request.POST.get('purpose')
-        student=StudentAdmission.objects.filter(ssc_roll=str1,board=str).last()
+        payment_purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
+        student=StudentAdmission.objects.filter(ssc_roll=str1,board=str,admission_session__in=payment_purpose.sessions.all()).last()
         if student:
             if student.status == "Admitted":
                 messages.error(request, 'Your Admssion already done, you can download admission form!')
@@ -67,7 +68,6 @@ def admissionForm(request):
             try:
                 context={}
                 #student=StudentAdmission.objects.filter(ssc_roll=request.POST.get('password'),board=board[str[-3:]],status='Not Admitted').first()
-                payment_purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
                 group=Group.objects.filter(title_en=student.admission_group).first()
                 if group:
                     select_admission=SelectAdmissionForm()
@@ -246,6 +246,7 @@ def admissionFormSubmit(request):
                     print(terminal)
                 subject=subject_form.save(commit=False)
                 subject.student=student_form
+                subject.class_roll=student_form.class_roll
                 subject=subject_form.save()
                 compulsory_sub=subject_form.cleaned_data['compulsory_subject']
                 for i in compulsory_sub:

@@ -1,4 +1,5 @@
 from typing import Iterable
+from django.http import HttpResponse
 from django.db import models
 from django.contrib.auth import get_user_model
 from ckeditor.fields import RichTextField
@@ -258,7 +259,24 @@ class Student(models.Model):
             return None
     user_link.allow_tags = True
     user_link.short_description = "User"
-    
+    def guardian_info_link(self):
+        if self.guardian_info is not None:
+            return format_html('<a href="%s" target="_blank">%s</a>' % (reverse("admin:student_guardianinfo_change", args=(self.guardian_info.id,)) , escape(self.guardian_info.father_name_en)))
+        else:
+            return None
+    guardian_info_link.allow_tags=True
+    def present_adress_link(self):
+        if self.present_adress is not None:
+            return format_html('<a href="%s" target="_blank">%s</a>' % (reverse("admin:student_adress_change", args=(self.present_adress.id,)) , escape(self.present_adress.village_or_house)))
+        else:
+            return None
+    guardian_info_link.allow_tags=True
+    def permanent_adress_link(self):
+        if self.permanent_adress is not None:
+            return format_html('<a href="%s" target="_blank">%s</a>' % (reverse("admin:student_adress_change", args=(self.permanent_adress.id,)) , escape(self.permanent_adress.village_or_house)))
+        else:
+            return None
+    permanent_adress_link.allow_tags=True
     def __str__(self):
        
         if self.phone and self.name :
@@ -268,6 +286,7 @@ class Student(models.Model):
     def __unicode__(self):
         return self.name_bangla
     def delete(self, *args, **kwargs):
+        
         if self.permanent_adress:
             adress=Adress.objects.filter(id=self.permanent_adress.id).last()
             adress.delete()
@@ -277,6 +296,10 @@ class Student(models.Model):
         if self.image:
                 if os.path.isfile(self.image.path):
                     os.remove(self.image.path)
+        choices=Choice.objects.filter(class_roll=self.class_roll).last()
+        return HttpResponse(choices)
+        if choices:
+            choices.delete()
         super(Student, self).delete(*args, **kwargs)
     
 
@@ -305,6 +328,7 @@ class SscEquvalent(models.Model):
 
 class SubjectChoice(models.Model):
     serial=models.IntegerField(default=10)
+    class_roll=models.CharField(max_length=255,null=True,blank=True)
     student=models.ForeignKey(Student,blank=True,null=True,on_delete=models.CASCADE)
     compulsory_subject=models.ManyToManyField(Subject,related_name='compulsory_subject',blank=True,null=True)
     optional_subject=models.ManyToManyField(Subject,related_name='optional_subject',blank=True,null=True)

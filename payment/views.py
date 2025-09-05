@@ -92,16 +92,7 @@ class CheckoutSuccessView(View):
                     subject_choices.append(subject)
                 for subject in subject_choice.optional_subject.all():
                     subject_choices.append(subject)
-                choice=Choice.objects.filter(class_roll=student.class_roll).last()
-                if choice is None:
-                    subjects=set()
-                    for subject in subject_choice.compulsory_subject.all():
-                            subjects.add(subject)
-                    for subject in subject_choice.optional_subject.all():
-                            subjects.add(subject)
-                    subjects=list(subjects)
-                    choice=Choice.objects.create(class_roll=student.class_roll, name=student.name, subject1=subjects[0], subject2=subjects[1], subject3=subjects[2], subject4=subjects[3], subject5=subjects[4], subject6=subjects[5], fourth_subject=subject_choice.fourth_subject, group=student.group,session=student.session)  
-        
+                
                 ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
                 
                 # password="Student@"+data['value_c']
@@ -191,6 +182,17 @@ class CheckoutIPNView(View):
                 new_path = os.path.join(settings.MEDIA_ROOT, 'media/student/'+year, filename)
                 if old_path:
                     os.rename(old_path, new_path)
+                subject_choice.class_roll=student.class_roll
+                subject_choice.save()
+                choice=Choice.objects.filter(class_roll=student.class_roll).last()
+                if choice is None:
+                    subjects=set()
+                    for subject in subject_choice.compulsory_subject.all():
+                            subjects.add(subject)
+                    for subject in subject_choice.optional_subject.all():
+                            subjects.add(subject)
+                    subjects=list(subjects)
+                    choice=Choice.objects.create(class_roll=student.class_roll, name=student.name, subject1=subjects[0], subject2=subjects[1], subject3=subjects[2], subject4=subjects[3], subject5=subjects[4], subject6=subjects[5], fourth_subject=subject_choice.fourth_subject, group=student.group,session=student.session)  
                 student_admission.status="Admitted"
                 student_admission.save()
             post_body['val_id'] = data['val_id']
