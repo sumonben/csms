@@ -21,6 +21,11 @@ BOARD_CHOICE={
     'Sylhet':'Sylhet',
 
 }
+def year_choices():
+    years= [(r,r) for r in range(datetime.date.today().year-1, datetime.date.today().year+1)]
+    years.reverse()
+    return years
+
 class AdmissionLoginForm(forms.ModelForm):
     username= forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm',}))
     password= forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control form-control-sm',}))
@@ -44,6 +49,7 @@ class SearchAdmissionForm(forms.ModelForm):
     roll= forms.CharField(label="SSC Roll", widget=forms.TextInput( attrs={'class': 'form-control form-control-sm',}))
     phone= forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm',}))
     board= forms.ChoiceField(required=True,label="SSC Board",choices=BOARD_CHOICE,widget=forms.Select(attrs={'class': 'form-control form-control-sm','required':'true'}))
+    passing_year= forms.ChoiceField(required=True,label="SSC Passing year",choices=year_choices,widget=forms.Select(attrs={'class': 'form-control form-control-sm','required':'true'}))
 
     class Meta:
         model = PaymentPurpose

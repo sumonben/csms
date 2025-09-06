@@ -41,7 +41,7 @@ class StudentResource(resources.ModelResource):
 @admin.register(Student)
 class StudentAdmin(ImportExportMixin,admin.ModelAdmin):
     search_fields=['email','phone','class_roll']
-    list_display=[ 'class_roll','name','email','phone','student_category','department','session','user_link','guardian_info_link','permanent_adress_link','present_adress_link']
+    list_display=[ 'class_roll','name','email','phone','student_category','department','session','user_link','subject_choice_link','subject_choice2_link','guardian_info_link','permanent_adress_link','present_adress_link']
     list_display_links = ['name','email']
     list_filter=['department','student_category','session','group','class_year','is_active']
     actions = ("export_as_csv",)
@@ -80,9 +80,10 @@ class StudentSessionAdmin(ImportExportMixin,admin.ModelAdmin):
 
 @admin.register(GuardianInfo)
 class GuardianInfoAdmin(ExportActionMixin,admin.ModelAdmin):
-    list_display= ['father_name', 'mother_name','guardian_phone']
+    list_display= ['serial','father_name', 'mother_name','guardian_phone']
     list_display_links = ['father_name', 'mother_name','guardian_phone']
-    list_filter=['guardian_phone',]
+    search_fields=['serial','guardian_phone']
+
 @admin.register(SscEquvalent)
 class SscEquvalentAdmin(ExportActionMixin,admin.ModelAdmin):
     list_display= ['id','ssc_exam_roll', 'ssc_or_equvalent','ssc_board']

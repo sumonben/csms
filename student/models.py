@@ -259,6 +259,20 @@ class Student(models.Model):
             return None
     user_link.allow_tags = True
     user_link.short_description = "User"
+    def subject_choice_link(self):
+        subject_choice=SubjectChoice.objects.filter(class_roll=self.class_roll).last()
+        if subject_choice:
+            return format_html('<a href="%s" target="_blank">%s</a>' % (reverse("admin:student_subjectchoice_change", args=(subject_choice.id,)) , escape(subject_choice.class_roll)))
+        else:
+            return None
+    subject_choice_link.allow_tags=True
+    def subject_choice2_link(self):
+        subject_choice=Choice.objects.filter(class_roll=self.class_roll).last()
+        if subject_choice:
+            return format_html('<a href="%s" target="_blank">%s</a>' % (reverse("admin:student_choice_change", args=(subject_choice.id,)) , escape(subject_choice)))
+        else:
+            return None
+    subject_choice_link.allow_tags=True
     def guardian_info_link(self):
         if self.guardian_info is not None:
             return format_html('<a href="%s" target="_blank">%s</a>' % (reverse("admin:student_guardianinfo_change", args=(self.guardian_info.id,)) , escape(self.guardian_info.father_name_en)))
@@ -286,18 +300,23 @@ class Student(models.Model):
     def __unicode__(self):
         return self.name_bangla
     def delete(self, *args, **kwargs):
-        
+        if self.guardian_info:
+            guardian_info=GuardianInfo.objects.filter(id=self.guardian_info.id).last()
+            if guardian_info:
+                guardian_info.delete()
         if self.permanent_adress:
             adress=Adress.objects.filter(id=self.permanent_adress.id).last()
-            adress.delete()
+            if adress:
+                adress.delete()
         if self.present_adress:
             adress=Adress.objects.filter(id=self.present_adress.id).last()
-            adress.delete()
+            if adress:
+                adress.delete()
         if self.image:
-                if os.path.isfile(self.image.path):
-                    os.remove(self.image.path)
+                image = self.image.path
+                if os.path.exists(image):
+                    os.remove(image)
         choices=Choice.objects.filter(class_roll=self.class_roll).last()
-        return HttpResponse(choices)
         if choices:
             choices.delete()
         super(Student, self).delete(*args, **kwargs)
@@ -321,9 +340,28 @@ class SscEquvalent(models.Model):
     class Meta:
         ordering = ['serial']
     def __str__(self):
+        # str=None
+        # if self.ssc_exam_roll:
+        #     str=str+self.ssc_exam_roll
+        # if self.ssc_board:
+        #     str=str+self.ssc_board
+        # if self.ssc_group:
+        #     str=str+self.ssc_group.title_en
+        # if self.ssc_session:
+        #     str=str+self.ssc_session.title_en
+        # if self.ssc_regitration_no:
+        #     str=str+self.ssc_regitration_no
+        # if self.ssc_or_equvalent:
+        #     str=str+self.ssc_or_equvalent
+        # if self.ssc_cgpa_with_4th:
+        #     str=str+self.ssc_cgpa_with_4th
+        # if self.ssc_passing_year:
+        #     str=str+self.ssc_passing_year
         if self.student and self.student.phone:
             return self.student.name+': '+self.student.phone
-        return '1'
+        # if str:
+        #     return str
+        return 'Ssc Equivalent'
     
 
 class SubjectChoice(models.Model):
@@ -361,6 +399,21 @@ class Choice(models.Model):
     class Meta:
         ordering = ['class_roll']
     def __str__(self):
-        if self.class_roll is not None and self.name:
-            return self.class_roll+': '+ self.name
+        str=""
+        if self.subject1:
+            str=str+self.subject1.name_en
+        if self.subject2:
+            str=str+self.subject2.name_en
+        if self.subject3:
+            str=str+self.subject3.name_en
+        if self.subject4:
+            str=str+self.subject4.name_en
+        if self.subject5:
+            str=str+self.subject5.name_en
+        if self.subject6:
+            str=str+self.subject6.name_en
+        if self.fourth_subject:
+            str=str+self.fourth_subject.name_en
+        if str:
+            return str
         return self.class_roll

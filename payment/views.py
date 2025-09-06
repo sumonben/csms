@@ -137,8 +137,8 @@ class CheckoutIPNView(View):
                 subject_choice=SubjectChoice.objects.filter(student=student).first()
                 ssc_equivalent=SscEquvalent.objects.filter(student=student).first()
                 student_admission=StudentAdmission.objects.filter(ssc_roll=ssc_equivalent.ssc_exam_roll,board=ssc_equivalent.ssc_board).last()
-                session=Session.objects.first()
-                std_count=Student.objects.filter(group=student.group,session=student.session,is_active=True).count()
+                session=student_admission.admission_session
+                std_count=Student.objects.filter(group=student.group,session=session,is_active=True).count()
                 session_string=session.title_en
                 str1=session_string[-5:-3]
                 roll=int(str1)*10000
@@ -179,6 +179,8 @@ class CheckoutIPNView(View):
                 student.image.name = os.path.join('media/student/'+year,filename)
                 student.is_active=True
                 student.save()
+                student.guardian_info.serial=int(student.class_roll)
+                student.guardian_info.save()
                 new_path = os.path.join(settings.MEDIA_ROOT, 'media/student/'+year, filename)
                 if old_path:
                     os.rename(old_path, new_path)
@@ -280,7 +282,12 @@ class CheckoutFaildView(View):
         tran_purpose=PaymentPurpose.objects.filter(id=data['value_d']).first()
         context['tran_purpose']=tran_purpose
         if tran_purpose.payment_type.id == 1:
-            student.delete()
+            if student:
+                if student.image:  # Check if an image exists
+                    image = student.image.path
+                    if os.path.exists(image):
+                        os.remove(image)
+                student.delete()
         return render(request,self.template_name,context)
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -297,7 +304,12 @@ class CheckoutCanceledView(View):
         tran_purpose=PaymentPurpose.objects.filter(id=data['value_d']).first()
         context['tran_purpose']=tran_purpose
         if tran_purpose.payment_type.id == 1:
-            student.delete()
+            if student:
+                if student.image:  # Check if an image exists
+                    image = student.image.path
+                    if os.path.exists(image):
+                        os.remove(image)
+                student.delete()        
         messages.success(request,'Payment Canceled')
         context['messages']=messages
         return render(request,self.template_name,context)

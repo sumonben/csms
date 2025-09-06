@@ -15,6 +15,7 @@ from django.template.loader import render_to_string
 from payment.sslcommerz import sslcommerz_payment_gateway_admission
 import random
 import string
+import os
 from django.contrib import messages 
 
 
@@ -36,6 +37,8 @@ board={
     'CUM':'Cumilla',
     'BAR':'Barishal',
     'SYL':'Sylhet',
+    'BOU':'BOU',
+
 
 }
 def admissionLogin(request ):
@@ -135,23 +138,30 @@ def admissionFormSubmit(request):
         tran_purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
         group=Group.objects.filter(title_en=request.POST.get('admission_group')).first()
         tran_purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
-        student=Student.objects.filter(name=request.POST.get('name'),phone=request.POST.get('phone')).last()
-        ssc_equivalent=SscEquvalent.objects.filter(student=student).last()
-        if student and ssc_equivalent:
-            student_admission=StudentAdmission.objects.filter(ssc_roll=ssc_equivalent.ssc_exam_roll,name=student.name).first()
+        ssc_equivalent=SscEquvalent.objects.filter(ssc_exam_roll=request.POST.get('ssc_exam_roll'),ssc_group=request.POST.get('ssc_group'),ssc_board=request.POST.get('ssc_board'),ssc_passing_year=request.POST.get('ssc_passing_year')).first()
+        if ssc_equivalent:
+            student_admission=StudentAdmission.objects.filter(ssc_roll=ssc_equivalent.ssc_exam_roll, board=ssc_equivalent.ssc_board,passing_year=ssc_equivalent.ssc_passing_year,group=ssc_equivalent.ssc_group).first()
             if  student_admission.status== "Not Admitted":
-                    select_admission=SelectAdmissionForm()
-                    form = StudentForm(instance=student_admission)
-                    subject_form = SubjectChoiceForm(group=student.group)
-                    adress_formset = AdressFormSet(queryset=Adress.objects.none())
-                    adress_form = AdressForm()
-                    present_adress_form = AdressForm()
-                    ssc_equivalent_form=SscEquvalentForm(instance=student_admission)
-                    guardian_form=GuardianForm()
-                    context={'payment_purpose':tran_purpose,'group':student.group,'form':form,'subject_form':subject_form,'adress_form':adress_form,'ssc_equivalent_form':ssc_equivalent_form,'guardian_form':guardian_form,'present_adress_form':present_adress_form}
-                    context['adress_formset']=adress_formset
-                    student.delete()
-                    return render(request, 'admission/admission.html',context)
+                    if ssc_equivalent.student:
+                        student=Student.objects.filter(id=ssc_equivalent.student.id,is_active=False).first()
+                        if student:
+                            if student.image:  # Check if an image exists
+                                image = student.image.path
+                                if os.path.exists(image):
+                                    os.remove(image)
+                            student.delete()
+                    # select_admission=SelectAdmissionForm()
+                    # form = StudentForm(instance=student_admission)
+                    # group=Group.objects.filter(title_en=student_admission.admission_group).first()
+                    # subject_form = SubjectChoiceForm(group=group)
+                    # adress_formset = AdressFormSet(queryset=Adress.objects.none())
+                    # adress_form = AdressForm()
+                    # present_adress_form = AdressForm()
+                    # ssc_equivalent_form=SscEquvalentForm(instance=student_admission)
+                    # guardian_form=GuardianForm()
+                    # context={'payment_purpose':tran_purpose,'group':group,'form':form,'subject_form':subject_form,'adress_form':adress_form,'ssc_equivalent_form':ssc_equivalent_form,'guardian_form':guardian_form,'present_adress_form':present_adress_form}
+                    # context['adress_formset']=adress_formset
+                    # return render(request, 'admission/admission.html',context)
                 #return redirect(sslcommerz_payment_gateway_admission(request, student,tran_purpose))
             else:
                 messages.error(request, 'Your Admission already done, you can download receipt!')
@@ -225,6 +235,7 @@ def admissionFormSubmit(request):
             
             student_category=StudentCategory.objects.filter(title_en="HSC").first()
             student_form.student_category=student_category
+            student_form.guardian_info.serial=int(student_form.class_roll)
             student_form.save()
 
             # print('6. Student form',email,username)
@@ -343,22 +354,29 @@ class SearchAdmissionView(View):
     def post(self, request, *args, **kwargs):
         context={}
         roll=request.POST.get('roll').strip()
-        ssc_equivalent=SscEquvalent.objects.filter(ssc_exam_roll=request.POST.get('roll').strip(),ssc_board=request.POST.get('board').strip()).last()
-        student=Student.objects.filter(class_roll=ssc_equivalent.student.class_roll).last()
-        if student is None:
-            form=SearchAdmissionForm(instance=request.user)
-            context['notfound']="Student Not Found, Please complete admission proccess!"
-            context['form'] = form
-            return render(request, self.template_name,context)
-        subject_choice=SubjectChoice.objects.filter(student=student).last()
-        subject_choices=[]
-        for subject in subject_choice.compulsory_subject.all():
-            subject_choices.append(subject)
-        for subject in subject_choice.optional_subject.all():
-            subject_choices.append(subject)        
-        ssc_equivalent=SscEquvalent.objects.filter(student=student).last()
-        return render(request, 'admission/admission_dummy.html',{'student':student,'ssc_equivalent':ssc_equivalent,'subject_choice':subject_choice, 'subject_choices':subject_choices})
-        
+        ssc_equivalent=SscEquvalent.objects.filter(ssc_exam_roll=request.POST.get('roll').strip(),ssc_board=request.POST.get('board').strip(),ssc_passing_year=request.POST.get('passing_year')).last()
+        student=None
+        if ssc_equivalent:
+            if ssc_equivalent.student:
+                student=Student.objects.filter(id=ssc_equivalent.student.id,is_active=True).last()
+                subject_choice=SubjectChoice.objects.filter(student=ssc_equivalent.student).last()
+                subject_choices=[]
+                for subject in subject_choice.compulsory_subject.all():
+                    subject_choices.append(subject)
+                for subject in subject_choice.optional_subject.all():
+                    subject_choices.append(subject)        
+                return render(request, 'admission/admission_dummy.html',{'student':student,'ssc_equivalent':ssc_equivalent,'subject_choice':subject_choice, 'subject_choices':subject_choices})
+            else:
+                form=SearchAdmissionForm(instance=request.user)
+                context['notfound']="Active Student Not Found, Please complete your admission proccess!"
+                context['form'] = form
+                return render(request, self.template_name,context)
+        form=SearchAdmissionForm(instance=request.user)
+        context['notfound']="Active Student Not Found, Please complete your admission proccess or contact office!"
+        context['form'] = form
+        return render(request, self.template_name,context)
+
+               
 class IDCardView(View):
     template_name = 'admission/get_id_card.html'
     
