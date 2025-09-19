@@ -30,7 +30,7 @@ STATICFILES_DIRS= [STATIC_DIR, ]
 SECRET_KEY = 'django-insecure-_if5--z-=1(wp5d@s3ncum=3u+(er^7924e)z7jl$uyz!f6(gs'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['student.gmrwc.edu.bd','www.student.gmrwc.edu.bd','student.gmrbwc.edu.bd','www.student.gmrbwc.edu.bd']
 

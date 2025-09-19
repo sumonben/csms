@@ -51,7 +51,7 @@ def admissionForm(request):
     if request.POST.get('username') and request.POST.get('password') :
         str=request.POST.get('username')
         str1=request.POST.get('password')
-        str=str[6:9]
+        str=str[-3:]
         if str in board:
             try:
                 str=board[str]
@@ -62,7 +62,7 @@ def admissionForm(request):
 
         str2=request.POST.get('purpose')
         payment_purpose=PaymentPurpose.objects.filter(id=request.POST.get('purpose')).first()
-        student=StudentAdmission.objects.filter(ssc_roll=str1,board=str,admission_session__in=payment_purpose.sessions.all()).last()
+        student=StudentAdmission.objects.filter(ssc_roll=str1,board=str,passing_year=request.POST.get('passing_year'),admission_session__in=payment_purpose.sessions.all()).last()
         if student:
             if student.status == "Admitted":
                 messages.error(request, 'Your Admssion already done, you can download admission form!')
@@ -90,7 +90,6 @@ def admissionForm(request):
                     messages.success(request, "Your creadential doesn't match!!")
                     return redirect('admission_login')
             except():
-                print("Exception")
                 messages.success(request, "Your creadential doesn't match!!")
                 return redirect('admission_login')
 
@@ -364,8 +363,9 @@ class SearchAdmissionView(View):
                 for subject in subject_choice.compulsory_subject.all():
                     subject_choices.append(subject)
                 for subject in subject_choice.optional_subject.all():
-                    subject_choices.append(subject)        
-                return render(request, 'admission/admission_dummy.html',{'student':student,'ssc_equivalent':ssc_equivalent,'subject_choice':subject_choice, 'subject_choices':subject_choices})
+                    subject_choices.append(subject) 
+                if student:       
+                    return render(request, 'admission/admission_dummy.html',{'student':student,'ssc_equivalent':ssc_equivalent,'subject_choice':subject_choice, 'subject_choices':subject_choices})
             else:
                 form=SearchAdmissionForm(instance=request.user)
                 context['notfound']="Active Student Not Found, Please complete your admission proccess!"
@@ -396,7 +396,7 @@ class IDCardView(View):
         student2=Student.objects.filter(class_roll=request.POST.get('roll_to').strip()).last()
         students=None
         if student1 and student2:
-            students=Student.objects.filter(id__range=(student1.id,student2.id),session=session,group=group)
+            students=Student.objects.order_by('class_roll').filter(class_roll__range=(request.POST.get('roll_from').strip(),request.POST.get('roll_to').strip()),session=session,group=group)
         if students is None:
             form=SearchIDCardForm()
             context['notfound']="Student Not Found, Please complete admission proccess!"

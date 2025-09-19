@@ -177,7 +177,7 @@
                     
                 </li>
 
-                <li class="nav-item nav-item dropdown"><a href=""   aria-expanded="false" class="{% if request.resolver_match.url_name in 'download_license_form' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Certificates</a>
+                <li class="nav-item nav-item dropdown"><a href="{% url 'choice-certificate' %}"   aria-expanded="false" class="{% if request.resolver_match.url_name in 'choice-certificate' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Certificates</a>
                    
                 </li>
                 <li class="nav-item nav-item dropdown"><a href="{% url 'get_payment_receipt' %}"   aria-expanded="false" class="{% if request.resolver_match.url_name in 'get_payment_receipt' %}nav-link nav-link dropdown-toggle parent-active{%else%}nav-link dropdown-toggle {%endif%}">Payment Receipt</a>

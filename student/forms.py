@@ -52,6 +52,8 @@ FATHER_PROFESSION_CHOICE = [
         ('Business', 'Business'),
         ('Govt. Service', 'Govt. Service'),
         ('NonGovt. Service', 'NonGovt. Service'),
+        ('Day labourer', 'Day labourer'),
+        ('Not Employed', 'Not Employed'),
 
         ]
 MOTHER_PROFESSION_CHOICE = [
@@ -72,17 +74,19 @@ class StudentForm(forms.ModelForm):
         model = Student
         fields = "__all__"
         labels = {
+        "name":"Name In ENGLISH ",
+        "name_bangla":  "নাম বাংলায় (Name In BANGLA)",
         "image":  "Choose  Image Size 300*300(Passport size) ",
         }
         exclude=['std_id','class_roll','exam_roll','registration','passing_year','student_category','department','section','class_year','cgpa','guardian_info','present_adress','permanent_adress','user','is_active','fourth_subject','signature']
         #department=forms.ModelChoiceField(label="",queryset=Department.objects.all(),empty_label="Placeholder",)
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control form-control-sm',  'placeholder':  'Name in English','onkeypress' : "myFunction(this.id)",'required':True}),
+            'name': forms.TextInput(attrs={'class': 'form-control form-control-sm',  'placeholder':  'Name in English','onkeypress' : "myFunction(this.id)",'required':True,'readonly':True}),
             'name_bangla': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'নাম লিখুন(বাংলায়)','onkeypress' : "myFunction(this.id)",'required':True}),
             'email': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Email','onkeypress' : "myFunction(this.id)"}),
             'phone': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  '11 digits ','required':True,'onkeypress' : "myFunction(this.id)",}),
             'date_of_birth': forms.DateInput(format=('%d-%m-%Y'),attrs={'class': 'form-control form-control-sm', 'placeholder': 'Select a date','type': 'date','required':True}),
-            'group': forms.Select(attrs={'class': 'form-control form-control-sm', 'style': 'margin-bottom:3px;','onchange' : "studentGroup(this.id)"}),
+            'group': forms.Select(attrs={'class': 'form-control form-control-sm', 'style': 'margin-bottom:3px;','onchange' : "studentGroup(this.id)",'readonly':True}),
             'birth_registration': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Birth registration Number','maxlength': '17','required':True}),
             'nationality': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'nationality','required':True}),
             'blood_group': forms.Select(choices=BlOOD_CHOICE,attrs={'class': 'form-control form-control-sm', 'placeholder':  'Your blood group','required':True}),
@@ -97,8 +101,8 @@ class StudentForm(forms.ModelForm):
             student = kwargs.pop('instance', None)
             super(StudentForm, self).__init__(*args, **kwargs)
             if student:
-                 self.fields['name']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.name}))
-                 self.fields['group']=forms.ModelChoiceField(label='Admission Group', queryset=Group.objects.filter(title_en=student.admission_group),initial=student.admission_group,widget=forms.Select(attrs={'class': 'form-control form-control-sm','value':student.admission_group}))
+                 self.fields['name']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.name,'readonly':True}))
+                 self.fields['group']=forms.ModelChoiceField(label='Admission Group', queryset=Group.objects.filter(title_en=student.admission_group),initial=student.admission_group,widget=forms.Select(attrs={'class': 'form-control form-control-sm','value':student.admission_group,'readonly':True}))
 
 
         
@@ -112,7 +116,12 @@ class GuardianForm(forms.ModelForm):
         model = GuardianInfo
         fields = "__all__"
         exclude=['serial',]
-
+        labels = {
+        "father_name":  "বাবার নাম বাংলায় (Father Name In BANGLA )",
+        "father_name_en":  "Father Name In English ",
+        "mother_name":  "মায়ের নাম বাংলায় (Mother Name In BANGLA )",
+        "mother_name_en":  "Mother Name In English ",
+        }
         
         widgets = {
             'father_name_en': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Name in English','required':True}),
@@ -161,16 +170,16 @@ class SubjectChoiceForm(forms.ModelForm):
         super(SubjectChoiceForm,self).__init__(*args,**kwargs)
         if group:
             if group.title_en=="Science":
-                self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3,4,5,]), widget=FilteredSelectMultiple('Comulsory Subject',True, attrs={'class':'form-control form-control-sm',}))
+                self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3,4,5,]), widget=FilteredSelectMultiple('Compulsory Subject',True, attrs={'class':'form-control form-control-sm','readonly':True}))
                 self.fields['optional_subject']=forms.ModelMultipleChoiceField(label='Choose 1 as Main Subject', queryset=Subject.objects.filter(group=group, type='Fourth'), widget=FilteredSelectMultiple('Science Optional Subject',False, attrs={'class':'form-control form-control-sm',}))
                 self.fields['fourth_subject']=forms.ModelChoiceField(queryset=Subject.objects.filter(group=group, type='Fourth'),initial=Subject.objects.filter(serial__in=[ 7,]), widget=forms.Select( attrs={'class':'form-control form-control-sm',}))
 
             if group.title_en=="Humanities":
-                self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3]), widget=FilteredSelectMultiple('Comulsory Subject',True, attrs={'class':'form-control form-control-sm',}))
+                self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3]), widget=FilteredSelectMultiple('Compulsory Subject',True, attrs={'class':'form-control form-control-sm','readonly':True}))
                 self.fields['optional_subject']=forms.ModelMultipleChoiceField(label='Choose any 3 as Optional Subject',queryset=Subject.objects.filter(Q(type='Optional')|Q(type='Fourth'), group=group ), widget=FilteredSelectMultiple('Humanities Optional Subject',False, attrs={'class':'form-control form-control-sm',}))
                 self.fields['fourth_subject']=forms.ModelChoiceField(queryset=Subject.objects.filter(Q(type='Optional')|Q(type='Fourth'), group=group), widget=forms.Select( attrs={'class':'form-control form-control-sm',}))
             if group.title_en=="Business Studies":
-                self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3]), widget=FilteredSelectMultiple('Comulsory Subject',False, attrs={'class':'form-control form-control-sm',}))
+                self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3]), widget=FilteredSelectMultiple('Compulsory Subject',False, attrs={'class':'form-control form-control-sm','readonly':True}))
                 self.fields['optional_subject']=forms.ModelMultipleChoiceField(label='Choose all 3 as Main Subject', queryset=Subject.objects.filter(group=group), widget=FilteredSelectMultiple('Group Subject',False, attrs={'class':'form-control form-control-sm',}))
                 self.fields['fourth_subject']=forms.ModelChoiceField(queryset=Subject.objects.filter(serial__in=[9,]),initial=None, widget=forms.Select( attrs={'class':'form-control form-control-sm',}))
                 # self.fields['compulsory_subject']=forms.ModelMultipleChoiceField(queryset=Subject.objects.filter(Q(group=group)|Q(group=None)),initial=Subject.objects.filter(serial__in=[ 1, 2,3,13,14,16]), widget=FilteredSelectMultiple('Comulsory Subject',True, attrs={'class':'form-control form-control-sm',}))
@@ -270,9 +279,9 @@ class SscEquvalentForm(forms.ModelForm):
             student = kwargs.pop('instance', None)
             super(SscEquvalentForm, self).__init__(*args, **kwargs)
             if student:
-                 self.fields['ssc_exam_roll']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.ssc_roll,'required':True}))
+                 self.fields['ssc_exam_roll']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.ssc_roll,'required':True,'readonly':True}))
                  self.fields['ssc_group']=forms.ModelChoiceField(queryset=Group.objects.filter(title_en=student.group),initial=Group.objects.filter(title_en=student.group).first(),widget=forms.Select(attrs={'class': 'form-control form-control-sm','required':True}))
-                 self.fields['ssc_board']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.board,'required':True}))
-                 self.fields['ssc_passing_year']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.passing_year,'required':True}))
-                 self.fields['ssc_session']=forms.ModelChoiceField(queryset=Session.objects.all()[1:3],initial=None,widget=forms.Select(attrs={'class': 'form-control form-control-sm','required':True}))
+                 self.fields['ssc_board']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.board,'required':True,'readonly':True}))
+                 self.fields['ssc_passing_year']=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm','value':student.passing_year,'required':True,'readonly':True}))
+                 self.fields['ssc_session']=forms.ModelChoiceField(queryset=Session.objects.all()[2:4],initial=None,widget=forms.Select(attrs={'class': 'form-control form-control-sm','required':True}))
 

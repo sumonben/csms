@@ -10,7 +10,7 @@ from django.utils.html import format_html
 from django.template.defaultfilters import escape
 from import_export.resources import ModelResource
 from smart_selects.db_fields import ChainedForeignKey
-from datetime import datetime
+from datetime import datetime 
 import os
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
@@ -291,6 +291,13 @@ class Student(models.Model):
         else:
             return None
     permanent_adress_link.allow_tags=True
+    def ssc_eqivalent_link(self):
+        ssc_eqivalent=SscEquvalent.objects.filter(student=self).last()
+        if ssc_eqivalent:
+            return format_html('<a href="%s" target="_blank">%s</a>' % (reverse("admin:student_sscequvalent_change", args=(ssc_eqivalent.id,)) , escape(ssc_eqivalent)))
+        else:
+            return None
+    ssc_eqivalent_link.allow_tags=True
     def __str__(self):
        
         if self.phone and self.name :

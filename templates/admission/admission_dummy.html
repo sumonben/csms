@@ -297,7 +297,7 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
     </table>
       </fieldset>
        
-        <table width="100%" border="0" style="margin-top: 10px;" valign="bottom">
+        <table width="100%" border="0" style="margin-top: 10px;padding:3px;" valign="bottom">
           
             <tbody>
               
@@ -385,7 +385,7 @@ button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover
          docprint.document.write('table th, table td {border:2px solid #eeeff0; background-color: #eeeff0;padding:0.1em;}</style>');
          docprint.document.write('</head><body onLoad="self.print()"><center>');
          docprint.document.write(content_vlue);
-         docprint.document.write('</center></body></html>');
+         docprint.document.write('</center><table width="100%" border="0" cellpadding="5" cellspacing="0" class="black10"><tbody><tr><td width="100%" align="left" valign="middle">Helpline: office (10:00am - 04:00pm)</td></tr><tr><td align="left" valign="middle">©{% now "Y" %}, Govt. Mojibor Rahman Bhandari Womens College, All Rights Reserved. </td></tr></tbody></table></body></html>');
          docprint.document.close();
       }
 

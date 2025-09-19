@@ -40,8 +40,8 @@ class StudentResource(resources.ModelResource):
 
 @admin.register(Student)
 class StudentAdmin(ImportExportMixin,admin.ModelAdmin):
-    search_fields=['email','phone','class_roll']
-    list_display=[ 'class_roll','name','email','phone','student_category','department','session','user_link','subject_choice_link','subject_choice2_link','guardian_info_link','permanent_adress_link','present_adress_link']
+    search_fields=['email','phone','class_roll','std_id']
+    list_display=[ 'std_id','class_roll','name','email','phone','student_category','department','session','user_link','subject_choice_link','subject_choice2_link','ssc_eqivalent_link','guardian_info_link','permanent_adress_link','present_adress_link']
     list_display_links = ['name','email']
     list_filter=['department','student_category','session','group','class_year','is_active']
     actions = ("export_as_csv",)
@@ -58,6 +58,8 @@ class StudentAdmin(ImportExportMixin,admin.ModelAdmin):
         for obj in queryset:
             row = [getattr(obj, field) for field in field_names]
             subject_choice=SubjectChoice.objects.filter(student=obj).first()
+            if subject_choice is None:
+                return HttpResponse(obj.class_roll)
             for subject in subject_choice.compulsory_subject.all():
                 if row:
                     print("Subject_choice:",subject)

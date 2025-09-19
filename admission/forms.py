@@ -29,7 +29,7 @@ def year_choices():
 class AdmissionLoginForm(forms.ModelForm):
     username= forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-sm',}))
     password= forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control form-control-sm',}))
-
+    passing_year= forms.ChoiceField(required=True,label="SSC Passing year",choices=year_choices,widget=forms.Select(attrs={'class': 'form-control form-control-sm','required':'true'}))
     class Meta:
         model = PaymentPurpose
         fields = []

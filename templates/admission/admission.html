@@ -209,7 +209,7 @@
                     {% endif %}
                     
                
-                    <form  id="form" class="form-row px-3" method="post" action="{% url 'admission_form_submit' %}" enctype="multipart/form-data" target="_blank">
+                    <form  id="form" class="form-row px-3" method="post" action="{% url 'admission_form_submit' %}" enctype="multipart/form-data">
                       {% csrf_token %}
                       {{form.media}}
                       <div id="qbox-container">
